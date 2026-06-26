@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:#DCEBFF;font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased;font-feature-settings:"tnum"}
+  @keyframes floatY{0%,100%{transform:translateY(0) translateX(0)}50%{transform:translateY(-26px) translateX(10px)}}
+  @keyframes floatY2{0%,100%{transform:translateY(0) translateX(0)}50%{transform:translateY(22px) translateX(-12px)}}
+  @keyframes rise{from{transform:translateY(16px);opacity:0}to{transform:translateY(0);opacity:1}}
+  @keyframes popIn{from{transform:scale(.6);opacity:0}to{transform:scale(1);opacity:1}}
+  @keyframes slideUp{from{transform:translateY(60px);opacity:.4}to{transform:translateY(0);opacity:1}}
+  @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+  @keyframes cupPop{0%{transform:scale(.8)}60%{transform:scale(1.14)}100%{transform:scale(1)}}
+  @keyframes tickPop{0%{transform:scale(.82);opacity:.4}100%{transform:scale(1);opacity:1}}
+  @keyframes pulseO{0%,100%{opacity:.5}50%{opacity:1}}
+  @keyframes confetti{to{transform:translate(var(--dx),var(--dy)) rotate(var(--rot));opacity:0}}
+  @keyframes breathe{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-7px) scale(1.025)}}
+  @keyframes blink{0%,92%,100%{transform:scaleY(1)}96%{transform:scaleY(.1)}}
+  @keyframes glowPulse{0%,100%{opacity:.45;transform:scale(1)}50%{opacity:.85;transform:scale(1.08)}}
+  @keyframes sparkleTwinkle{0%,100%{opacity:0;transform:scale(.4) rotate(0deg)}50%{opacity:1;transform:scale(1) rotate(90deg)}}
+  @keyframes boltFlash{0%,100%{opacity:.9;transform:translateY(0) scale(1)}50%{opacity:1;transform:translateY(-2px) scale(1.12)}}
+  @keyframes liquidWave{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+  @keyframes ringSpin{to{transform:rotate(360deg)}}
+  @keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+  @keyframes flameFlicker{0%,100%{transform:scale(1) rotate(-3deg)}50%{transform:scale(1.18) rotate(3deg)}}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+  @keyframes shimmer{0%{transform:translateX(-140%) skewX(-18deg)}100%{transform:translateX(260%) skewX(-18deg)}}
+  @keyframes toastUp{0%{opacity:0;transform:translateY(12px) scale(.92)}12%{opacity:1;transform:translateY(0) scale(1)}82%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-14px) scale(.98)}}
+  @keyframes micPulse{0%,100%{box-shadow:0 0 0 0 rgba(59,160,255,.45)}50%{box-shadow:0 0 0 7px rgba(59,160,255,0)}}
+  @keyframes floatY3{0%,100%{transform:translateY(0) translateX(0)}50%{transform:translateY(-18px) translateX(14px)}}
+  @keyframes softWiggle{0%,100%{transform:rotate(-1.5deg) translateY(0)}50%{transform:rotate(1.5deg) translateY(-5px)}}
+  @keyframes cardGlow{0%,100%{filter:saturate(1)}50%{filter:saturate(1.08)}}
+  @keyframes pencilHello{0%,100%{transform:translateX(0) rotate(-2deg)}50%{transform:translateX(3px) rotate(1deg)}}
+  @media (prefers-reduced-motion:reduce){*{animation-duration:.01ms !important;animation-iteration-count:1 !important}}
+</style>
+</helmet>
+
+<div style="position:relative;min-height:100vh;width:100%;display:flex;justify-content:center;background:radial-gradient(circle at 78% 8%,rgba(114,244,237,.58) 0,rgba(114,244,237,0) 28%),radial-gradient(circle at 12% 18%,rgba(170,194,255,.55) 0,rgba(170,194,255,0) 34%),linear-gradient(180deg,#C7E9FF 0%,#DDEBFF 42%,#EFF6FF 76%,#F8FCFF 100%);overflow:hidden">
+
+  {{ bgParticles }}
+
+  <div style="width:100%;max-width:438px;padding:18px 16px 156px;position:relative;z-index:2">
+
+    <!-- ════ HERO ════ -->
+    <header style="position:relative;animation:fadeIn .5s both">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:2px 2px 0">
+        <div style="display:flex;align-items:center;gap:9px">
+          <span style="width:34px;height:34px;border-radius:12px;background:rgba(255,255,255,.62);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.82)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0D2447" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></span>
+          <span style="font-size:17px;font-weight:800;color:#12264D;letter-spacing:.5px;white-space:nowrap">健康小目标</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:7px;padding:7px 13px;border-radius:999px;background:rgba(255,255,255,.62);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.82);white-space:nowrap">
+          <span style="display:inline-flex;animation:bob 2.6s ease-in-out infinite"><svg width="16" height="16" viewBox="0 0 24 24" fill="#706BFF"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/></svg></span>
+          <span style="font-size:15px;font-weight:800;color:#12264D">{{ streak }}</span>
+          <span style="font-size:11px;font-weight:600;color:#7E8BA8">满电值</span>
+        </div>
+      </div>
+
+      <div style="position:relative;min-height:286px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;margin-top:0;text-align:center">
+        <div style="position:absolute;top:14px;left:-18px;right:-18px;text-align:center;font-size:88px;font-weight:900;color:rgba(255,255,255,.34);letter-spacing:8px;pointer-events:none;user-select:none;line-height:1;text-shadow:0 18px 32px rgba(90,150,220,.14)">HEALTH</div>
+        <div style="position:absolute;right:10px;top:46px;width:96px;border-radius:18px;background:rgba(255,255,255,.46);border:1px solid rgba(255,255,255,.78);backdrop-filter:blur(22px) saturate(1.2);-webkit-backdrop-filter:blur(22px) saturate(1.2);padding:12px 10px;z-index:3">
+          <div style="font-size:18px;font-weight:900;color:#706BFF;line-height:1">{{ streak }}</div>
+          <div style="font-size:12px;font-weight:800;color:#526581;margin-top:5px">福气萌芽</div>
+        </div>
+        <div style="position:relative;z-index:2;width:236px;height:214px;margin-top:10px;display:flex;align-items:flex-start;justify-content:center;animation:softWiggle 4.6s ease-in-out infinite;filter:drop-shadow(0 24px 24px rgba(62,100,210,.30))">{{ mascotEl }}</div>
+        <p style="position:relative;z-index:3;font-size:28px;font-weight:900;color:#1265F3;letter-spacing:.2px;margin-top:-13px;font-family:Georgia,'Times New Roman',serif;font-style:italic;line-height:.9;animation:pencilHello 3.2s ease-in-out infinite;text-shadow:0 8px 16px rgba(18,101,243,.16)">Hello</p>
+        <p style="position:relative;z-index:3;font-size:16px;font-weight:900;color:#12264D;margin-top:6px;letter-spacing:.2px">制定你的健康小目标</p>
+        <div style="position:relative;z-index:4;display:flex;align-items:center;gap:5px;margin-top:14px;padding:5px;border-radius:999px;background:rgba(255,255,255,.52);border:1px solid rgba(255,255,255,.78);backdrop-filter:blur(16px) saturate(1.2);-webkit-backdrop-filter:blur(16px) saturate(1.2);box-shadow:inset 0 1px 0 rgba(255,255,255,.86)">
+          <button onClick="{{ chooseBoy }}" style="{{ boyMascotStyle }}">男孩</button>
+          <button onClick="{{ chooseGirl }}" style="{{ girlMascotStyle }}">女孩</button>
+        </div>
+      </div>
+
+    </header>
+
+    <!-- ════ Tab ════ -->
+    <nav style="display:flex;gap:7px;background:rgba(255,255,255,.36);backdrop-filter:blur(24px) saturate(1.35);-webkit-backdrop-filter:blur(24px) saturate(1.35);border:1px solid rgba(255,255,255,.66);border-radius:20px;padding:6px;margin-top:14px;box-shadow:inset 0 1px 0 rgba(255,255,255,.78)">
+      <button onClick="{{ goToday }}" style="{{ todayTabStyle }}">今日</button>
+      <button onClick="{{ goTrend }}" style="{{ trendTabStyle }}">趋势</button>
+    </nav>
+
+    <!-- ════ 今日 ════ -->
+    <sc-if value="{{ isToday }}" hint-placeholder-val="{{ true }}">
+    <main style="display:flex;flex-direction:column;gap:13px;margin-top:15px">
+
+      {{ taskCarousel }}
+
+      <!-- 体重 -->
+      <section style="background:rgba(255,255,255,.72);backdrop-filter:blur(18px) saturate(1.2);-webkit-backdrop-filter:blur(18px) saturate(1.2);border:1px solid rgba(255,255,255,.82);border-radius:22px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,.88);animation:rise .5s .4s both">
+        <button onClick="{{ toggleWeight }}" style="width:100%;padding:15px 18px;border:none;background:transparent;display:flex;justify-content:space-between;align-items:center;font-size:14px;color:#5A6480;cursor:pointer;font-family:inherit;font-weight:600">⚖️ 记录体重（可选）<span style="font-size:12px;color:#9AA3BE">{{ weightToggleLabel }}</span></button>
+        <sc-if value="{{ showWeight }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:0 18px 18px">
+            <div style="display:flex;align-items:center;justify-content:space-between;background:rgba(123,150,255,.1);border-radius:15px;padding:6px">
+              <button onClick="{{ weightDown }}" style="width:42px;height:42px;border:none;border-radius:12px;font-size:23px;color:#fff;cursor:pointer;line-height:1;background:linear-gradient(135deg,#3BA0FF,#5B6CFF);box-shadow:0 6px 12px -5px rgba(0,0,0,.3)" style-active="transform:scale(.9)">−</button>
+              <span style="font-size:21px;font-weight:800;color:#2A3550">{{ weightVal }}<em style="font-style:normal;font-size:13px;color:#9AA3BE;font-weight:600;margin-left:3px">kg</em></span>
+              <button onClick="{{ weightUp }}" style="width:42px;height:42px;border:none;border-radius:12px;font-size:23px;color:#fff;cursor:pointer;line-height:1;background:linear-gradient(135deg,#3BA0FF,#5B6CFF);box-shadow:0 6px 12px -5px rgba(0,0,0,.3)" style-active="transform:scale(.9)">+</button>
+            </div>
+            <p style="font-size:12px;color:#9AA3BE;margin-top:12px;line-height:1.7">仅供参考，不必每天称。健康是长期的节律，一两天的浮动很正常。</p>
+          </div>
+        </sc-if>
+      </section>
+    </main>
+
+    <!-- ════ 本周能量带 ════ -->
+    <div style="background:rgba(255,255,255,.72);backdrop-filter:blur(18px) saturate(1.2);-webkit-backdrop-filter:blur(18px) saturate(1.2);border:1px solid rgba(255,255,255,.82);border-radius:24px;padding:16px 18px;margin-top:14px;box-shadow:inset 0 1px 0 rgba(255,255,255,.88);animation:rise .55s .08s both">
+      <p style="font-size:12px;color:#577190;letter-spacing:1.5px;font-weight:900;margin-bottom:13px">本 周 能 量</p>
+      <div style="display:flex;justify-content:space-between;gap:7px">
+        <sc-for list="{{ ribbonCols }}" as="col" hint-placeholder-count="7">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:8px;flex:1">
+            <div style="{{ col.stackStyle }}">
+              <sc-for list="{{ col.cells }}" as="cell" hint-placeholder-count="5">
+                <span style="{{ cell.style }}"></span>
+              </sc-for>
+            </div>
+            <span style="{{ col.dowStyle }}">{{ col.dow }}</span>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+    </sc-if>
+
+    <!-- ════ 趋势 ════ -->
+    <sc-if value="{{ isTrend }}" hint-placeholder-val="{{ false }}">
+    <main style="display:flex;flex-direction:column;gap:13px;margin-top:14px;animation:fadeIn .4s both">
+      <div style="display:flex;gap:7px">
+        <sc-for list="{{ ranges }}" as="r" hint-placeholder-count="3">
+          <button onClick="{{ r.onClick }}" style="{{ r.style }}">{{ r.label }}</button>
+        </sc-for>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:9px">
+        <div style="background:#fff;border-radius:17px;padding:15px 6px;text-align:center;box-shadow:0 8px 20px -16px rgba(32,36,46,.3)"><span style="display:block;font-size:23px;font-weight:800;line-height:1.1;color:#7C6CFF">{{ avgSleep }}</span><span style="display:block;font-size:10px;color:#9A9EB2;margin-top:6px;line-height:1.3;font-weight:500">平均睡眠 (h)</span></div>
+        <div style="background:#fff;border-radius:17px;padding:15px 6px;text-align:center;box-shadow:0 8px 20px -16px rgba(32,36,46,.3)"><span style="display:block;font-size:23px;font-weight:800;line-height:1.1;color:#10C49A">{{ totalEx }}</span><span style="display:block;font-size:10px;color:#9A9EB2;margin-top:6px;line-height:1.3;font-weight:500">运动 (min)</span></div>
+        <div style="background:#fff;border-radius:17px;padding:15px 6px;text-align:center;box-shadow:0 8px 20px -16px rgba(32,36,46,.3)"><span style="display:block;font-size:23px;font-weight:800;line-height:1.1;color:#23B5F0">{{ avgWater }}</span><span style="display:block;font-size:10px;color:#9A9EB2;margin-top:6px;line-height:1.3;font-weight:500">日均喝水 (杯)</span></div>
+        <div style="background:#fff;border-radius:17px;padding:15px 6px;text-align:center;box-shadow:0 8px 20px -16px rgba(32,36,46,.3)"><span style="display:block;font-size:23px;font-weight:800;line-height:1.1;color:#FF6B4A">{{ checkedDays }}</span><span style="display:block;font-size:10px;color:#9A9EB2;margin-top:6px;line-height:1.3;font-weight:500">打卡天数</span></div>
+      </div>
+      {{ sleepChart }}
+      {{ exerciseChart }}
+      {{ waterChart }}
+      {{ moodChart }}
+    </main>
+    </sc-if>
+
+    <footer style="text-align:center;font-size:12px;color:#9A9EB2;margin-top:28px;letter-spacing:.5px;font-weight:500">把健康过成习惯 · 你就赢了大多数人</footer>
+  </div>
+
+  <!-- ════ 对话输入栏 ════ -->
+  <div style="position:fixed;left:0;right:0;bottom:0;z-index:40;display:flex;justify-content:center;pointer-events:none;background:linear-gradient(180deg,rgba(246,251,255,0),rgba(238,247,255,.76) 38%,rgba(248,252,255,.94) 100%);padding-top:34px">
+    <div style="width:100%;max-width:438px;padding:0 16px 14px;pointer-events:auto;position:relative">
+      <sc-if value="{{ chatToastShow }}" hint-placeholder-val="{{ false }}">
+        <div style="position:absolute;left:18px;right:18px;bottom:96px;display:flex;justify-content:flex-start">
+          <div style="display:flex;align-items:flex-end;gap:9px;max-width:94%">
+            <span style="width:36px;height:36px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,#3BA0FF,#7B6CFF);display:flex;align-items:center;justify-content:center;box-shadow:0 8px 18px -8px rgba(59,108,255,.7)"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M13 2 3 14h7l-1 8 11-13h-7l1-7z"/></svg></span>
+            <div style="background:rgba(255,255,255,.94);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.85);border-radius:18px 18px 18px 6px;padding:12px 15px;box-shadow:0 16px 34px -14px rgba(60,90,160,.65);font-size:13.5px;color:#2A3550;font-weight:600;line-height:1.6;animation:toastUp 3.6s ease forwards">{{ chatToastText }}</div>
+          </div>
+        </div>
+      </sc-if>
+      <div style="display:flex;gap:10px;margin-bottom:10px">
+        <button onClick="{{ goTrend }}" style="display:flex;align-items:center;gap:7px;padding:9px 15px;border:1px solid rgba(255,255,255,.82);border-radius:999px;background:rgba(255,255,255,.72);backdrop-filter:blur(16px) saturate(1.2);-webkit-backdrop-filter:blur(16px) saturate(1.2);font-size:13px;font-weight:900;color:#2E66D7;cursor:pointer;font-family:inherit;box-shadow:0 12px 24px -20px rgba(77,116,190,.45),inset 0 1px 0 rgba(255,255,255,.92)" style-active="transform:scale(.95)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#2E66D7" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m7 14 4-4 3 3 5-6"/></svg>我的能量</button>
+        <button onClick="{{ goToday }}" style="display:flex;align-items:center;gap:7px;padding:9px 15px;border:1px solid rgba(255,255,255,.82);border-radius:999px;background:rgba(255,255,255,.72);backdrop-filter:blur(16px) saturate(1.2);-webkit-backdrop-filter:blur(16px) saturate(1.2);font-size:13px;font-weight:900;color:#10224B;cursor:pointer;font-family:inherit;box-shadow:0 12px 24px -20px rgba(77,116,190,.45),inset 0 1px 0 rgba(255,255,255,.92)" style-active="transform:scale(.95)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#10224B" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>打卡任务</button>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.82);backdrop-filter:blur(24px) saturate(1.24);-webkit-backdrop-filter:blur(24px) saturate(1.24);border:1px solid rgba(255,255,255,.92);border-radius:999px;padding:8px 9px 8px 14px;box-shadow:0 18px 34px -28px rgba(72,108,180,.60),inset 0 1px 0 rgba(255,255,255,.96)">
+        <button onClick="{{ voiceTap }}" style="border:1px solid rgba(56,86,130,.16);background:rgba(255,255,255,.70);width:40px;height:40px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;animation:micPulse 2.2s ease-in-out infinite;box-shadow:inset 0 1px 0 rgba(255,255,255,.78)" style-active="transform:scale(.9)"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#10224B" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><path d="M12 19v3"/></svg></button>
+        <input placeholder="生活健康问题，问我就行" onKeyDown="{{ chatKey }}" style="flex:1;min-width:0;border:none;background:none;outline:none;font-size:14px;color:#10224B;font-family:inherit;font-weight:700" />
+        <button onClick="{{ plusTap }}" style="width:38px;height:38px;border-radius:50%;border:1px solid rgba(56,86,130,.26);background:rgba(255,255,255,.70);color:#10224B;font-size:21px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:inset 0 1px 0 rgba(255,255,255,.78)" style-active="transform:scale(.88) rotate(90deg)">+</button>
+        <button onClick="{{ openDiet }}" style="width:42px;height:42px;border-radius:50%;border:1px solid rgba(255,255,255,.82);background:linear-gradient(135deg,#EEF4FF,#706BFF);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:inset 0 1px 0 rgba(255,255,255,.52)" style-active="transform:scale(.88)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3.2"/></svg></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════ 弹层 ════ -->
+  {{ sheet }}
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:438,&quot;height&quot;:900}}">
+class Component extends DCLogic {
+  C = { ink:"#10224B", inkSoft:"#566D8D", muted:"#95A5BD", line:"#E6EEF8", bg:"#F4F8FF", surface:"#FFFFFF",
+    sleep:"#6E7BFF", move:"#20D9E5", diet:"#FF9F86", water:"#33CFE3", mood:"#7D89FF", streak:"#706BFF" };
+  GRAD = {
+    sleep:"linear-gradient(135deg,#4BA7FF,#706BFF)", move:"linear-gradient(135deg,#7EEBFF,#20D9E5)",
+    diet:"linear-gradient(135deg,#FFE0D6,#FF9F86)", water:"linear-gradient(135deg,#B8F7FF,#33CFE3)",
+    mood:"linear-gradient(135deg,#EEF4FF,#7D89FF)", hero:"linear-gradient(135deg,#24F0DD,#2E77FF)" };
+  CONFETTI = ["#24F0DD","#2E77FF","#706BFF","#FF9F86","#B8F7FF","#7D89FF"];
+  MODULES = [
+    { key:"sleep", name:"睡眠", accent:"#5D6CFF", bg:"#EEF4FF", card:"linear-gradient(150deg,#2EA7FF 0%,#676BFF 100%)" },
+    { key:"exercise", name:"运动", accent:"#16BFD2", bg:"#EAFBFF", card:"linear-gradient(150deg,#C8FAFF 0%,#73EAF4 100%)" },
+    { key:"diet", name:"饮食", accent:"#E77D68", bg:"#FFF0EB", card:"linear-gradient(150deg,#FFE4DA 0%,#FFB09B 100%)" },
+    { key:"water", name:"喝水", accent:"#21BBD1", bg:"#E9FAFF", card:"linear-gradient(150deg,#B8F7FF 0%,#38D0E5 100%)" },
+    { key:"mood", name:"心情", accent:"#6472FF", bg:"#EEF2FF", card:"linear-gradient(150deg,#FFFFFF 0%,#DDE7FF 100%)" },
+  ];
+  WEEK = ["日","一","二","三","四","五","六"];
+  SOUNDS = [
+    { key:"rain", name:"雨声", noise:"white", filter:"lowpass", freq:1300, q:0.7 },
+    { key:"ocean", name:"海浪", noise:"brown", filter:"lowpass", freq:620, swell:0.08 },
+    { key:"forest", name:"林间", noise:"white", filter:"bandpass", freq:2400, q:1.2 },
+    { key:"white", name:"白噪音", noise:"white", filter:"highpass", freq:180 },
+    { key:"fire", name:"篝火", noise:"brown", filter:"lowpass", freq:760, swell:0.6 },
+  ];
+  EN_SLEEP = [
+    { title:"Settle", text:"Let the day settle like dust after sunset. There is nothing left to finish tonight. Breathe in slowly, and let your shoulders fall. The room is quiet, the light is soft, and you are allowed to rest. Tomorrow can wait until tomorrow." },
+    { title:"Four counts", text:"Breathe in for four. Hold it gently for four. And let it go for six, like a tide pulling back from the shore. Again. With each breath out, you sink a little deeper into the bed. Slower. Softer. There is nowhere you need to be." },
+    { title:"The night asks nothing", text:"The night asks nothing of you. Not your worries, not your plans, not the things you forgot to do. For now, you can put them down by the door. Picture a calm grey sea under a quiet sky. The waves arrive, and leave, and arrive again. And so does your breath. Rest now." },
+  ];
+  MEDITATIONS = [
+    { title:"睡前放空", time:"3 分钟", text:"找一个舒服的姿势，轻轻闭上眼睛。把注意力放在呼吸上，不需要控制它，只是观察。吸气时知道自己在吸气，呼气时知道自己在呼气。今天已经结束了，此刻你只需要安静地待在这里。" },
+    { title:"身体扫描", time:"5 分钟", text:"从脚趾开始，慢慢感受身体接触床面的重量。放松脚踝、小腿、膝盖、大腿。再放松腰背、肩颈、手臂和脸。哪里紧绷，就把呼吸送到那里。每一次呼气，都让身体更沉一点。" },
+    { title:"焦虑安放", time:"4 分钟", text:"如果脑子里还有事情，不急着赶走它。想象把这些念头写在纸上，轻轻放到桌边。你可以明天再处理它们。现在，把手放在胸口，告诉自己：我已经做得够好了。" },
+  ];
+  BREATH_MODES = [
+    { key:"box", name:"方块呼吸", desc:"吸 4 · 停 4 · 呼 4 · 停 4", phases:[["吸气",4],["停住",4],["呼气",4],["停住",4]] },
+    { key:"sleep478", name:"4-7-8 助眠", desc:"吸 4 · 停 7 · 呼 8", phases:[["吸气",4],["停住",7],["呼气",8]] },
+    { key:"calm", name:"舒缓呼吸", desc:"吸 4 · 呼 6", phases:[["吸气",4],["呼气",6]] },
+  ];
+  CN_READ = [
+    "慢下来，不是停滞，是给身体一个回到自己的机会。今天走得快了，就让晚上走得轻一点。",
+    "你不需要每天都很好。允许有疲惫的日子，允许只是把今天过完，这本身已经很了不起。",
+    "健康不是一场冲刺，而是日复一日的温柔对待。喝水、走路、好好睡，都是在对自己说：我在乎你。",
+  ];
+  QUOTES = [
+    "今天为自己充的每一格电，身体都记得。","进步藏在那些你以为不算数的小坚持里。",
+    "动起来的人，运气都不会太差。","今天累了就好好休息，明天的力气是睡出来的。",
+    "别和昨天的自己比输赢，和此刻的自己好好相处。","一杯水、一次深呼吸，都是把自己往回拉一点点。",
+    "你不必很完美，只要愿意一次次重新开始。","把健康过成习惯，你就赢了大多数人。",
+  ];
+  RECIPES = [
+    { name:"番茄豆腐蔬菜汤", tag:"清淡暖胃", ing:["番茄 2 个","嫩豆腐 1 块","鸡蛋 1 个","青菜一把"], steps:["番茄切块炒出汁","加水煮开放入豆腐","下青菜，淋蛋液","少盐调味即可"] },
+    { name:"鸡胸牛油果藜麦碗", tag:"高蛋白饱腹", ing:["鸡胸肉 1 块","藜麦 1 杯","牛油果半个","小番茄一把"], steps:["藜麦煮熟备用","鸡胸煎熟切片","所有食材摆碗","淋柠檬汁与橄榄油"] },
+    { name:"香煎三文鱼配时蔬", tag:"优质脂肪", ing:["三文鱼 1 块","西兰花一小颗","芦笋几根"], steps:["三文鱼两面煎香","时蔬焯水或清炒","撒黑胡椒海盐","挤一点柠檬提鲜"] },
+    { name:"杂菇荞麦面", tag:"膳食纤维", ing:["荞麦面一份","香菇蟹味菇适量","菠菜一把"], steps:["菌菇炒香","荞麦面煮熟过冷水","加菠菜菌菇拌匀","少量酱油提味"] },
+    { name:"燕麦莓果早餐杯", tag:"缓释能量", ing:["燕麦半杯","无糖酸奶 1 盒","蓝莓草莓一把","坚果碎少许"], steps:["燕麦用酸奶泡软","铺上莓果坚果","冷藏或现做皆可","想甜可加点蜂蜜"] },
+    { name:"清蒸柠檬鸡配西兰花", tag:"简单少油", ing:["鸡腿肉 1 块","柠檬几片","西兰花一颗"], steps:["鸡腿铺柠檬蒜末","上锅蒸约 15 分钟","西兰花焯熟摆盘","淋少许蒸出的汤汁"] },
+  ];
+  ROUTINES = [
+    { key:"morning", name:"晨间唤醒", level:"舒缓", desc:"唤醒身体 · 约 5 分钟", moves:[
+      {name:"深呼吸",sec:30,tip:"鼻吸口呼，放松肩膀"},{name:"颈部环绕",sec:40,tip:"缓慢，幅度不必大"},
+      {name:"站姿前屈",sec:40,tip:"膝盖微弯，垂下放松"},{name:"猫牛伸展",sec:50,tip:"跟着呼吸拱背沉背"},
+      {name:"弓步转体",sec:50,tip:"左右各做，稳住核心"},{name:"整理呼吸",sec:30,tip:"回到平稳"}] },
+    { key:"energy", name:"活力七分钟", level:"燃脂", desc:"微微出汗 · 约 7 分钟", moves:[
+      {name:"原地踏步热身",sec:40,tip:"逐渐加快"},{name:"深蹲",sec:40,tip:"膝盖不超脚尖"},
+      {name:"休息",sec:15,tip:"喝口水"},{name:"开合跳",sec:40,tip:"落地轻一点"},
+      {name:"平板支撑",sec:40,tip:"收紧腹部，别塌腰"},{name:"休息",sec:15,tip:"调整呼吸"},
+      {name:"臀桥",sec:40,tip:"顶到最高停一秒"},{name:"高抬腿",sec:40,tip:"量力而行"},
+      {name:"拉伸收尾",sec:40,tip:"慢慢放松"}] },
+    { key:"night", name:"睡前放松", level:"舒缓", desc:"助眠拉伸 · 约 6 分钟", moves:[
+      {name:"婴儿式",sec:50,tip:"额头贴地，深呼吸"},{name:"仰卧扭转",sec:60,tip:"左右各半，肩膀贴地"},
+      {name:"蝴蝶式",sec:50,tip:"脚掌相对，轻压膝盖"},{name:"抱膝触胸",sec:50,tip:"缓解下背紧张"},
+      {name:"双腿靠墙",sec:60,tip:"放松小腿，闭眼"},{name:"深长呼吸",sec:40,tip:"为入睡做准备"}] },
+  ];
+  DEMO_SCORE = { rating:4, summary:"色彩丰富、荤素搭得很棒！", tips:["再加一小份全谷主食会更均衡","深色蔬菜可以多一点点"] };
+
+  state = {
+    entries:{}, loaded:false, tab:"today", range:14, openKey:null, showWeight:false, mascotGender:"boy",
+    taskFocus:0,
+    ambientKey:null, ambientVol:0.5, timer:30,
+    enIdx:0, reading:false, meditationIdx:0, meditationActive:false, breathMode:"box", breathActive:false, breathPhase:0,
+    recipeIdx:0, exVoice:false,
+    workout:null, woIdx:0, woRemaining:0, woPaused:false, woDone:false,
+    dietBusy:false, dietScored:false, moodQuote:"", quoteBusy:false, readIdx:0,
+    chatToastShow:false, chatToastText:"",
+  };
+  CHAT_REPLIES = [
+    "你愿意照顾自己，这件事本身就很棒。","今天的每一格电，都会变成明天的力气。",
+    "慢慢来，坚持比完美更重要，我一直在。","记得喝水、伸个懒腰，对自己好一点～",
+    "需要的话，我可以帮你把今天的小目标拆细一点。",
+  ];
+
+  // ── 工具 ──
+  pad(n){ return String(n).padStart(2,"0"); }
+  fmt(d){ return d.getFullYear()+"-"+this.pad(d.getMonth()+1)+"-"+this.pad(d.getDate()); }
+  today(){ return this.fmt(new Date()); }
+  lastNDays(n){ const end=new Date(),a=[]; for(let i=n-1;i>=0;i--){const d=new Date(end);d.setDate(end.getDate()-i);a.push(this.fmt(d));} return a; }
+  greeting(){ const h=new Date().getHours(); if(h<5)return"夜深了";if(h<11)return"早上好";if(h<13)return"中午好";if(h<18)return"下午好";if(h<23)return"晚上好";return"夜深了"; }
+  moduleDone(key,e){ if(!e)return false; switch(key){
+    case"sleep":return!!(e.sleep&&e.sleep.hours>0); case"exercise":return!!(e.exercise&&e.exercise.minutes>0);
+    case"diet":return!!e.diet; case"water":return!!(e.water&&e.water.cups>0); case"mood":return!!(e.mood&&e.mood.level); default:return false; } }
+  doneCount(e){ return this.MODULES.reduce((s,m)=>s+(this.moduleDone(m.key,e)?1:0),0); }
+  computeStreak(entries){ let s=0; const d=new Date(); if(this.doneCount(entries[this.fmt(d)])===0)d.setDate(d.getDate()-1);
+    while(this.doneCount(entries[this.fmt(d)])>=1){s++;d.setDate(d.getDate()-1);} return s; }
+
+  componentDidMount(){
+    // 生成演示历史数据（除今天外）
+    const entries={}; const days=this.lastNDays(30); const rnd=(seed)=>{let x=Math.sin(seed)*10000;return x-Math.floor(x);};
+    days.forEach((k,i)=>{
+      if(k===this.today())return;
+      const r=(o)=>rnd(i*7.3+o);
+      const e={};
+      if(r(1)>0.12) e.sleep={hours:Math.round((6.4+r(2)*2.4)*2)/2, quality:Math.floor(r(3)*3)};
+      if(r(4)>0.42) e.exercise={minutes:[15,20,25,30,40,45][Math.floor(r(5)*6)], type:Math.floor(r(6)*6)};
+      if(r(7)>0.3) e.diet={quality:Math.floor(r(8)*3), veggies:1+Math.floor(r(9)*4), regular:r(10)>0.5};
+      if(r(11)>0.15) e.water={cups:3+Math.floor(r(12)*6)};
+      if(r(13)>0.2) e.mood={level:2+Math.floor(r(14)*4)};
+      if(r(15)>0.55) e.weight=Math.round((60+ (i*0.04) + (r(16)-0.5)*1.6)*10)/10;
+      entries[k]=e;
+    });
+    // 读取今日本地存储
+    let todayE={};
+    try{ const raw=localStorage.getItem("manman-health-today"); if(raw){const o=JSON.parse(raw); if(o.date===this.today())todayE=o.data||{};} }catch(_){}
+    entries[this.today()]=todayE;
+    this.setState({ entries, loaded:true, moodQuote:this.dailyPick(this.QUOTES), enIdx:0 });
+  }
+  componentWillUnmount(){ this.stopAmbient(); this.stopSpeak(); this.stopBreathing(); if(this._woTimer)clearInterval(this._woTimer); }
+
+  dailyPick(arr,off=0){ const s=this.today(); let h=off; for(let i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))%100000; return arr[h%arr.length]; }
+
+  saveToday(entries){ try{ localStorage.setItem("manman-health-today", JSON.stringify({date:this.today(), data:entries[this.today()]||{}})); }catch(_){} }
+
+  patch(key,value){
+    this.setState(prev=>{
+      const prevDay=prev.entries[this.today()]||{}; const day={...prevDay};
+      if(value===null)delete day[key]; else day[key]=value;
+      const entries={...prev.entries,[this.today()]:day};
+      this.saveToday(entries);
+      if(!this.moduleDone(key,prevDay)&&this.moduleDone(key,day)){
+        const full=this.doneCount(day)>=5&&this.doneCount(prevDay)<5;
+        this.burst(window.innerWidth/2, window.innerHeight*0.32, full);
+      }
+      return {entries};
+    });
+  }
+
+  // ── 彩屑 ──
+  burst(x,y,big){
+    if(typeof document==="undefined")return;
+    const n=big?44:18;
+    for(let i=0;i<n;i++){
+      const p=document.createElement("div");
+      const ang=Math.random()*Math.PI*2, dist=(big?100:55)+Math.random()*(big?170:95);
+      p.style.cssText="position:fixed;width:10px;height:10px;border-radius:3px;z-index:9999;pointer-events:none;left:"+x+"px;top:"+y+"px;background:"+this.CONFETTI[i%this.CONFETTI.length]+";--dx:"+(Math.cos(ang)*dist)+"px;--dy:"+(Math.sin(ang)*dist-(big?70:34))+"px;--rot:"+(Math.random()*720-360)+"deg;animation:confetti .95s cubic-bezier(.2,.7,.3,1) forwards";
+      document.body.appendChild(p);
+      setTimeout(()=>p.remove(),970);
+    }
+  }
+
+  // ── 音景 ──
+  ensureCtx(){ if(!this._actx){const AC=window.AudioContext||window.webkitAudioContext; this._actx=new AC();} return this._actx; }
+  makeNoise(ctx,type){ const len=ctx.sampleRate*2, buf=ctx.createBuffer(1,len,ctx.sampleRate), d=buf.getChannelData(0);
+    if(type==="brown"){let last=0;for(let i=0;i<len;i++){const w=Math.random()*2-1;last=(last+0.02*w)/1.02;d[i]=last*3.5;}}
+    else{for(let i=0;i<len;i++)d[i]=Math.random()*2-1;} return buf; }
+  stopAmbient(){ if(this._aTimer){clearTimeout(this._aTimer);this._aTimer=null;}
+    if(this._src){try{this._src.stop();}catch(_){}try{this._src.disconnect();}catch(_){}this._src=null;}
+    if(this._lfo){try{this._lfo.stop();}catch(_){}this._lfo=null;} this.setState({ambientKey:null}); }
+  playAmbient(key,minutes){ const ctx=this.ensureCtx(); if(ctx.state==="suspended")ctx.resume(); this.stopAmbient();
+    const cfg=this.SOUNDS.find(s=>s.key===key); if(!cfg)return;
+    const src=ctx.createBufferSource(); src.buffer=this.makeNoise(ctx,cfg.noise); src.loop=true;
+    const filter=ctx.createBiquadFilter(); filter.type=cfg.filter; filter.frequency.value=cfg.freq; if(cfg.q)filter.Q.value=cfg.q;
+    const gain=ctx.createGain(); gain.gain.value=this.state.ambientVol;
+    src.connect(filter); filter.connect(gain); gain.connect(ctx.destination);
+    if(cfg.swell){const lfo=ctx.createOscillator();lfo.frequency.value=cfg.swell;const lg=ctx.createGain();lg.gain.value=this.state.ambientVol*0.5;lfo.connect(lg);lg.connect(gain.gain);lfo.start();this._lfo=lfo;}
+    src.start(); this._src=src; this._gain=gain; this.setState({ambientKey:key});
+    if(minutes)this._aTimer=setTimeout(()=>this.stopAmbient(),minutes*60000); }
+  setVol(v){ this.setState({ambientVol:v}); if(this._gain)this._gain.gain.value=v; }
+
+  // ── 朗读 ──
+  speak(text,lang){ if(typeof window==="undefined"||!window.speechSynthesis)return false; window.speechSynthesis.cancel();
+    const u=new SpeechSynthesisUtterance(text); u.lang=lang||"zh-CN"; u.rate=lang==="en-US"?0.88:1; window.speechSynthesis.speak(u); return true; }
+  stopSpeak(){ if(typeof window!=="undefined"&&window.speechSynthesis)window.speechSynthesis.cancel(); }
+  startMeditation(m){ this.stopSpeak(); this.setState({meditationActive:this.speak(m.text,"zh-CN")}); }
+  stopMeditation(){ this.stopSpeak(); this.setState({meditationActive:false}); }
+  startBreathing(modeKey){
+    const mode=this.BREATH_MODES.find(m=>m.key===modeKey)||this.BREATH_MODES[0];
+    this.stopBreathing();
+    this.setState({breathMode:mode.key,breathActive:true,breathPhase:0});
+    const tick=(i)=>{ this.setState({breathPhase:i}); this._breathTimer=setTimeout(()=>tick((i+1)%mode.phases.length),mode.phases[i][1]*1000); };
+    tick(0);
+  }
+  stopBreathing(){ if(this._breathTimer){clearTimeout(this._breathTimer);this._breathTimer=null;} this.setState({breathActive:false,breathPhase:0}); }
+
+  // ── 跟练 ──
+  startWorkout(r){ this.setState({workout:r,woIdx:0,woRemaining:r.moves[0].sec,woPaused:false,woDone:false},()=>this.tickSetup()); if(this.state.exVoice)this.speak(r.moves[0].name+"。"+r.moves[0].tip); }
+  tickSetup(){ if(this._woTimer)clearInterval(this._woTimer);
+    this._woTimer=setInterval(()=>{ const s=this.state; if(s.woPaused||s.woDone||!s.workout)return;
+      if(s.woRemaining<=1){ const total=s.workout.moves.length;
+        if(s.woIdx<total-1){ const ni=s.woIdx+1; this.setState({woIdx:ni,woRemaining:s.workout.moves[ni].sec}); if(s.exVoice)this.speak(s.workout.moves[ni].name+"。"+s.workout.moves[ni].tip); }
+        else{ this.finishWorkout(); } }
+      else this.setState({woRemaining:s.woRemaining-1}); },1000); }
+  finishWorkout(){ if(this._woTimer){clearInterval(this._woTimer);this._woTimer=null;} this.stopSpeak();
+    const r=this.state.workout; const totalMin=Math.max(1,Math.round(r.moves.reduce((a,m)=>a+m.sec,0)/60));
+    this.setState({woDone:true}); if(this.state.exVoice)this.speak("完成啦，太棒了！");
+    this.burst(window.innerWidth/2,window.innerHeight/2,true);
+    const ex=this.state.entries[this.today()]?.exercise;
+    this.patch("exercise",{minutes:(ex?.minutes||0)+totalMin,type:ex?.type??5}); }
+  exitWorkout(){ if(this._woTimer){clearInterval(this._woTimer);this._woTimer=null;} this.stopSpeak(); this.setState({workout:null,woDone:false}); }
+
+  // ── 饮食评分（演示） ──
+  scoreMeal(){ this.setState({dietBusy:true});
+    setTimeout(()=>{ this.patch("diet",{...(this.state.entries[this.today()]?.diet||{}),score:this.DEMO_SCORE});
+      this.setState({dietBusy:false,dietScored:true}); this.burst(window.innerWidth/2,window.innerHeight*0.4,false); },1400); }
+
+  refreshQuote(){ this.setState({quoteBusy:true});
+    setTimeout(()=>{ const cur=this.state.moodQuote; let q=cur; while(q===cur)q=this.QUOTES[Math.floor(Math.random()*this.QUOTES.length)];
+      this.setState({moodQuote:q,quoteBusy:false}); },800); }
+
+  // ── 关闭弹层 ──
+  closeSheet(){ this.stopAmbient(); this.stopSpeak(); this.stopBreathing(); if(this._woTimer){clearInterval(this._woTimer);this._woTimer=null;} this.setState({openKey:null,workout:null,woDone:false,reading:false,meditationActive:false}); }
+  openSheet(key){ this.setState({openKey:key, recipeIdx:this.RECIPES.indexOf(this.dailyPick(this.RECIPES)), readIdx:this.CN_READ.indexOf(this.dailyPick(this.CN_READ)), enIdx:this.EN_SLEEP.indexOf(this.dailyPick(this.EN_SLEEP)), reading:false, dietScored:false }); }
+
+  // ── 问小电 对话 ──
+  pickReply(t){
+    if(!t) return this.CHAT_REPLIES[Math.floor(Math.random()*this.CHAT_REPLIES.length)];
+    if(/水|渴/.test(t)) return "记得小口多次喝水，现在就去喝一杯吧～点开「喝水」打个卡？";
+    if(/睡|困|失眠|熬夜/.test(t)) return "今晚早点放下手机，试试助眠音景，我陪你慢慢入睡。";
+    if(/累|压力|焦虑|emo|烦|难过/.test(t)) return "先深呼吸三次。你已经很努力了，允许自己歇一会儿。";
+    if(/吃|饿|减|瘦|胖/.test(t)) return "别和食物较劲，均衡多样才是对身体最温柔的方式。";
+    if(/运动|锻炼|跑|健身/.test(t)) return "哪怕只动五分钟身体都会谢谢你，要不要来段跟练？";
+    return this.CHAT_REPLIES[Math.floor(Math.random()*this.CHAT_REPLIES.length)];
+  }
+  showToast(text){ if(this._toastT)clearTimeout(this._toastT); this.setState({chatToastShow:true,chatToastText:text}); this._toastT=setTimeout(()=>this.setState({chatToastShow:false}),3500); }
+  chatSend(text){ this.showToast(this.pickReply((text||"").trim())); }
+  chatKey(ev){ if(ev.key==="Enter"){ this.chatSend(ev.target.value); ev.target.value=""; } }
+  voiceTap(){ this.showToast("在听呢，说说看你的健康小困惑～"); }
+  plusTap(){ this.showToast(this.pickReply("")); }
+
+  // ════ 视觉元素 ════
+  e = React.createElement;
+
+  bgParticles(){ const e=this.e; const blobs=[
+    {c:"#9ED6FF",s:160,l:"-8%",t:"8%",d:"floatY 11s",dl:"0s",o:.48},
+    {c:"#7EF1F3",s:130,l:"78%",t:"3%",d:"floatY2 13s",dl:"1s",o:.45},
+    {c:"#DDE7FF",s:112,l:"4%",t:"52%",d:"floatY 15s",dl:".6s",o:.48},
+    {c:"#B8F7FF",s:120,l:"72%",t:"58%",d:"floatY2 12s",dl:"2s",o:.40},
+    {c:"#AFC5FF",s:74,l:"42%",t:"28%",d:"floatY3 17s",dl:"1.4s",o:.34},
+    {c:"#EEF4FF",s:88,l:"28%",t:"82%",d:"floatY2 14s",dl:".3s",o:.42},
+  ];
+    return e("div",{style:{position:"fixed",inset:0,zIndex:0,pointerEvents:"none",filter:"blur(8px)"}},
+      blobs.map((b,i)=>e("div",{key:i,style:{position:"absolute",left:b.l,top:b.t,width:b.s,height:b.s,borderRadius:"50%",background:b.c,opacity:b.o,animation:b.d+" ease-in-out infinite",animationDelay:b.dl}})));
+  }
+
+  // 电池小精灵 — 随完成度充电、变表情
+  buildMascot(level){
+    const e=this.e; const pct=level/5;
+    const fillColor = pct>=1?"#46E3B4":pct>=0.6?"#FFB02E":pct>=0.3?"#FF9A4D":"#FF7A6B";
+    const fillTop = 100 - pct*78; // body inner from y22..y100
+    // 表情
+    const happy = level>=4, mid = level>=2&&level<4, sleepy = level<2;
+    const eyeY=52;
+    let eyes, mouth;
+    if(happy){
+      eyes=[e("path",{key:"l",d:"M37 50 q5 -7 10 0",stroke:"#20242E",strokeWidth:3.4,fill:"none",strokeLinecap:"round"}),
+            e("path",{key:"r",d:"M63 50 q5 -7 10 0",stroke:"#20242E",strokeWidth:3.4,fill:"none",strokeLinecap:"round"})];
+      mouth=e("path",{d:"M42 62 q13 16 26 0",stroke:"#20242E",strokeWidth:3.6,fill:"none",strokeLinecap:"round"});
+    } else if(mid){
+      eyes=[e("circle",{key:"l",cx:43,cy:eyeY,r:3.4,fill:"#20242E",style:{transformOrigin:"43px "+eyeY+"px",animation:"blink 4s infinite"}}),
+            e("circle",{key:"r",cx:68,cy:eyeY,r:3.4,fill:"#20242E",style:{transformOrigin:"68px "+eyeY+"px",animation:"blink 4s infinite"}})];
+      mouth=e("path",{d:"M45 63 q11 8 22 0",stroke:"#20242E",strokeWidth:3.4,fill:"none",strokeLinecap:"round"});
+    } else {
+      eyes=[e("path",{key:"l",d:"M38 52 q5 4 10 0",stroke:"#20242E",strokeWidth:3,fill:"none",strokeLinecap:"round"}),
+            e("path",{key:"r",d:"M62 52 q5 4 10 0",stroke:"#20242E",strokeWidth:3,fill:"none",strokeLinecap:"round"})];
+      mouth=e("ellipse",{cx:56,cy:64,rx:5,ry:6,fill:"#20242E",opacity:.85});
+    }
+    const cheeks = (happy||mid)?[e("circle",{key:"cl",cx:34,cy:60,r:5,fill:"#FF7A9A",opacity:.45}),e("circle",{key:"cr",cx:78,cy:60,r:5,fill:"#FF7A9A",opacity:.45})]:[];
+    const sparkles = happy?[
+      e("g",{key:"s1",style:{transformOrigin:"14px 22px",animation:"sparkleTwinkle 1.6s ease-in-out infinite"}},e("path",{d:"M14 14 l2 6 6 2 -6 2 -2 6 -2 -6 -6 -2 6 -2z",fill:"#FFD23F"})),
+      e("g",{key:"s2",style:{transformOrigin:"98px 36px",animation:"sparkleTwinkle 1.6s ease-in-out infinite",animationDelay:".5s"}},e("path",{d:"M98 30 l1.5 4.5 4.5 1.5 -4.5 1.5 -1.5 4.5 -1.5 -4.5 -4.5 -1.5 4.5 -1.5z",fill:"#FF8FB1"})),
+    ]:[];
+    const bolt = happy?e("g",{style:{transformOrigin:"56px 35px",animation:"boltFlash 1.1s ease-in-out infinite"}},
+      e("path",{d:"M58 28 L48 42 H55 L53 52 L65 36 H57 L58 28 Z",fill:"#FFD23F",stroke:"#fff",strokeWidth:1.4,strokeLinejoin:"round"})):null;
+
+    const body = e("svg",{width:108,height:128,viewBox:"0 0 112 132"},
+      e("defs",null,
+        e("linearGradient",{id:"mFill",x1:0,y1:0,x2:0,y2:1},
+          e("stop",{offset:"0%",stopColor:fillColor,stopOpacity:.95}),
+          e("stop",{offset:"100%",stopColor:fillColor})),
+        e("clipPath",{id:"mClip"},e("rect",{x:18,y:24,width:76,height:94,rx:20}))),
+      // 顶部正极
+      e("rect",{x:42,y:8,width:28,height:14,rx:6,fill:"#fff",opacity:.92}),
+      // 外壳
+      e("rect",{x:14,y:20,width:84,height:102,rx:24,fill:"#fff",stroke:"rgba(32,36,46,.08)",strokeWidth:2}),
+      // 液面填充
+      e("g",{clipPath:"url(#mClip)"},
+        e("rect",{x:18,y:fillTop,width:76,height:120,fill:"url(#mFill)",style:{transition:"y .9s cubic-bezier(.34,1.56,.64,1)"}}),
+        e("ellipse",{cx:56,cy:fillTop,rx:42,ry:7,fill:fillColor,opacity:.55,style:{transition:"cy .9s cubic-bezier(.34,1.56,.64,1)"}})),
+      // 高光
+      e("rect",{x:22,y:28,width:10,height:60,rx:5,fill:"#fff",opacity:.4}),
+      ...cheeks, ...eyes, mouth, bolt, ...sparkles);
+
+    return e("div",{key:level,style:{animation:"breathe 3.2s ease-in-out infinite",filter:"drop-shadow(0 10px 16px rgba(157,77,255,.3))"}},body);
+  }
+
+  // 能量核心：进度环 + 电池小精灵
+  energyCore(){
+    const e=this.e; const level=this.doneCount(this.state.entries[this.today()]); const pct=level/5;
+    const r=64, c=2*Math.PI*r;
+    const ring=e("svg",{width:148,height:148,viewBox:"0 0 148 148",style:{position:"absolute",inset:0}},
+      e("defs",null,e("linearGradient",{id:"ringG",x1:0,y1:0,x2:1,y2:1},
+        e("stop",{offset:"0%",stopColor:"#FFE6A8"}),e("stop",{offset:"100%",stopColor:"#fff"}))),
+      e("circle",{cx:74,cy:74,r:r,fill:"none",stroke:"rgba(255,255,255,.26)",strokeWidth:7}),
+      e("circle",{cx:74,cy:74,r:r,fill:"none",stroke:"url(#ringG)",strokeWidth:7,strokeLinecap:"round",
+        strokeDasharray:c,strokeDashoffset:c*(1-pct),transform:"rotate(-90 74 74)",
+        style:{transition:"stroke-dashoffset 1s cubic-bezier(.34,1.56,.64,1)",filter:"drop-shadow(0 0 5px rgba(255,255,255,.7))"}}));
+    const glow=e("div",{style:{position:"absolute",inset:14,borderRadius:"50%",background:"radial-gradient(circle,rgba(255,255,255,.5),transparent 68%)",animation:"glowPulse 3s ease-in-out infinite"}});
+    return e("div",{style:{position:"relative",width:148,height:148,flexShrink:0,display:"flex",alignItems:"center",justifyContent:"center"}},
+      glow, ring,
+      e("div",{style:{position:"relative",zIndex:2}},this.buildMascot(level)));
+  }
+
+  renderTaskCarousel(td){
+    const e=this.e, C=this.C, G=this.GRAD;
+    const statusOf=(key)=>{ switch(key){
+      case"sleep":return td.sleep?.hours?td.sleep.hours+" 小时":"去记录";
+      case"exercise":return td.exercise?.minutes?td.exercise.minutes+" 分钟":"去运动";
+      case"diet":return td.diet?.score?"均衡 "+td.diet.score.rating+"/5":(td.diet?"已记录":"去记录");
+      case"water":return (td.water?.cups||0)+"/8 杯";
+      case"mood":return td.mood?.level?["","低落","一般","平静","不错","很好"][td.mood.level]:"去打卡"; } };
+    const iconPath={
+      sleep:["M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"],
+      exercise:["M22 12h-4l-3 9L9 3l-3 9H2"],
+      diet:["M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z","M2 21c0-3 1.85-5.36 5.08-6"],
+      water:["M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"],
+      mood:["M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"]
+    };
+    const sub={
+      sleep:"助眠音景 · 冥想呼吸 · 睡眠记录",
+      exercise:"计时跟练 · 跟着动起来",
+      diet:"食谱推荐 · 拍照评分",
+      water:"杯数打卡 · 留证提醒",
+      mood:"每日鸡汤 · 静读记录",
+    };
+    const english={sleep:"SLEEP",exercise:"MOVE",diet:"MEAL",water:"WATER",mood:"MOOD"};
+    const modules=this.MODULES.filter(m=>["sleep","exercise","diet","mood"].includes(m.key)).map((m,i)=>({
+      ...m, idx:i, sub:sub[m.key], tag:english[m.key], status:statusOf(m.key), done:this.moduleDone(m.key,td),
+      grad:G[m.key==="exercise"?"move":m.key],
+      open:()=>this.openSheet(m.key),
+    }));
+    const focus=((this.state.taskFocus%modules.length)+modules.length)%modules.length;
+    const cur=modules[focus];
+    const icon=(m,size=28,color="#fff")=>e("svg",{width:size,height:size,viewBox:"0 0 24 24",fill:"none",stroke:color,strokeWidth:2.35,strokeLinecap:"round",strokeLinejoin:"round"},
+      iconPath[m.key].map((d,i)=>e("path",{key:i,d})));
+    const icon3d=(m,big)=>e("span",{style:{position:"relative",width:big?86:58,height:big?86:58,display:"inline-flex",alignItems:"center",justifyContent:"center",flexShrink:0}},
+      e("span",{style:{position:"absolute",inset:big?10:7,borderRadius:big?22:17,background:m.grad,transform:"rotate(-10deg)",boxShadow:"inset 0 1px 0 rgba(255,255,255,.55)",opacity:.34}}),
+      e("span",{style:{position:"absolute",inset:big?4:3,borderRadius:big?26:18,background:"linear-gradient(145deg,rgba(255,255,255,.74),rgba(255,255,255,.12))",transform:"rotate(8deg)",border:"1px solid rgba(255,255,255,.72)"}}),
+      e("span",{style:{position:"relative",zIndex:2,width:big?64:44,height:big?64:44,borderRadius:big?20:15,display:"flex",alignItems:"center",justifyContent:"center",background:m.grad,boxShadow:"inset 0 1px 0 rgba(255,255,255,.72),inset 0 -10px 18px rgba(255,255,255,.16)",animation:"bob "+(big?4.8:5.6)+"s ease-in-out infinite"}},icon(m,big?31:22)));
+    const moveFocus=(delta)=>this.setState(s=>({taskFocus:((s.taskFocus+delta)%modules.length+modules.length)%modules.length}));
+    const select=(i)=>this.setState({taskFocus:i});
+    const glassDecor=(m,small)=>e("span",{style:{position:"absolute",right:small?-8:16,top:small?-10:14,width:small?86:124,height:small?76:104,pointerEvents:"none",zIndex:1}},
+      e("span",{style:{position:"absolute",right:small?14:16,top:small?14:2,width:small?44:68,height:small?44:68,borderRadius:small?16:22,background:"linear-gradient(145deg,rgba(255,255,255,.34),rgba(255,255,255,.08))",border:"1px solid rgba(255,255,255,.58)",backdropFilter:"blur(14px)",WebkitBackdropFilter:"blur(14px)",transform:"rotate(16deg)",boxShadow:"inset 0 1px 0 rgba(255,255,255,.72)"}}),
+      e("span",{style:{position:"absolute",right:small?2:0,top:small?48:60,width:small?34:52,height:small?12:14,borderRadius:999,background:"rgba(255,255,255,.22)",border:"1px solid rgba(255,255,255,.48)",transform:"rotate(-4deg)"}}),
+      e("span",{style:{position:"absolute",right:small?10:8,top:small?64:82,width:small?42:62,height:small?9:11,borderRadius:999,background:"rgba(255,255,255,.16)",border:"1px solid rgba(255,255,255,.38)",transform:"rotate(-4deg)"}}),
+      e("span",{style:{position:"absolute",right:small?62:86,top:small?6:18,width:small?13:16,height:small?13:16,borderRadius:"50%",background:m.grad,opacity:.24,border:"1px solid rgba(255,255,255,.45)"}}));
+    const startDrag=(ev)=>{const p=(ev.touches&&ev.touches[0])||ev; this._deckX=p.clientX; this._deckY=p.clientY; this._deckMoved=false;};
+    const endDrag=(ev)=>{const p=(ev.changedTouches&&ev.changedTouches[0])||ev; if(this._deckX==null||!p)return; const dx=p.clientX-this._deckX, dy=p.clientY-this._deckY; if(Math.abs(dx)>38&&Math.abs(dx)>Math.abs(dy)*1.2){this._deckMoved=true; moveFocus(dx<0?1:-1);} this._deckX=null; this._deckY=null;};
+    const coverCard=(m)=>{
+      const raw=(m.idx-focus+modules.length)%modules.length;
+      const signed=raw>modules.length/2?raw-modules.length:raw;
+      const front=signed===0, side=Math.abs(signed)===1, back=Math.abs(signed)===2;
+      const x=front?0:(signed<0?-122:(signed>1?0:122));
+      const y=front?14:(side?46:10);
+      const scale=front?1:(side ? .80 : .68);
+      const rotate=front?0:(signed<0?-4:(signed>1?1:4));
+      const opacity=front?1:(side ? .80 : .48);
+      const z=front?30:(side?18:8);
+      const blur=front?"none":(side?"saturate(.9)":"saturate(.78) blur(.4px)");
+      return e("button",{key:m.key,onClick:()=>{if(this._deckMoved){this._deckMoved=false;return;} front?m.open():select(m.idx);},style:{position:"absolute",left:"50%",top:0,width:"72%",maxWidth:302,minWidth:244,height:174,border:front?"1px solid rgba(255,255,255,.92)":"1px solid transparent",borderRadius:30,padding:16,display:"flex",alignItems:"center",gap:14,textAlign:"left",fontFamily:"inherit",cursor:front?"pointer":"grab",overflow:"hidden",background:front?"linear-gradient(180deg,rgba(255,255,255,.98) 0%,rgba(255,255,255,.88) 100%)":m.card,backdropFilter:"blur(22px) saturate(1.18)",WebkitBackdropFilter:"blur(22px) saturate(1.18)",boxShadow:front?"0 22px 42px -32px rgba(68,112,210,.70),inset 0 1px 0 rgba(255,255,255,.96),inset 0 -28px 42px rgba(226,238,255,.34)":"none",transform:"translateX(-50%) translateX("+x+"px) translateY("+y+"px) scale("+scale+") rotate("+rotate+"deg)",transformOrigin:"center bottom",zIndex:z,opacity:opacity,filter:blur,transition:"transform .34s cubic-bezier(.2,.9,.22,1), opacity .28s, filter .28s",touchAction:"pan-y",WebkitTapHighlightColor:"transparent"}},
+      e("span",{style:{position:"absolute",inset:0,background:front?"radial-gradient(circle at 72% 8%,rgba(112,236,255,.22),rgba(112,236,255,0) 38%),linear-gradient(145deg,rgba(255,255,255,.34),rgba(255,255,255,0) 44%)":"linear-gradient(145deg,rgba(255,255,255,.24),rgba(255,255,255,0) 45%,rgba(28,74,150,.08) 100%)"}}),
+      e("span",{style:{position:"absolute",left:18,right:18,top:14,height:1,borderRadius:999,background:"rgba(255,255,255,.44)"}}),
+      e("span",{style:{position:"absolute",right:-28,top:-24,width:126,height:126,borderRadius:36,background:"rgba(255,255,255,.22)",border:"1px solid rgba(255,255,255,.32)",transform:"rotate(18deg)"}}),
+      front&&glassDecor(m,false),
+      !front&&e("span",{style:{position:"absolute",left:signed<0?18:"auto",right:signed>0?18:"auto",top:22,width:52,height:52,borderRadius:18,display:"flex",alignItems:"center",justifyContent:"center",background:"rgba(255,255,255,.38)",border:"1px solid rgba(255,255,255,.46)",boxShadow:"inset 0 1px 0 rgba(255,255,255,.48)"}},icon(m,24,"rgba(255,255,255,.92)")),
+      front&&e("span",{style:{position:"absolute",left:22,right:22,bottom:18,height:8,borderRadius:999,background:m.done?m.grad:"rgba(93,124,170,.13)",opacity:1}}),
+      front&&e("span",{style:{position:"absolute",right:18,bottom:17,width:34,height:23,borderRadius:8,background:"rgba(255,255,255,.32)",border:"1px solid rgba(255,255,255,.42)",boxShadow:"inset 0 1px 0 rgba(255,255,255,.46)",opacity:.85}}),
+      e("div",{style:{position:"relative",zIndex:2,display:front?"flex":"none",alignItems:"center",gap:14,width:"100%",minWidth:0}},
+        icon3d(m,front),
+        e("div",{style:{flex:1,minWidth:0,paddingTop:front?0:3}},
+          e("div",{style:{display:"flex",alignItems:"center",gap:8,marginBottom:front?8:6}},
+            e("span",{style:{fontSize:11,fontWeight:900,letterSpacing:2.1,color:m.accent}},m.tag),
+            m.done&&e("span",{style:{fontSize:10.5,fontWeight:900,color:"#fff",padding:"4px 8px",borderRadius:999,background:m.grad,opacity:front?1:.65}},"已点亮")),
+          e("div",{style:{fontSize:24,fontWeight:900,color:"#10224B",lineHeight:1.08,textShadow:"0 1px 0 rgba(255,255,255,.30)",whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}},m.name),
+          e("div",{style:{fontSize:12,color:"#5A6F8C",fontWeight:800,lineHeight:1.42,marginTop:6,textShadow:"0 1px 0 rgba(255,255,255,.20)",display:front?"block":"none"}},m.sub),
+          e("div",{style:{display:"inline-flex",alignItems:"center",gap:7,marginTop:12,padding:"7px 12px",borderRadius:999,background:"rgba(255,255,255,.72)",backdropFilter:"blur(16px) saturate(1.2)",WebkitBackdropFilter:"blur(16px) saturate(1.2)",boxShadow:"inset 0 1px 0 rgba(255,255,255,.82)",fontSize:12.5,fontWeight:900,color:"#10224B",maxWidth:"100%"}},
+            m.status,
+            e("span",{style:{fontSize:15,color:m.accent,display:front?"inline":"none"}},"›")))));
+    };
+    return e("section",{style:{animation:"rise .48s .12s both"}},
+      e("div",{style:{display:"flex",alignItems:"center",justifyContent:"space-between",margin:"0 2px 10px"}},
+        e("div",null,
+          e("div",{style:{fontSize:12,fontWeight:900,letterSpacing:2,color:"#4F6B8C"}},"打 卡 任 务"),
+          e("div",{style:{fontSize:12,color:"#7E8CA6",fontWeight:700,marginTop:4}},"睡眠、运动、饮食、心情一屏切换")),
+        e("div",{style:{fontSize:11,fontWeight:900,color:"#4F6B8C",padding:"7px 11px",borderRadius:999,background:"rgba(255,255,255,.56)",border:"1px solid rgba(255,255,255,.82)",backdropFilter:"blur(14px)",WebkitBackdropFilter:"blur(14px)"}},"滑动切换")),
+      e("div",{onTouchStart:startDrag,onTouchEnd:endDrag,onMouseDown:startDrag,onMouseUp:endDrag,onMouseLeave:endDrag,style:{position:"relative",height:218,margin:"0 -10px",touchAction:"pan-y",userSelect:"none",overflow:"hidden"}},
+        e("span",{style:{position:"absolute",left:"21%",right:"21%",top:22,height:42,borderRadius:999,background:"linear-gradient(90deg,#2E77FF,#24F0DD)",boxShadow:"0 12px 24px -16px rgba(46,119,255,.75)",opacity:.88,zIndex:10}}),
+        modules.map(coverCard),
+        e("button",{"aria-label":"上一张任务卡",onClick:()=>moveFocus(-1),style:{position:"absolute",left:0,top:28,width:64,height:154,zIndex:36,border:"none",outline:"none",background:"transparent",cursor:"grab",WebkitTapHighlightColor:"transparent"}}),
+        e("button",{"aria-label":"下一张任务卡",onClick:()=>moveFocus(1),style:{position:"absolute",right:0,top:28,width:64,height:154,zIndex:36,border:"none",outline:"none",background:"transparent",cursor:"grab",WebkitTapHighlightColor:"transparent"}})),
+      e("div",{style:{display:"flex",justifyContent:"center",gap:7,marginTop:0}},
+        modules.map(m=>e("button",{key:m.key,onClick:()=>select(m.idx),style:{width:focus===m.idx?22:7,height:7,border:"none",borderRadius:999,background:focus===m.idx?cur.grad:"rgba(92,124,170,.22)",cursor:"pointer",transition:".2s"}}))));
+  }
+
+  buildHeroMascot(level,gender){
+    const e=this.e;
+    const isGirl=gender==="girl";
+    const src=isGirl?"./uploads/health-mascot-girl.png":"./uploads/health-mascot.png";
+    const alt=isGirl?"女孩健康小助手":"男孩健康小助手";
+    return e("div",{style:{position:"relative",width:"100%",height:"100%",display:"flex",alignItems:"flex-start",justifyContent:"center"}},
+      e("div",{style:{position:"absolute",left:20,right:20,bottom:12,height:38,borderRadius:"50%",background:"radial-gradient(ellipse,rgba(50,106,220,.20),rgba(50,106,220,0) 68%)"}}),
+      e("img",{src,alt,style:{position:"relative",zIndex:2,width:isGirl?246:238,height:isGirl?246:238,objectFit:"contain",objectPosition:"center top",transform:isGirl?"translateY(-18px)":"translateY(-14px)",filter:"drop-shadow(0 18px 18px rgba(77,91,170,.22))",WebkitMaskImage:"linear-gradient(180deg,#000 0%,#000 54%,rgba(0,0,0,.72) 66%,rgba(0,0,0,.20) 80%,transparent 92%)",maskImage:"linear-gradient(180deg,#000 0%,#000 54%,rgba(0,0,0,.72) 66%,rgba(0,0,0,.20) 80%,transparent 92%)"}}),
+      e("span",{style:{position:"absolute",left:15,top:60,zIndex:3,padding:"7px 12px",borderRadius:14,background:"rgba(255,255,255,.86)",border:"1px solid rgba(255,255,255,.9)",boxShadow:"0 12px 24px -14px rgba(30,80,190,.6)",fontSize:13,fontWeight:900,color:"#1265F3"}},"Hi!"),
+      e("span",{style:{position:"absolute",right:12,top:126,zIndex:3,padding:"7px 10px",borderRadius:999,background:level>=5?"linear-gradient(135deg,#13E7AB,#19C7FF)":"rgba(255,255,255,.82)",boxShadow:"0 12px 24px -16px rgba(30,80,190,.6)",fontSize:12,fontWeight:900,color:level>=5?"#fff":"#5C6F8C"}},"+"+level+" 格"));
+  }
+
+  // ── 趋势图 ──
+  makeChart(opts){
+    const e=this.e; const {title,unit,color,grad,data,type,domain,reKey}=opts;
+    const W=320,H=132,PL=26,PR=8,PT=12,PB=20; const iw=W-PL-PR, ih=H-PT-PB;
+    const vals=data.map(d=>d.v);
+    const max=domain?domain[1]:Math.max(1,...vals.filter(v=>v!=null));
+    const min=domain?domain[0]:0;
+    const X=i=>PL+(data.length<=1?iw/2:iw*i/(data.length-1));
+    const Y=v=>PT+ih*(1-(v-min)/(max-min||1));
+    const labels=e("g",null,data.map((d,i)=>{ if(data.length>10&&i%Math.ceil(data.length/7)!==0&&i!==data.length-1)return null;
+      return e("text",{key:i,x:X(i),y:H-6,fontSize:9.5,fill:"#9A9EB2",textAnchor:"middle"},d.label); }));
+    let plot;
+    if(type==="bar"){
+      const bw=Math.min(16,iw/data.length*0.62);
+      plot=e("g",null,data.map((d,i)=>{ const v=d.v||0; const h=ih*(v/(max-min||1)); 
+        return e("rect",{key:i,x:X(i)-bw/2,y:PT+ih-h,width:bw,height:Math.max(0,h),rx:4,fill:color,opacity:v?1:0,
+          style:{transformOrigin:"center "+(PT+ih)+"px",animation:"growBar .6s cubic-bezier(.34,1.4,.6,1) both",animationDelay:(i*0.025)+"s"}}); }));
+    } else if(type==="area"){
+      const pts=data.map((d,i)=>d.v==null?null:[X(i),Y(d.v)]).filter(Boolean);
+      const line="M"+pts.map(p=>p[0]+" "+p[1]).join(" L ");
+      const area=line+" L "+pts[pts.length-1][0]+" "+(PT+ih)+" L "+pts[0][0]+" "+(PT+ih)+" Z";
+      plot=e("g",null,
+        e("path",{d:area,fill:grad,opacity:.9,style:{animation:"fadeIn .8s both"}}),
+        e("path",{d:line,fill:"none",stroke:color,strokeWidth:2.6,strokeLinecap:"round",strokeLinejoin:"round",
+          strokeDasharray:1200,strokeDashoffset:1200,style:{animation:"draw 1.1s ease forwards"}}),
+        pts.map((p,i)=>e("circle",{key:i,cx:p[0],cy:p[1],r:2.6,fill:color,opacity:0,style:{animation:"fadeIn .4s forwards",animationDelay:(0.5+i*0.03)+"s"}})));
+    } else {
+      const pts=data.map((d,i)=>d.v==null?null:[X(i),Y(d.v)]).filter(Boolean);
+      const line="M"+pts.map(p=>p[0]+" "+p[1]).join(" L ");
+      plot=e("g",null,
+        e("path",{d:line,fill:"none",stroke:color,strokeWidth:2.6,strokeLinecap:"round",strokeLinejoin:"round",
+          strokeDasharray:1200,strokeDashoffset:1200,style:{animation:"draw 1.1s ease forwards"}}),
+        pts.map((p,i)=>e("circle",{key:i,cx:p[0],cy:p[1],r:3,fill:color,opacity:0,style:{animation:"popIn .35s forwards",animationDelay:(0.5+i*0.04)+"s",transformOrigin:p[0]+"px "+p[1]+"px"}})));
+    }
+    return e("section",{key:reKey,style:{background:"#fff",borderRadius:20,padding:"16px 14px 8px",boxShadow:"0 8px 20px -16px rgba(32,36,46,.3)"}},
+      e("header",{style:{display:"flex",alignItems:"center",gap:8,padding:"0 4px 4px"}},
+        e("span",{style:{width:10,height:10,borderRadius:"50%",background:color}}),
+        e("h4",{style:{fontSize:14.5,fontWeight:700,flex:1,color:"#20242E"}},title),
+        e("span",{style:{fontSize:11,color:"#9A9EB2"}},unit)),
+      e("svg",{width:"100%",viewBox:"0 0 "+W+" "+H,style:{display:"block"}},
+        e("style",null,"@keyframes draw{to{stroke-dashoffset:0}}@keyframes growBar{from{transform:scaleY(0)}to{transform:scaleY(1)}}"),
+        labels, plot));
+  }
+
+  renderVals(){
+    const e=this.e; const C=this.C, G=this.GRAD;
+    if(!this.state.loaded) return {
+      greeting:"正在充电…", dateStr:"", streak:0, heroBig:"", heroSub:"",
+      bgParticles:this.bgParticles(), energyCore:null, isToday:true, isTrend:false,
+      ribbonCols:[], ranges:[], sheet:null, taskCarousel:null,
+      mascotEl:this.buildHeroMascot(0,"boy"), goalDots:[], chatToastShow:false, chatToastText:"",
+      boyMascotStyle:{}, girlMascotStyle:{},
+      weightToggleLabel:"展开", weightVal:"60.0",
+      chatKey:()=>{}, voiceTap:()=>{}, plusTap:()=>{}, goToday:()=>{}, goTrend:()=>{}, openDiet:()=>{},
+      chooseBoy:()=>{}, chooseGirl:()=>{},
+    };
+    const ent=this.state.entries; const td=ent[this.today()]||{}; const level=this.doneCount(td);
+    const now=new Date();
+    const mascotChip=(active)=>({padding:"7px 13px",border:"none",borderRadius:999,background:active?"linear-gradient(135deg,#3BA0FF,#24DAD7)":"transparent",color:active?"#fff":"#526581",fontSize:12,fontWeight:900,fontFamily:"inherit",cursor:"pointer",boxShadow:active?"0 8px 16px -10px rgba(46,119,255,.75)":"none",transition:".18s"});
+
+    // 周能量带
+    const ribbonCols=this.lastNDays(7).map(k=>{
+      const e2=ent[k], isToday=k===this.today(), cnt=this.doneCount(e2);
+      const cells=this.MODULES.map(m=>{ const on=this.moduleDone(m.key,e2);
+        return { style: on?{height:9,borderRadius:3,background:G[m.key==="exercise"?"move":m.key],boxShadow:"0 0 7px "+m.accent+"66",transition:"all .4s"}:{height:9,borderRadius:3,background:C.line,transition:"all .4s"} }; });
+      return { isToday, cells,
+        stackStyle:{display:"flex",flexDirection:"column",gap:3,width:"100%",transform:isToday?"scale(1.07)":"none",transition:"transform .3s"},
+        dow: cnt>=5?"⚡":this.WEEK[new Date(k).getDay()],
+        dowStyle:{fontSize:cnt>=5?13:11,color:isToday?C.ink:C.muted,fontWeight:isToday?800:600,height:14,display:"flex",alignItems:"center"} };
+    });
+
+    // 状态文字
+    const statusOf=(key)=>{ switch(key){
+      case"sleep":return td.sleep?.hours?td.sleep.hours+" 小时":"去记录";
+      case"exercise":return td.exercise?.minutes?td.exercise.minutes+" 分钟":"去运动";
+      case"diet":return td.diet?.score?"均衡 "+td.diet.score.rating+"/5":(td.diet?"已记录":"去记录");
+      case"water":return (td.water?.cups||0)+"/8 杯";
+      case"mood":return td.mood?.level?["","低落","一般","平静","不错","很好"][td.mood.level]:"去打卡"; } };
+    const pill=(done,key)=>done?{fontSize:12,fontWeight:900,color:"#fff",padding:"6px 12px",borderRadius:999,whiteSpace:"nowrap",backgroundImage:G[key==="exercise"?"move":key],boxShadow:"0 8px 16px -10px rgba(0,80,180,.6)"}:{fontSize:12,fontWeight:800,color:C.inkSoft,background:"rgba(255,255,255,.82)",padding:"6px 12px",borderRadius:999,whiteSpace:"nowrap",boxShadow:"inset 0 0 0 1px rgba(255,255,255,.9)"};
+
+    // Tab
+    const tabBase={flex:1,padding:"12px",border:"none",borderRadius:14,fontSize:14.5,cursor:"pointer",fontFamily:"inherit",fontWeight:900,transition:".25s"};
+    const tabOn={...tabBase,backgroundImage:"linear-gradient(135deg,#2E77FF,#24F0DD)",color:"#fff",boxShadow:"0 10px 20px -12px rgba(46,119,255,.55)"}; const tabOff={...tabBase,background:"transparent",color:"#526B8A"};
+
+    // 趋势数据
+    const range=this.state.range; const days=this.lastNDays(range);
+    const ser=days.map(k=>{ const x=ent[k]||{},d=new Date(k); return {label:(d.getMonth()+1)+"/"+d.getDate(),
+      sleep:x.sleep?.hours??null, ex:x.exercise?.minutes??0, water:x.water?.cups??0, mood:x.mood?.level??null, done:this.doneCount(x)}; });
+    const sl=ser.filter(s=>s.sleep!=null);
+    const avgSleep=sl.length?(sl.reduce((a,s)=>a+s.sleep,0)/sl.length).toFixed(1):"—";
+    const totalEx=ser.reduce((a,s)=>a+s.ex,0);
+    const avgWater=Math.round(ser.reduce((a,s)=>a+s.water,0)/range);
+    const checkedDays=ser.filter(s=>s.done>=1).length;
+    const ranges=[7,14,30].map(n=>({label:n+" 天",onClick:()=>this.setState({range:n}),
+      style:{padding:"8px 17px",border:"1.5px solid "+(range===n?C.ink:C.line),background:range===n?C.ink:"#fff",borderRadius:12,fontSize:13,color:range===n?"#fff":C.muted,cursor:"pointer",fontFamily:"inherit",fontWeight:700,transition:".18s"}}));
+
+    const rk=this.state.tab+"-"+range;
+    const charts={
+      sleepChart:this.makeChart({title:"睡眠时长",unit:"小时",color:C.sleep,grad:"rgba(124,108,255,.16)",type:"area",domain:[0,12],reKey:"s"+rk,data:ser.map(s=>({label:s.label,v:s.sleep}))}),
+      exerciseChart:this.makeChart({title:"运动时长",unit:"分钟",color:C.move,type:"bar",reKey:"e"+rk,data:ser.map(s=>({label:s.label,v:s.ex}))}),
+      waterChart:this.makeChart({title:"每日喝水",unit:"杯",color:C.water,type:"bar",domain:[0,8],reKey:"w"+rk,data:ser.map(s=>({label:s.label,v:s.water}))}),
+      moodChart:this.makeChart({title:"心情起伏",unit:"1–5",color:C.mood,type:"line",domain:[1,5],reKey:"m"+rk,data:ser.map(s=>({label:s.label,v:s.mood}))}),
+    };
+
+    return {
+      bgParticles:this.bgParticles(),
+      greeting:this.greeting(),
+      dateStr:(now.getMonth()+1)+" 月 "+now.getDate()+" 日 · 周"+this.WEEK[now.getDay()],
+      streak:this.computeStreak(ent),
+      heroBig: level>=5?"今天满电！":"再点亮 "+(5-level)+" 项",
+      heroSub: level>=5?"五项全部完成，电力拉满 ⚡":"每点亮一项，小电就多充一格电",
+      energyCore:this.energyCore(),
+      taskCarousel:this.renderTaskCarousel(td),
+
+      ribbonCols,
+      isToday:this.state.tab==="today", isTrend:this.state.tab==="trend",
+      goToday:()=>this.setState({tab:"today"}), goTrend:()=>this.setState({tab:"trend"}),
+      todayTabStyle:this.state.tab==="today"?tabOn:tabOff, trendTabStyle:this.state.tab==="trend"?tabOn:tabOff,
+
+      sleepStatus:statusOf("sleep"), sleepDone:this.moduleDone("sleep",td), sleepPill:pill(this.moduleDone("sleep",td),"sleep"),
+      exStatus:statusOf("exercise"), exDone:this.moduleDone("exercise",td), exPill:pill(this.moduleDone("exercise",td),"exercise"),
+      dietStatus:statusOf("diet"), dietDone:this.moduleDone("diet",td), dietPill:pill(this.moduleDone("diet",td),"diet"),
+      waterStatus:statusOf("water"), waterDone:this.moduleDone("water",td), waterPill:pill(this.moduleDone("water",td),"water"),
+      moodStatus:statusOf("mood"), moodDone:this.moduleDone("mood",td), moodPill:pill(this.moduleDone("mood",td),"mood"),
+
+      openSleep:()=>this.openSheet("sleep"), openExercise:()=>this.openSheet("exercise"),
+      openDiet:()=>this.openSheet("diet"), openWater:()=>this.openSheet("water"), openMood:()=>this.openSheet("mood"),
+
+      showWeight:this.state.showWeight, toggleWeight:()=>this.setState(s=>({showWeight:!s.showWeight})),
+      weightToggleLabel:this.state.showWeight?"收起":"展开",
+      weightVal:(td.weight||60).toFixed(1),
+      weightDown:()=>this.patch("weight",Math.round((Math.max(20,(td.weight||60)-0.1))*10)/10),
+      weightUp:()=>this.patch("weight",Math.round((Math.min(200,(td.weight||60)+0.1))*10)/10),
+
+      ranges, avgSleep, totalEx, avgWater, checkedDays, ...charts,
+
+      mascotEl: this.buildHeroMascot(level,this.state.mascotGender),
+      chooseBoy:()=>this.setState({mascotGender:"boy"}),
+      chooseGirl:()=>this.setState({mascotGender:"girl"}),
+      boyMascotStyle:mascotChip(this.state.mascotGender==="boy"),
+      girlMascotStyle:mascotChip(this.state.mascotGender==="girl"),
+      goalDots: [0,1,2,3,4].map(i=>({ style:{ width:32, height:9, borderRadius:5, transition:"all .5s "+(i*0.07)+"s",
+        background: i<level?"linear-gradient(135deg,#24F0DD,#2E77FF)":"rgba(255,255,255,.34)",
+        boxShadow: i<level?"0 7px 14px -7px rgba(46,119,255,.55)":"inset 0 0 0 1px rgba(255,255,255,.70)" } })),
+      chatToastShow:this.state.chatToastShow, chatToastText:this.state.chatToastText,
+      chatKey:(ev)=>this.chatKey(ev), voiceTap:()=>this.voiceTap(), plusTap:()=>this.plusTap(),
+
+      sheet: this.renderSheet(),
+    };
+  }
+
+  fileToDataURL(file,max){ return new Promise((res,rej)=>{ const img=new Image(); const url=URL.createObjectURL(file);
+    img.onload=()=>{ const s=Math.min(1,max/Math.max(img.width,img.height)); const cv=document.createElement("canvas");
+      cv.width=Math.round(img.width*s); cv.height=Math.round(img.height*s); cv.getContext("2d").drawImage(img,0,0,cv.width,cv.height);
+      URL.revokeObjectURL(url); res(cv.toDataURL("image/jpeg",.82)); }; img.onerror=rej; img.src=url; }); }
+
+  renderSheet(){
+    const e=this.e, C=this.C, G=this.GRAD, st=this.state;
+    const key=st.openKey; if(!key)return null;
+    const td=st.entries[this.today()]||{};
+    const mod=this.MODULES.find(m=>m.key===key);
+    const grad=G[key==="exercise"?"move":key], accent=mod.accent;
+
+    // ── 控件 ──
+    const ic=(d,color,size=16)=>e("svg",{width:size,height:size,viewBox:"0 0 24 24",fill:"none",stroke:color||accent,strokeWidth:2.2,strokeLinecap:"round",strokeLinejoin:"round"},(Array.isArray(d)?d:[d]).map((p,i)=>e("path",{key:i,d:p})));
+    const block=(...ch)=>e("section",{style:{background:"#fff",borderRadius:20,padding:18,boxShadow:"0 6px 18px -14px rgba(32,36,46,.2)"}},ch);
+    const head=(label,icon)=>e("div",{style:{display:"flex",alignItems:"center",gap:8,marginBottom:6}},icon,e("h3",{style:{fontSize:15.5,fontWeight:700,color:C.ink}},label));
+    const sub=(t)=>e("p",{style:{fontSize:12,color:C.muted,marginBottom:14}},t);
+    const stepBtn={width:42,height:42,border:"none",borderRadius:12,fontSize:23,color:"#fff",cursor:"pointer",lineHeight:1,backgroundImage:grad,boxShadow:"0 5px 12px -5px rgba(0,0,0,.3)",transition:".12s"};
+    const stepper=(val,minus,plus,suf)=>e("div",{style:{display:"flex",alignItems:"center",justifyContent:"space-between",background:C.bg,borderRadius:15,padding:6}},
+      e("button",{onClick:minus,style:stepBtn},"−"),
+      e("span",{key:val,style:{fontSize:21,fontWeight:800,color:C.ink,animation:"tickPop .3s"}},val,suf&&e("em",{style:{fontStyle:"normal",fontSize:13,color:C.muted,fontWeight:600,marginLeft:2}},suf)),
+      e("button",{onClick:plus,style:stepBtn},"+"));
+    const chipBase={padding:"9px 14px",border:"1.5px solid "+C.line,background:"#fff",borderRadius:12,fontSize:13,color:C.inkSoft,cursor:"pointer",fontFamily:"inherit",fontWeight:600,transition:".15s"};
+    const chips=(opts,active,pick)=>e("div",{style:{display:"flex",flexWrap:"wrap",gap:7}},opts.map((o,i)=>e("button",{key:i,onClick:()=>pick(i),style:i===active?{...chipBase,backgroundImage:grad,borderColor:"transparent",color:"#fff",boxShadow:"0 6px 14px -6px rgba(0,0,0,.3)"}:chipBase},o)));
+    const hint=(t)=>e("p",{style:{fontSize:12,color:C.muted,margin:"14px 0 8px",fontWeight:500}},t);
+    const ghost=(label,onClick,wide)=>e("button",{onClick,style:{...(wide?{width:"100%",marginTop:12}:{flex:1}),display:"inline-flex",alignItems:"center",justifyContent:"center",gap:6,padding:13,border:"1.5px solid "+C.line,background:"#fff",borderRadius:14,fontSize:14,color:C.inkSoft,cursor:"pointer",fontFamily:"inherit",fontWeight:600}},label);
+    const solid=(label,onClick,wide)=>e("button",{onClick,style:{...(wide?{width:"100%",marginTop:12}:{flex:1}),display:"inline-flex",alignItems:"center",justifyContent:"center",gap:6,padding:13,border:"none",borderRadius:14,fontSize:14,color:"#fff",cursor:"pointer",fontFamily:"inherit",fontWeight:700,backgroundImage:grad,boxShadow:"0 8px 18px -8px rgba(0,0,0,.45)"}},label);
+    const safe=(t)=>e("p",{style:{fontSize:11.5,color:C.muted,marginTop:12,lineHeight:1.6}},t);
+
+    let body;
+
+    // ════ 睡眠 ════
+    if(key==="sleep"){
+      const en=this.EN_SLEEP[(st.enIdx+this.EN_SLEEP.length)%this.EN_SLEEP.length];
+      const med=this.MEDITATIONS[(st.meditationIdx+this.MEDITATIONS.length)%this.MEDITATIONS.length];
+      const breath=this.BREATH_MODES.find(m=>m.key===st.breathMode)||this.BREATH_MODES[0];
+      const phase=breath.phases[st.breathPhase%breath.phases.length];
+      body=[
+        block(
+          head("助眠音景",ic(["M11 5 6 9H2v6h4l5 4z","M19.07 4.93a10 10 0 0 1 0 14.14","M15.54 8.46a5 5 0 0 1 0 7.07"])),
+          sub("浏览器实时合成，闭眼听一会儿"),
+          e("div",{style:{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:9}},this.SOUNDS.map(s=>{
+            const on=st.ambientKey===s.key;
+            return e("button",{key:s.key,onClick:()=>on?this.stopAmbient():this.playAmbient(s.key,st.timer||0),
+              style:{display:"flex",flexDirection:"column",alignItems:"center",gap:6,padding:"15px 4px",border:"1.5px solid "+(on?"transparent":C.line),background:on?undefined:"#fff",backgroundImage:on?grad:undefined,borderRadius:15,fontSize:13,color:on?"#fff":C.inkSoft,cursor:"pointer",fontFamily:"inherit",fontWeight:600,transition:".15s"}},
+              on?ic("M6 4v16M14 4v16","#fff",16):ic("M6 3 20 12 6 21Z","#fff"===on?"#fff":accent,16),
+              e("span",null,s.name)); })),
+          e("div",{style:{display:"flex",alignItems:"center",justifyContent:"space-between",marginTop:16,gap:12}},
+            e("span",{style:{fontSize:13,color:C.inkSoft,fontWeight:500}},"音量"),
+            e("input",{type:"range",min:0,max:1,step:0.05,value:st.ambientVol,onChange:ev=>this.setVol(Number(ev.target.value)),style:{flex:1,maxWidth:180,accentColor:accent}})),
+          e("div",{style:{display:"flex",alignItems:"center",justifyContent:"space-between",marginTop:14,gap:12}},
+            e("span",{style:{fontSize:13,color:C.inkSoft,fontWeight:500}},"定时关闭"),
+            e("div",{style:{display:"flex",gap:7}},[["关",0],["15分",15],["30分",30],["60分",60]].map(([t,v])=>
+              e("button",{key:v,onClick:()=>this.setState({timer:v}),style:st.timer===v?{...chipBase,backgroundImage:grad,borderColor:"transparent",color:"#fff"}:chipBase},t))))
+        ),
+        block(
+          head("睡前冥想",ic(["M12 2a7 7 0 0 0-7 7c0 4 7 13 7 13s7-9 7-13a7 7 0 0 0-7-7z","M9 10h.01M15 10h.01M9 15c1.5 1 4.5 1 6 0"])),
+          sub("短引导，帮大脑从今天慢慢退出来"),
+          e("div",{style:{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:8,marginBottom:12}},this.MEDITATIONS.map((m,i)=>e("button",{key:m.title,onClick:()=>this.setState({meditationIdx:i}),style:i===st.meditationIdx?{...chipBase,backgroundImage:grad,borderColor:"transparent",color:"#fff",padding:"9px 8px"}:{...chipBase,padding:"9px 8px"}},
+            e("span",{style:{display:"block",fontWeight:800,whiteSpace:"nowrap"}},m.title),
+            e("span",{style:{display:"block",fontSize:10,opacity:.75,marginTop:2}},m.time)))),
+          e("div",{style:{background:C.bg,borderRadius:15,padding:16}},
+            e("div",{style:{fontSize:12,color:accent,letterSpacing:1.2,fontWeight:800,marginBottom:8}},med.time+" · "+med.title),
+            e("p",{style:{fontSize:14.5,lineHeight:1.8,color:C.inkSoft,fontWeight:600}},med.text)),
+          e("div",{style:{display:"flex",gap:10,marginTop:14}},
+            ghost("换一个",()=>{this.stopMeditation();this.setState(s=>({meditationIdx:s.meditationIdx+1}));}),
+            solid(st.meditationActive?[ic("M6 4v16M14 4v16","#fff",15)," 停止冥想"]:[ic("M6 3 20 12 6 21Z","#fff",15)," 开始冥想"],
+              ()=>st.meditationActive?this.stopMeditation():this.startMeditation(med)))
+        ),
+        block(
+          head("呼吸练习",ic(["M12 3c3.5 3.4 6 6.6 6 10a6 6 0 0 1-12 0c0-3.4 2.5-6.6 6-10z","M12 9v6M9 12h6"])),
+          sub("跟着圆形节奏呼吸，睡前尽量轻一点"),
+          e("div",{style:{display:"flex",gap:7,flexWrap:"wrap",marginBottom:14}},this.BREATH_MODES.map(m=>e("button",{key:m.key,onClick:()=>this.setState({breathMode:m.key,breathPhase:0}),style:st.breathMode===m.key?{...chipBase,backgroundImage:grad,borderColor:"transparent",color:"#fff"}:chipBase},m.name))),
+          e("div",{style:{display:"flex",alignItems:"center",gap:16,background:C.bg,borderRadius:18,padding:16}},
+            e("div",{style:{width:112,height:112,borderRadius:"50%",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,backgroundImage:grad,boxShadow:"0 16px 32px -18px "+accent,transform:st.breathActive&&(phase[0]==="吸气")?"scale(1.08)":st.breathActive&&(phase[0]==="呼气")?"scale(.86)":"scale(.96)",transition:"transform "+(phase[1]||4)+"s ease, opacity .3s",opacity:st.breathActive?1:.82}},
+              e("div",{style:{width:82,height:82,borderRadius:"50%",background:"rgba(255,255,255,.46)",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",color:"#fff",fontWeight:900,textShadow:"0 1px 0 rgba(0,0,0,.12)"}},
+                e("span",{style:{fontSize:18}},st.breathActive?phase[0]:"准备"),
+                e("span",{style:{fontSize:12,marginTop:4,opacity:.88}},st.breathActive?phase[1]+" 秒":"轻呼吸"))),
+            e("div",{style:{flex:1,minWidth:0}},
+              e("div",{style:{fontSize:16,fontWeight:900,color:C.ink}},breath.name),
+              e("div",{style:{fontSize:12.5,color:C.inkSoft,lineHeight:1.6,marginTop:5,fontWeight:700}},breath.desc),
+              e("button",{onClick:()=>st.breathActive?this.stopBreathing():this.startBreathing(breath.key),style:{marginTop:14,padding:"9px 13px",border:"none",borderRadius:999,backgroundImage:grad,color:"#fff",fontSize:13,fontWeight:900,fontFamily:"inherit",cursor:"pointer",boxShadow:"0 8px 16px -10px rgba(46,119,255,.55)"}},st.breathActive?"结束练习":"开始练习")))
+        ),
+        block(
+          head("英文助眠朗读",ic(["M4 19.5A2.5 2.5 0 0 1 6.5 17H20","M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"])),
+          sub("睡前听一段安静的英文，慢慢放空"),
+          e("div",{style:{background:C.bg,borderRadius:15,padding:16}},
+            e("div",{style:{fontSize:11,color:C.muted,letterSpacing:1.5,marginBottom:8,textTransform:"uppercase",fontWeight:700}},en.title),
+            e("p",{style:{fontSize:15,lineHeight:1.85,color:C.ink,fontFamily:'Georgia,"Times New Roman",serif'}},en.text)),
+          e("div",{style:{display:"flex",gap:10,marginTop:14}},
+            ghost("换一段",()=>{this.stopSpeak();this.setState(s=>({reading:false,enIdx:s.enIdx+1}));}),
+            solid(st.reading?[ic("M6 4v16M14 4v16","#fff",15)," 停止"]:[ic("M6 3 20 12 6 21Z","#fff",15)," 朗读"],
+              ()=>{ if(st.reading){this.stopSpeak();this.setState({reading:false});} else this.setState({reading:this.speak(en.text,"en-US")}); }))
+        ),
+        block(
+          head("今晚睡眠记录",ic("M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z")),
+          stepper(td.sleep?.hours||0,
+            ()=>this.patch("sleep",((td.sleep?.hours||0)-0.5)>0?{...td.sleep,hours:Math.round(((td.sleep?.hours||0)-0.5)*2)/2}:null),
+            ()=>this.patch("sleep",{...td.sleep,hours:Math.min(12,Math.round(((td.sleep?.hours||0)+0.5)*2)/2)})," 小时"),
+          hint("入睡顺利吗"),
+          chips(["不太好","一般","很安稳"],td.sleep?.quality??-1,i=>this.patch("sleep",{hours:td.sleep?.hours||0,quality:i}))
+        ),
+      ];
+    }
+
+    // ════ 运动 ════
+    else if(key==="exercise"){
+      if(st.workout&&st.woDone){
+        const r=st.workout, totalMin=Math.max(1,Math.round(r.moves.reduce((a,m)=>a+m.sec,0)/60));
+        body=[e("div",{key:"done",style:{display:"flex",flexDirection:"column",alignItems:"center",textAlign:"center",padding:"40px 20px",minHeight:"50vh",justifyContent:"center",gap:8}},
+          e("div",{style:{width:88,height:88,borderRadius:28,display:"flex",alignItems:"center",justifyContent:"center",backgroundImage:grad,boxShadow:"0 16px 32px -10px rgba(16,196,154,.6)",animation:"popIn .5s cubic-bezier(.34,1.56,.64,1)"}},
+            ic(["M12 3l1.9 5.8H20l-4.9 3.6 1.9 5.8L12 14.6 7 18.2l1.9-5.8L4 8.8h6.1z"],"#fff",36)),
+          e("h2",{style:{fontSize:24,fontWeight:800,marginTop:18,color:C.ink}},"完成！"+r.name),
+          e("p",{style:{color:C.inkSoft,marginTop:8,fontWeight:500}},"已自动记录 "+totalMin+" 分钟运动"),
+          e("button",{onClick:()=>this.exitWorkout(),style:{width:"100%",maxWidth:260,marginTop:26,padding:14,border:"none",borderRadius:14,fontSize:15,color:"#fff",cursor:"pointer",fontFamily:"inherit",fontWeight:700,backgroundImage:grad,boxShadow:"0 8px 18px -8px rgba(0,0,0,.45)"}},"收下这份能量 ⚡"))];
+      } else if(st.workout){
+        const r=st.workout, idx=st.woIdx, total=r.moves.length, move=r.moves[idx];
+        body=[e("div",{key:"player",style:{display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",textAlign:"center",padding:"36px 20px",minHeight:"52vh",gap:8}},
+          e("div",{style:{fontSize:13,color:C.muted,letterSpacing:2,fontWeight:600}},"第 "+(idx+1)+" / "+total+" 个"),
+          e("div",{style:{fontSize:34,fontWeight:800,marginTop:8,color:C.ink}},move.name),
+          e("div",{key:st.woRemaining,style:{fontSize:92,fontWeight:800,lineHeight:1.05,fontVariantNumeric:"tabular-nums",backgroundImage:grad,WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",animation:"tickPop .4s cubic-bezier(.34,1.56,.64,1)"}},st.woRemaining),
+          e("div",{style:{fontSize:14,color:C.inkSoft,fontWeight:500}},move.tip),
+          idx<total-1&&e("div",{style:{fontSize:12,color:C.muted,marginTop:6,fontWeight:600}},"下一个 · "+r.moves[idx+1].name),
+          e("div",{style:{display:"flex",gap:12,marginTop:28,width:"100%",maxWidth:300}},
+            ghost("退出",()=>this.exitWorkout()),
+            solid(st.woPaused?[ic("M6 3 20 12 6 21Z","#fff",15)," 继续"]:[ic("M6 4v16M14 4v16","#fff",15)," 暂停"],()=>this.setState(s=>({woPaused:!s.woPaused})))))];
+      } else {
+        body=[
+          block(
+            head("跟练课程",ic("M22 12h-4l-3 9L9 3l-3 9H2")),
+            sub("选择课程，跟着节奏开始"),
+            e("div",{style:{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:6}},
+              e("span",{style:{fontSize:13,color:C.inkSoft,fontWeight:500}},"语音报动作"),
+              e("button",{onClick:()=>this.setState(s=>({exVoice:!s.exVoice})),style:{width:48,height:28,borderRadius:999,border:"1.5px solid "+(st.exVoice?"transparent":C.line),background:st.exVoice?undefined:C.bg,backgroundImage:st.exVoice?grad:undefined,position:"relative",cursor:"pointer",transition:".2s"}},
+                e("span",{style:{position:"absolute",top:2,left:st.exVoice?23:2,width:21,height:21,borderRadius:"50%",background:"#fff",boxShadow:"0 1px 4px rgba(0,0,0,.2)",transition:".22s"}}))),
+            this.ROUTINES.map(r=>e("button",{key:r.key,onClick:()=>this.startWorkout(r),style:{display:"flex",alignItems:"center",gap:12,width:"100%",background:"#FBFAFE",border:"1.5px solid "+C.line,borderRadius:16,padding:13,marginTop:10,cursor:"pointer",fontFamily:"inherit",textAlign:"left",transition:".15s"}},
+              e("span",{style:{width:40,height:40,borderRadius:13,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,backgroundImage:grad,boxShadow:"0 6px 14px -6px rgba(0,0,0,.35)"}},ic("M6 3 20 12 6 21Z","#fff",16)),
+              e("div",{style:{flex:1}},e("div",{style:{fontSize:15.5,fontWeight:700,color:C.ink}},r.name),e("div",{style:{fontSize:12,color:C.muted,marginTop:3}},r.desc)),
+              e("span",{style:{fontSize:11,padding:"5px 11px",borderRadius:999,fontWeight:700,background:mod.bg,color:accent}},r.level)))
+          ),
+          block(
+            head("手动记录",ic("M20 6 9 17l-5-5")),
+            stepper(td.exercise?.minutes||0,
+              ()=>this.patch("exercise",((td.exercise?.minutes||0)-5)>0?{...td.exercise,minutes:(td.exercise?.minutes||0)-5}:null),
+              ()=>this.patch("exercise",{...td.exercise,minutes:Math.min(240,(td.exercise?.minutes||0)+5)})," 分钟"),
+            hint("做了什么"),
+            chips(["步行","跑步","力量","瑜伽","骑行","其他"],td.exercise?.type??-1,i=>this.patch("exercise",{minutes:td.exercise?.minutes||30,type:i})),
+            safe("量力而行，出现不适请立即停止。")
+          ),
+        ];
+      }
+    }
+
+    // ════ 饮食 ════
+    else if(key==="diet"){
+      const r=this.RECIPES[(st.recipeIdx+this.RECIPES.length)%this.RECIPES.length];
+      const score=td.diet?.score;
+      body=[
+        block(
+          head("今日食谱推荐",ic(["M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z","M2 21c0-3 1.85-5.36 5.08-6"])),
+          e("div",{style:{background:C.bg,borderRadius:16,padding:16}},
+            e("div",{style:{display:"flex",alignItems:"center",justifyContent:"space-between",gap:10,marginBottom:12}},
+              e("div",{style:{fontSize:19,fontWeight:800,color:C.ink}},r.name),
+              e("span",{style:{fontSize:11,padding:"5px 12px",borderRadius:999,fontWeight:700,color:"#fff",backgroundImage:grad}},r.tag)),
+            e("div",{style:{fontSize:12,color:C.muted,letterSpacing:1,margin:"4px 0 7px",fontWeight:600}},"食材"),
+            e("div",{style:{display:"flex",flexWrap:"wrap",gap:7}},r.ing.map((x,i)=>e("span",{key:i,style:{fontSize:13,background:"#fff",border:"1.5px solid "+C.line,borderRadius:10,padding:"6px 11px",color:C.inkSoft,fontWeight:500}},x))),
+            e("div",{style:{fontSize:12,color:C.muted,letterSpacing:1,margin:"12px 0 7px",fontWeight:600}},"做法"),
+            e("ol",{style:{margin:0,paddingLeft:18}},r.steps.map((x,i)=>e("li",{key:i,style:{fontSize:13.5,color:C.inkSoft,lineHeight:1.95}},x)))),
+          ghost([ic("M21 2v6h-6","#5A5F70",14)," 换一道"],()=>this.setState(s=>({recipeIdx:s.recipeIdx+1})),true)
+        ),
+        block(
+          head("这一餐拍照看看",ic(["M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"])),
+          sub("从「均衡与多样」给点鼓励，不计较卡路里"),
+          e("input",{type:"file",accept:"image/*",ref:el=>this._dietInput=el,onChange:async ev=>{const f=ev.target.files?.[0];if(!f)return;const thumb=await this.fileToDataURL(f,200);this.patch("diet",{...(this.state.entries[this.today()]?.diet||{}),photo:thumb});this.scoreMeal();if(this._dietInput)this._dietInput.value="";},style:{display:"none"}}),
+          score&&e("div",{style:{display:"flex",gap:13,background:C.bg,borderRadius:16,padding:13,marginBottom:10}},
+            td.diet.photo&&e("img",{src:td.diet.photo,style:{width:88,height:88,borderRadius:14,objectFit:"cover",flexShrink:0}}),
+            e("div",{style:{flex:1,minWidth:0}},
+              e("div",{style:{display:"flex",alignItems:"center",gap:5,marginBottom:8}},[1,2,3,4,5].map(n=>e("span",{key:n,style:{width:12,height:12,borderRadius:"50%",backgroundImage:n<=score.rating?grad:undefined,background:n<=score.rating?undefined:C.line}})),e("span",{style:{fontSize:12,color:C.inkSoft,marginLeft:5,fontWeight:600}},"均衡度 "+score.rating+"/5")),
+              e("p",{style:{fontSize:14.5,color:C.ink,lineHeight:1.6,fontWeight:700}},score.summary),
+              score.tips?.map((t,i)=>e("p",{key:i,style:{fontSize:12.5,color:C.inkSoft,lineHeight:1.7,marginTop:5}},"· "+t)))),
+          st.dietBusy&&e("div",{style:{textAlign:"center",fontSize:13,color:C.muted,padding:14,animation:"pulseO 1.6s infinite"}},"正在看你的这一餐…"),
+          solid([ic(["M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"],"#fff",16)," "+(score?"重新拍一张":"拍照 / 选图")],()=>this._dietInput?.click(),true)
+        ),
+        block(
+          head("饮食记录",ic("M20 6 9 17l-5-5")),
+          hint("今天吃得"),
+          chips(["清淡均衡","一般","偏油腻"],td.diet?.quality??-1,i=>this.patch("diet",{...(td.diet||{}),quality:i})),
+          e("div",{style:{display:"flex",alignItems:"center",justifyContent:"space-between",marginTop:14,gap:12}},
+            e("span",{style:{fontSize:13,color:C.inkSoft,fontWeight:500}},"蔬菜份数"),
+            stepper(td.diet?.veggies||0,()=>this.patch("diet",{...(td.diet||{}),veggies:Math.max(0,(td.diet?.veggies||0)-1)}),()=>this.patch("diet",{...(td.diet||{}),veggies:Math.min(8,(td.diet?.veggies||0)+1)}))),
+          e("button",{onClick:()=>this.patch("diet",{...(td.diet||{}),regular:!td.diet?.regular}),style:{marginTop:13,width:"100%",padding:12,border:"1.5px solid "+(td.diet?.regular?"transparent":C.line),background:td.diet?.regular?undefined:"#fff",backgroundImage:td.diet?.regular?grad:undefined,borderRadius:14,fontSize:14,color:td.diet?.regular?"#fff":C.inkSoft,cursor:"pointer",fontFamily:"inherit",fontWeight:600}},"三餐规律 "+(td.diet?.regular?"✓":""))
+        ),
+      ];
+    }
+
+    // ════ 喝水 ════
+    else if(key==="water"){
+      body=[block(
+        head("今日喝水",ic("M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z")),
+        e("div",{style:{display:"flex",gap:8,flexWrap:"wrap"}},Array.from({length:8}).map((_,i)=>{
+          const filled=(td.water?.cups||0)>i;
+          return e("button",{key:i,onClick:()=>this.patch("water",{...(td.water||{}),cups:i+1}),
+            style:{width:38,height:48,border:"2px solid "+(filled?"transparent":C.line),borderRadius:"8px 8px 13px 13px",cursor:"pointer",backgroundImage:filled?grad:undefined,background:filled?undefined:mod.bg,boxShadow:filled?"0 6px 14px -6px rgba(35,181,240,.5)":undefined,animation:filled?"cupPop .3s":undefined,transition:".2s"}}); })),
+        e("div",{style:{display:"flex",alignItems:"center",justifyContent:"space-between",marginTop:14}},
+          e("span",{style:{fontSize:20,fontWeight:800,color:accent}},(td.water?.cups||0),e("em",{style:{fontStyle:"normal",fontSize:13,color:C.muted,fontWeight:600}}," / 8 杯")),
+          e("button",{onClick:()=>this.patch("water",null),style:{border:"none",background:"none",color:C.muted,fontSize:13,cursor:"pointer",fontFamily:"inherit",textDecoration:"underline"}},"清空")),
+        safe("温水小口、少量多次，比一次猛灌更舒服。")
+      )];
+    }
+
+    // ════ 心情 ════
+    else if(key==="mood"){
+      const read=this.CN_READ[(st.readIdx+this.CN_READ.length)%this.CN_READ.length];
+      body=[
+        block(
+          head("今日鸡汤",ic(["M12 3l1.4 4.3L18 8.7l-4.6 1.4L12 14.4l-1.4-4.3L6 8.7l4.6-1.4z"])),
+          e("div",{style:{fontSize:18,lineHeight:1.85,color:"#fff",borderRadius:16,padding:22,fontWeight:700,marginTop:4,backgroundImage:grad,boxShadow:"0 10px 22px -10px rgba(0,0,0,.3)",minHeight:60}},st.quoteBusy?"正在写给你…":st.moodQuote),
+          ghost([ic("M21 2v6h-6","#5A5F70",14)," 换一条"],()=>this.refreshQuote(),true)
+        ),
+        block(
+          head("静读",ic(["M4 19.5A2.5 2.5 0 0 1 6.5 17H20","M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"])),
+          e("p",{style:{fontSize:15,lineHeight:1.95,color:C.inkSoft}},read),
+          ghost("换一篇",()=>this.setState(s=>({readIdx:s.readIdx+1})),true)
+        ),
+        block(
+          head("此刻心情",ic("M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z")),
+          e("div",{style:{display:"flex",gap:7}},[["低落",1],["一般",2],["平静",3],["不错",4],["很好",5]].map(([t,lv])=>{
+            const active=td.mood?.level===lv;
+            return e("button",{key:lv,onClick:()=>this.patch("mood",{level:lv}),style:{flex:1,display:"flex",flexDirection:"column",alignItems:"center",gap:7,padding:"14px 4px",border:"1.5px solid "+(active?"transparent":C.line),background:active?undefined:"#fff",backgroundImage:active?grad:undefined,borderRadius:14,fontSize:12,color:active?"#fff":C.inkSoft,cursor:"pointer",fontFamily:"inherit",fontWeight:600,transition:".15s"}},
+              e("span",{style:{width:14,height:14,borderRadius:"50%",background:active?"#fff":accent,opacity:0.35+lv*0.13}}),t); }))
+        ),
+      ];
+    }
+
+    const hideHead = key==="exercise" && st.workout;
+    return e("div",{onClick:()=>this.closeSheet(),style:{position:"fixed",inset:0,background:"rgba(32,36,46,.42)",backdropFilter:"blur(4px)",display:"flex",alignItems:"flex-end",justifyContent:"center",zIndex:50,animation:"fadeIn .25s"}},
+      e("div",{onClick:ev=>ev.stopPropagation(),style:{background:C.bg,width:"100%",maxWidth:438,maxHeight:"92vh",borderRadius:"30px 30px 0 0",display:"flex",flexDirection:"column",animation:"slideUp .34s cubic-bezier(.22,1,.36,1)",overflow:"hidden"}},
+        e("header",{style:{display:"flex",alignItems:"center",gap:12,padding:20,color:"#fff",backgroundImage:grad}},
+          e("span",{style:{width:42,height:42,borderRadius:13,background:"rgba(255,255,255,.25)",display:"flex",alignItems:"center",justifyContent:"center"}},ic({sleep:"M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z",exercise:"M22 12h-4l-3 9L9 3l-3 9H2",diet:"M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z",water:"M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z",mood:"M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"}[key],"#fff",20)),
+          e("h2",{style:{fontSize:19,fontWeight:800,flex:1}},mod.name),
+          e("button",{onClick:()=>this.closeSheet(),style:{width:38,height:38,border:"none",background:"rgba(255,255,255,.25)",borderRadius:"50%",display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer"}},ic(["M18 6 6 18","M6 6l12 12"],"#fff",20))),
+        e("div",{style:{overflowY:"auto",padding:"16px 16px 32px",display:"flex",flexDirection:"column",gap:13}},body)));
+  }
+}
+</script>
+</body>
+</html>
