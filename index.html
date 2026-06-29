@@ -197,11 +197,11 @@ class Component extends DCLogic {
   ];
   WEEK = ["日","一","二","三","四","五","六"];
   SOUNDS = [
-    { key:"rain", name:"雨声", noise:"white", filter:"lowpass", freq:1300, q:0.7 },
-    { key:"ocean", name:"海浪", noise:"brown", filter:"lowpass", freq:620, swell:0.08 },
-    { key:"forest", name:"林间", noise:"white", filter:"bandpass", freq:2400, q:1.2 },
-    { key:"white", name:"白噪音", noise:"white", filter:"highpass", freq:180 },
-    { key:"fire", name:"篝火", noise:"brown", filter:"lowpass", freq:760, swell:0.6 },
+    { key:"rain", name:"雨声", src:"uploads/audio/rain.ogg", gain:0.82 },
+    { key:"ocean", name:"海浪", src:"uploads/audio/ocean.ogg", gain:0.8 },
+    { key:"forest", name:"林间", src:"uploads/audio/forest.ogg", gain:0.72 },
+    { key:"white", name:"白噪音", src:"uploads/audio/white.ogg", gain:0.48 },
+    { key:"fire", name:"篝火", src:"uploads/audio/fire.ogg", gain:0.72 },
   ];
   EN_SLEEP = [
     { title:"Settle", text:"Let the day settle like dust after sunset. There is nothing left to finish tonight. Breathe in slowly, and let your shoulders fall. The room is quiet, the light is soft, and you are allowed to rest. Tomorrow can wait until tomorrow." },
@@ -258,7 +258,7 @@ class Component extends DCLogic {
   state = {
     entries:{}, loaded:false, tab:"today", range:14, openKey:null, showWeight:false, mascotGender:"boy",
     taskFocus:0,
-    ambientKey:null, ambientVol:0.5, timer:30,
+    ambientKey:null, ambientVol:0.35, timer:30,
     enIdx:0, reading:false, meditationIdx:0, meditationActive:false, breathMode:"box", breathActive:false, breathPhase:0,
     recipeIdx:0, exVoice:false,
     workout:null, woIdx:0, woRemaining:0, woPaused:false, woDone:false,
@@ -339,23 +339,49 @@ class Component extends DCLogic {
   }
 
   // ── 音景 ──
-  ensureCtx(){ if(!this._actx){const AC=window.AudioContext||window.webkitAudioContext; this._actx=new AC();} return this._actx; }
-  makeNoise(ctx,type){ const len=ctx.sampleRate*2, buf=ctx.createBuffer(1,len,ctx.sampleRate), d=buf.getChannelData(0);
-    if(type==="brown"){let last=0;for(let i=0;i<len;i++){const w=Math.random()*2-1;last=(last+0.02*w)/1.02;d[i]=last*3.5;}}
-    else{for(let i=0;i<len;i++)d[i]=Math.random()*2-1;} return buf; }
-  stopAmbient(){ if(this._aTimer){clearTimeout(this._aTimer);this._aTimer=null;}
-    if(this._src){try{this._src.stop();}catch(_){}try{this._src.disconnect();}catch(_){}this._src=null;}
-    if(this._lfo){try{this._lfo.stop();}catch(_){}this._lfo=null;} this.setState({ambientKey:null}); }
-  playAmbient(key,minutes){ const ctx=this.ensureCtx(); if(ctx.state==="suspended")ctx.resume(); this.stopAmbient();
-    const cfg=this.SOUNDS.find(s=>s.key===key); if(!cfg)return;
-    const src=ctx.createBufferSource(); src.buffer=this.makeNoise(ctx,cfg.noise); src.loop=true;
-    const filter=ctx.createBiquadFilter(); filter.type=cfg.filter; filter.frequency.value=cfg.freq; if(cfg.q)filter.Q.value=cfg.q;
-    const gain=ctx.createGain(); gain.gain.value=this.state.ambientVol;
-    src.connect(filter); filter.connect(gain); gain.connect(ctx.destination);
-    if(cfg.swell){const lfo=ctx.createOscillator();lfo.frequency.value=cfg.swell;const lg=ctx.createGain();lg.gain.value=this.state.ambientVol*0.5;lfo.connect(lg);lg.connect(gain.gain);lfo.start();this._lfo=lfo;}
-    src.start(); this._src=src; this._gain=gain; this.setState({ambientKey:key});
-    if(minutes)this._aTimer=setTimeout(()=>this.stopAmbient(),minutes*60000); }
-  setVol(v){ this.setState({ambientVol:v}); if(this._gain)this._gain.gain.value=v; }
+  fadeAmbient(target,duration=700){
+    if(this._ambientFade){clearInterval(this._ambientFade);this._ambientFade=null;}
+    const audio=this._ambientAudio; if(!audio)return;
+    const start=audio.volume, steps=Math.max(1,Math.round(duration/40)), delta=(target-start)/steps;
+    let i=0; this._ambientFade=setInterval(()=>{
+      if(audio!==this._ambientAudio){clearInterval(this._ambientFade);this._ambientFade=null;return;}
+      i++; audio.volume=Math.max(0,Math.min(1,i>=steps?target:start+delta*i));
+      if(i>=steps){clearInterval(this._ambientFade);this._ambientFade=null;}
+    },40);
+  }
+  stopAmbient(immediate=false){
+    if(this._aTimer){clearTimeout(this._aTimer);this._aTimer=null;}
+    if(this._ambientFade){clearInterval(this._ambientFade);this._ambientFade=null;}
+    const audio=this._ambientAudio; this._ambientAudio=null;
+    if(audio){
+      if(immediate){audio.volume=0;audio.pause();audio.currentTime=0;}
+      else{
+        const start=audio.volume, steps=5; let i=0;
+        this._ambientFade=setInterval(()=>{
+          i++; audio.volume=Math.max(0,start*(1-i/steps));
+          if(i>=steps){clearInterval(this._ambientFade);this._ambientFade=null;audio.pause();audio.currentTime=0;}
+        },40);
+      }
+    }
+    this.setState({ambientKey:null});
+  }
+  playAmbient(key,minutes){
+    this.stopAmbient(true);
+    const cfg=this.SOUNDS.find(s=>s.key===key); if(!cfg||typeof Audio==="undefined")return;
+    const audio=new Audio(cfg.src); audio.loop=true; audio.preload="auto"; audio.volume=0;
+    this._ambientAudio=audio; this._ambientGain=cfg.gain||1; this.setState({ambientKey:key});
+    const started=audio.play();
+    if(started&&started.then)started.then(()=>{
+      if(audio===this._ambientAudio)this.fadeAmbient(this.state.ambientVol*this._ambientGain);
+    }).catch(()=>{
+      if(audio===this._ambientAudio){this._ambientAudio=null;this.setState({ambientKey:null});}
+    });
+    if(minutes)this._aTimer=setTimeout(()=>this.stopAmbient(),minutes*60000);
+  }
+  setVol(v){
+    this.setState({ambientVol:v});
+    if(this._ambientAudio)this.fadeAmbient(v*(this._ambientGain||1),180);
+  }
 
   // ── 朗读 ──
   speak(text,lang){ if(typeof window==="undefined"||!window.speechSynthesis)return false; window.speechSynthesis.cancel();
@@ -794,7 +820,7 @@ class Component extends DCLogic {
       body=[
         block(
           head("助眠音景",ic(["M11 5 6 9H2v6h4l5 4z","M19.07 4.93a10 10 0 0 1 0 14.14","M15.54 8.46a5 5 0 0 1 0 7.07"])),
-          sub("浏览器实时合成，闭眼听一会儿"),
+          sub("高品质自然录音，闭眼听一会儿"),
           e("div",{style:{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:9}},this.SOUNDS.map(s=>{
             const on=st.ambientKey===s.key;
             return e("button",{key:s.key,onClick:()=>on?this.stopAmbient():this.playAmbient(s.key,st.timer||0),
