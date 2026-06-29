@@ -209,9 +209,9 @@ class Component extends DCLogic {
     { title:"The night asks nothing", audio:"uploads/audio/english-sleep-2.wav", text:"The night asks nothing of you. Not your worries, not your plans, not the things you forgot to do. For now, you can put them down by the door. Picture a calm grey sea under a quiet sky. The waves arrive, and leave, and arrive again. And so does your breath. Rest now." },
   ];
   MEDITATIONS = [
-    { title:"睡前放空", time:"3 分钟", audio:"uploads/audio/meditation-0.wav", text:"找一个舒服的姿势，轻轻闭上眼睛。把注意力放在呼吸上，不需要控制它，只是观察。吸气时知道自己在吸气，呼气时知道自己在呼气。今天已经结束了，此刻你只需要安静地待在这里。" },
-    { title:"身体扫描", time:"5 分钟", audio:"uploads/audio/meditation-1.wav", text:"从脚趾开始，慢慢感受身体接触床面的重量。放松脚踝、小腿、膝盖、大腿。再放松腰背、肩颈、手臂和脸。哪里紧绷，就把呼吸送到那里。每一次呼气，都让身体更沉一点。" },
-    { title:"焦虑安放", time:"4 分钟", audio:"uploads/audio/meditation-2.wav", text:"如果脑子里还有事情，不急着赶走它。想象把这些念头写在纸上，轻轻放到桌边。你可以明天再处理它们。现在，把手放在胸口，告诉自己：我已经做得够好了。" },
+    { title:"睡前放空", time:"3 分钟", audio:"uploads/audio/meditation-0.mp3", text:"找一个舒服的姿势，轻轻闭上眼睛。把注意力放在呼吸上，不需要控制它，只是观察。吸气时知道自己在吸气，呼气时知道自己在呼气。今天已经结束了，此刻你只需要安静地待在这里。" },
+    { title:"身体扫描", time:"5 分钟", audio:"uploads/audio/meditation-1.mp3", text:"从脚趾开始，慢慢感受身体接触床面的重量。放松脚踝、小腿、膝盖、大腿。再放松腰背、肩颈、手臂和脸。哪里紧绷，就把呼吸送到那里。每一次呼气，都让身体更沉一点。" },
+    { title:"焦虑安放", time:"4 分钟", audio:"uploads/audio/meditation-2.mp3", text:"如果脑子里还有事情，不急着赶走它。想象把这些念头写在纸上，轻轻放到桌边。你可以明天再处理它们。现在，把手放在胸口，告诉自己：我已经做得够好了。" },
   ];
   BREATH_MODES = [
     { key:"box", name:"方块呼吸", desc:"吸 4 · 停 4 · 呼 4 · 停 4", phases:[["吸气",4],["停住",4],["呼气",4],["停住",4]] },
@@ -366,7 +366,7 @@ class Component extends DCLogic {
     this.setState({ambientKey:null});
   }
   playAmbient(key,minutes){
-    this.stopAmbient(true);
+    this.stopNarration(); this.stopAmbient(true);
     const cfg=this.SOUNDS.find(s=>s.key===key); if(!cfg||typeof Audio==="undefined")return;
     const audio=new Audio(cfg.src); audio.loop=true; audio.preload="auto"; audio.volume=0;
     this._ambientAudio=audio; this._ambientGain=cfg.gain||1; this.setState({ambientKey:key});
@@ -389,7 +389,7 @@ class Component extends DCLogic {
   stopSpeak(){ if(typeof window!=="undefined"&&window.speechSynthesis)window.speechSynthesis.cancel(); }
   setNarrationState(stateKey,active){ this.setState(stateKey==="reading"?{reading:active}:{meditationActive:active}); }
   playNarration(src,stateKey){
-    this.stopSpeak(); this.stopNarration();
+    this.stopSpeak(); this.stopAmbient(true); this.stopNarration();
     if(typeof Audio==="undefined")return;
     const audio=new Audio(src); audio.preload="auto"; audio.volume=0;
     this._narrationAudio=audio; this._narrationStateKey=stateKey;
@@ -862,7 +862,7 @@ class Component extends DCLogic {
         block(
           head("睡前冥想",ic(["M12 2a7 7 0 0 0-7 7c0 4 7 13 7 13s7-9 7-13a7 7 0 0 0-7-7z","M9 10h.01M15 10h.01M9 15c1.5 1 4.5 1 6 0"])),
           sub("短引导，帮大脑从今天慢慢退出来"),
-          e("div",{style:{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:8,marginBottom:12}},this.MEDITATIONS.map((m,i)=>e("button",{key:m.title,onClick:()=>this.setState({meditationIdx:i}),style:i===st.meditationIdx?{...chipBase,backgroundImage:grad,borderColor:"transparent",color:"#fff",padding:"9px 8px"}:{...chipBase,padding:"9px 8px"}},
+          e("div",{style:{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:8,marginBottom:12}},this.MEDITATIONS.map((m,i)=>e("button",{key:m.title,onClick:()=>{this.stopNarration();this.setState({meditationIdx:i});},style:i===st.meditationIdx?{...chipBase,backgroundImage:grad,borderColor:"transparent",color:"#fff",padding:"9px 8px"}:{...chipBase,padding:"9px 8px"}},
             e("span",{style:{display:"block",fontWeight:800,whiteSpace:"nowrap"}},m.title),
             e("span",{style:{display:"block",fontSize:10,opacity:.75,marginTop:2}},m.time)))),
           e("div",{style:{background:C.bg,borderRadius:15,padding:16}},
