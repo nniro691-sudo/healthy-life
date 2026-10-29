@@ -52,9 +52,6 @@
   .task-description{font-size:11px!important;font-weight:500!important;line-height:1.6!important;margin-top:3px!important}
   .task-action{margin-top:8px!important;padding:0!important;min-height:26px;background:transparent!important;box-shadow:none!important;font-size:12px!important;font-weight:650!important}
   .deck-edge{width:24px!important}
-  .task-pagination{height:28px;display:flex;align-items:center;justify-content:center;gap:4px}
-  .task-dot{width:28px;height:28px;display:flex;align-items:center;justify-content:center;border:0;background:transparent}
-  .task-dot>span{display:block;height:5px;border-radius:999px;transition:width .2s}
   .week-section{padding:12px 0 10px;margin-top:12px;border-top:1px solid var(--line)}
   .section-title{font-size:14px;line-height:20px;font-weight:700;margin-bottom:10px}
   .weight-section{border-top:1px solid var(--line);overflow:hidden}
@@ -88,12 +85,44 @@
   .course-info{min-width:0}
   .course-level{flex-shrink:0;white-space:nowrap}
   .workout-name{font-size:26px!important;line-height:1.4;min-height:74px;width:100%;overflow-wrap:anywhere}
+  .health-app{background:linear-gradient(155deg,#BFEFF5 0,#D8E6FF 270px,#EFF5FF 560px,#F7FAFD 900px)!important}
+  .hero-stage{height:218px;isolation:isolate}
+  .hero-word{position:absolute;inset:18px 0 auto;font-size:56px;line-height:1;font-weight:900;color:rgba(255,255,255,.5);pointer-events:none;z-index:-1}
+  .hero-mascot{position:relative;border:0;background:none;cursor:pointer;pointer-events:auto}
+  .hero-mascot img{animation:buddyHello .55s ease-out,buddyFloat 5s ease-in-out .55s infinite}
+  .hero-bubble{position:absolute;left:0;top:58px;z-index:2;width:88px;padding:10px 8px;border:1px solid rgba(255,255,255,.95);border-radius:14px 14px 3px 14px;background:rgba(255,255,255,.76);color:#3171CE;font-size:11px;line-height:1.6;font-weight:650;text-align:left;pointer-events:none}
+  .hero-growth{position:absolute;right:0;top:125px;display:flex;align-items:center;gap:4px;color:#6665C5;font-size:10px;padding:7px 8px;border:1px solid rgba(255,255,255,.9);border-radius:12px;background:rgba(255,255,255,.58)}
+  .hero-hello{color:#265ED4;font-size:27px}
+  .daily-charge{display:flex;align-items:center;gap:10px;min-height:38px;margin:0 0 5px}
+  .daily-charge-label{font-size:12px;font-weight:700;white-space:nowrap}
+  .charge-meter{display:flex;gap:4px;flex:1;min-width:0}
+  .charge-cell{height:10px;flex:1;border:1px solid rgba(255,255,255,.9);border-radius:4px;transition:background .3s,transform .3s}
+  .charge-score{font-size:11px;white-space:nowrap;color:#5D7191;font-variant-numeric:tabular-nums}
+  .view-tabs{background:rgba(255,255,255,.35)}
+  .task-tabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;padding-top:6px}
+  .task-tab{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;min-width:0;min-height:64px;padding:6px 2px;border:1px solid transparent;border-radius:14px;background:transparent;color:#63748E;font-size:11px;cursor:pointer;transition:background .2s,transform .2s}
+  .task-tab[aria-pressed=true]{border-color:rgba(255,255,255,.95);background:rgba(255,255,255,.7);color:#18334F;font-weight:700}
+  .task-tab:active{transform:scale(.95)}
+  .task-tab-icon{width:30px;height:30px;display:flex;align-items:center;justify-content:center;border-radius:10px;border:1px solid rgba(255,255,255,.75)}
+  .task-tab-label{display:flex;align-items:center;gap:3px;white-space:nowrap}
+  .task-done-dot{width:5px;height:5px;border-radius:50%;background:#21BFA5}
+  .task-action{padding:4px 10px!important;border-radius:10px!important;background:rgba(255,255,255,.72)!important}
+  .week-header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px}
+  .week-header .section-title{margin:0}
+  .water-mini{min-height:36px;display:flex;align-items:center;gap:5px;padding:6px 10px;border:1px solid rgba(255,255,255,.85);border-radius:12px;background:rgba(213,247,251,.7);font-size:11px;color:#178799;cursor:pointer;white-space:nowrap}
+  .chat-composer button:first-child{background:#EDF5FF!important}
+  .chat-composer button:last-child{background:linear-gradient(145deg,#97C3FF,#9380E8)!important}
+  .chat-composer button:last-child svg{stroke:white}
+  @keyframes buddyHello{0%{transform:translateY(-8px) rotate(0)}35%{transform:translateY(-12px) rotate(-4deg)}70%{transform:translateY(-8px) rotate(3deg)}100%{transform:translateY(-8px) rotate(0)}}
+  @keyframes buddyFloat{0%,100%{transform:translateY(-8px)}50%{transform:translateY(-12px)}}
   @media(max-width:350px){
     .app-content{padding-inline:16px!important}
     .task-card{width:calc(100% - 32px)!important;padding:12px!important}
     .task-card-content{gap:8px!important}
     .task-card-icon{width:48px!important}
     .task-card-icon>span:last-child{width:46px!important;height:46px!important;border-radius:14px!important}
+    .hero-bubble{width:72px;font-size:10px;top:68px;padding:8px 6px}
+    .hero-growth{font-size:9px;padding:6px;top:129px}
     .sheet-scroll{padding-inline:10px!important}
     .sheet-scroll>section{padding:14px!important}
     .course-row{gap:8px!important;padding:10px!important}
@@ -154,15 +183,20 @@
         </div>
       </div>
       <div class="hero-stage">
+        <span class="hero-word" aria-hidden="true">HEALTH</span>
+        <span class="hero-bubble">{{ heroBubble }}</span>
+        <span class="hero-growth"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/></svg>福气萌芽</span>
         <div class="mascot-switch" role="group" aria-label="选择人物">
           <button onClick="{{ chooseBoy }}" style="{{ boyMascotStyle }}">男孩</button>
           <button onClick="{{ chooseGirl }}" style="{{ girlMascotStyle }}">女孩</button>
         </div>
-        <div class="hero-mascot">{{ mascotEl }}</div>
+        <button class="hero-mascot" aria-label="和小电打招呼" title="和小电打招呼" onClick="{{ mascotTap }}">{{ mascotEl }}</button>
         <p class="hero-hello">Hello</p>
         <p class="hero-caption">制定你的健康小目标</p>
       </div>
     </header>
+
+    {{ dailyCharge }}
 
     <nav class="view-tabs" aria-label="健康记录视图">
       <button onClick="{{ goToday }}" style="{{ todayTabStyle }}">今日</button>
@@ -175,7 +209,10 @@
       {{ taskCarousel }}
 
       <section class="week-section" aria-label="本周能量">
-        <h2 class="section-title">本周能量</h2>
+        <div class="week-header">
+          <h2 class="section-title">本周能量</h2>
+          <button class="water-mini" aria-label="记录喝水" onClick="{{ openWater }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/></svg>喝水 {{ waterStatus }}</button>
+        </div>
         <div style="display:flex;justify-content:space-between;gap:8px">
           <sc-for list="{{ ribbonCols }}" as="col" hint-placeholder-count="7">
             <div style="display:flex;flex-direction:column;align-items:center;gap:8px;flex:1;min-width:0">
@@ -358,7 +395,7 @@ class Component extends DCLogic {
     recipeIdx:0, exVoice:false,
     workout:null, woIdx:0, woRemaining:0, woPaused:false, woDone:false,
     dietBusy:false, dietScored:false, moodQuote:"", quoteBusy:false, readIdx:0,
-    chatToastShow:false, chatToastText:"",
+    chatToastShow:false, chatToastText:"", mascotMood:0,
   };
   CHAT_REPLIES = [
     "你愿意照顾自己，这件事本身就很棒。","今天的每一格电，都会变成明天的力气。",
@@ -665,6 +702,15 @@ class Component extends DCLogic {
       e("div",{style:{position:"relative",zIndex:2}},this.buildMascot(level)));
   }
 
+  renderDailyCharge(td){
+    const e=this.e,count=this.doneCount(td);
+    return e("div",{className:"daily-charge"},
+      e("span",{className:"daily-charge-label"},"今日充电"),
+      e("div",{className:"charge-meter",role:"progressbar","aria-label":"今日充电","aria-valuemin":0,"aria-valuemax":5,"aria-valuenow":count},
+        this.MODULES.map(m=>e("span",{className:"charge-cell",key:m.key,title:m.name+(this.moduleDone(m.key,td)?"已点亮":"未点亮"),style:{background:this.moduleDone(m.key,td)?this.GRAD[m.key==="exercise"?"move":m.key]:"rgba(255,255,255,.55)"}}))),
+      e("span",{className:"charge-score"},count+" / 5"));
+  }
+
   renderTaskCarousel(td){
     const e=this.e, C=this.C, G=this.GRAD;
     const statusOf=(key)=>{ switch(key){
@@ -694,7 +740,6 @@ class Component extends DCLogic {
       open:()=>this.openSheet(m.key),
     }));
     const focus=((this.state.taskFocus%modules.length)+modules.length)%modules.length;
-    const cur=modules[focus];
     const icon=(m,size=28,color="#fff")=>e("svg",{width:size,height:size,viewBox:"0 0 24 24",fill:"none",stroke:color,strokeWidth:2.35,strokeLinecap:"round",strokeLinejoin:"round"},
       iconPath[m.key].map((d,i)=>e("path",{key:i,d})));
     const icon3d=(m,big)=>e("span",{className:"task-card-icon",style:{position:"relative",width:big?86:58,height:big?86:58,display:"inline-flex",alignItems:"center",justifyContent:"center",flexShrink:0}},
@@ -703,7 +748,7 @@ class Component extends DCLogic {
       e("span",{style:{position:"relative",zIndex:2,width:big?64:44,height:big?64:44,borderRadius:big?20:15,display:"flex",alignItems:"center",justifyContent:"center",background:m.grad,boxShadow:"inset 0 1px 0 rgba(255,255,255,.72),inset 0 -10px 18px rgba(255,255,255,.16)",animation:"bob "+(big?4.8:5.6)+"s ease-in-out infinite"}},icon(m,big?31:22)));
     const moveFocus=(delta)=>this.setState(s=>({taskFocus:((s.taskFocus+delta)%modules.length+modules.length)%modules.length}));
     const select=(i)=>this.setState({taskFocus:i});
-    const glassDecor=()=>e("span",{"aria-hidden":true,style:{position:"absolute",right:18,top:16,width:44,height:44,borderRadius:14,border:"1px solid rgba(255,255,255,.78)",background:"rgba(222,243,255,.36)",transform:"rotate(14deg)",pointerEvents:"none"}});
+    const glassDecor=m=>e("span",{"aria-hidden":true,style:{position:"absolute",right:18,top:16,width:52,height:52,borderRadius:16,border:"1px solid rgba(255,255,255,.85)",background:m.bg,transform:"rotate(14deg)",display:"flex",alignItems:"center",justifyContent:"center",opacity:.56,pointerEvents:"none"}},icon(m,28,m.accent));
     const startDrag=(ev)=>{if(ev.button!==0||ev.isPrimary===false)return;this._deckX=ev.clientX;this._deckY=ev.clientY;this._deckMoved=false;ev.target.setPointerCapture(ev.pointerId);};
     const endDrag=(ev)=>{if(this._deckX==null)return;const dx=ev.clientX-this._deckX,dy=ev.clientY-this._deckY;if(Math.abs(dx)>38&&Math.abs(dx)>Math.abs(dy)*1.2){this._deckMoved=true;moveFocus(dx<0?1:-1);}this._deckX=null;this._deckY=null;};
     const cancelDrag=()=>{this._deckX=null;this._deckY=null;this._deckMoved=false;};
@@ -719,10 +764,10 @@ class Component extends DCLogic {
       const opacity=front?1:(side ? .64 : .36);
       const z=front?30:(side?18:8);
       const blur=front?"none":(side?"saturate(.9)":"saturate(.78) blur(.4px)");
-      return e("button",{className:"task-card",key:m.key,onClick:()=>{if(this._deckMoved){this._deckMoved=false;return;} front?m.open():select(m.idx);},style:{position:"absolute",left:"50%",top:0,width:"72%",maxWidth:302,minWidth:244,height:174,border:front?"1px solid rgba(255,255,255,.92)":"1px solid transparent",borderRadius:30,padding:16,display:"flex",alignItems:"center",gap:14,textAlign:"left",fontFamily:"inherit",cursor:front?"pointer":"grab",overflow:"hidden",background:front?"linear-gradient(180deg,rgba(255,255,255,.98) 0%,rgba(255,255,255,.88) 100%)":m.card,backdropFilter:"blur(22px) saturate(1.18)",WebkitBackdropFilter:"blur(22px) saturate(1.18)",boxShadow:front?"0 22px 42px -32px rgba(68,112,210,.70),inset 0 1px 0 rgba(255,255,255,.96),inset 0 -28px 42px rgba(226,238,255,.34)":"none",transform:"translateX(-50%) translateX("+x+"px) translateY("+y+"px) scale("+scale+") rotate("+rotate+"deg)",transformOrigin:"center bottom",zIndex:z,opacity:opacity,filter:blur,transition:"transform .34s cubic-bezier(.2,.9,.22,1), opacity .28s, filter .28s",touchAction:"pan-y",WebkitTapHighlightColor:"transparent"}},
+      return e("button",{className:"task-card",key:m.key,onClick:()=>{if(this._deckMoved){this._deckMoved=false;return;} front?m.open():select(m.idx);},style:{position:"absolute",left:"50%",top:0,width:"72%",maxWidth:302,minWidth:244,height:174,border:front?"1px solid rgba(255,255,255,.92)":"1px solid transparent",borderRadius:30,padding:16,display:"flex",alignItems:"center",gap:14,textAlign:"left",fontFamily:"inherit",cursor:front?"pointer":"grab",overflow:"hidden",background:front?"linear-gradient(135deg,rgba(255,255,255,.96),"+m.bg+")":m.card,backdropFilter:"blur(22px) saturate(1.18)",WebkitBackdropFilter:"blur(22px) saturate(1.18)",boxShadow:front?"0 22px 42px -32px rgba(68,112,210,.70),inset 0 1px 0 rgba(255,255,255,.96),inset 0 -28px 42px rgba(226,238,255,.34)":"none",transform:"translateX(-50%) translateX("+x+"px) translateY("+y+"px) scale("+scale+") rotate("+rotate+"deg)",transformOrigin:"center bottom",zIndex:z,opacity:opacity,filter:blur,transition:"transform .34s cubic-bezier(.2,.9,.22,1), opacity .28s, filter .28s",touchAction:"pan-y",WebkitTapHighlightColor:"transparent"}},
       e("span",{style:{position:"absolute",inset:0,background:front?"radial-gradient(circle at 72% 8%,rgba(112,236,255,.22),rgba(112,236,255,0) 38%),linear-gradient(145deg,rgba(255,255,255,.34),rgba(255,255,255,0) 44%)":"linear-gradient(145deg,rgba(255,255,255,.24),rgba(255,255,255,0) 45%,rgba(28,74,150,.08) 100%)"}}),
       e("span",{style:{position:"absolute",left:18,right:18,top:14,height:1,borderRadius:999,background:"rgba(255,255,255,.44)"}}),
-      front&&glassDecor(),
+      front&&glassDecor(m),
       !front&&e("span",{style:{position:"absolute",left:signed<0?18:"auto",right:signed>0?18:"auto",top:22,width:52,height:52,borderRadius:18,display:"flex",alignItems:"center",justifyContent:"center",background:"rgba(255,255,255,.38)",border:"1px solid rgba(255,255,255,.46)",boxShadow:"inset 0 1px 0 rgba(255,255,255,.48)"}},icon(m,24,"rgba(255,255,255,.92)")),
       e("div",{className:"task-card-content",style:{position:"relative",zIndex:2,display:front?"flex":"none",alignItems:"center",gap:14,width:"100%",minWidth:0}},
         icon3d(m,front),
@@ -744,13 +789,16 @@ class Component extends DCLogic {
         modules.map(coverCard),
         e("button",{className:"deck-edge","aria-label":"上一张任务卡",onClick:()=>edgeClick(-1),style:{position:"absolute",left:0,top:28,width:64,height:154,zIndex:36,border:"none",outline:"none",background:"transparent",cursor:"grab",WebkitTapHighlightColor:"transparent"}}),
         e("button",{className:"deck-edge","aria-label":"下一张任务卡",onClick:()=>edgeClick(1),style:{position:"absolute",right:0,top:28,width:64,height:154,zIndex:36,border:"none",outline:"none",background:"transparent",cursor:"grab",WebkitTapHighlightColor:"transparent"}})),
-      e("div",{className:"task-pagination"},
-        modules.map(m=>e("button",{className:"task-dot",key:m.key,"aria-label":"切换到"+m.name,"aria-pressed":focus===m.idx,onClick:()=>select(m.idx)},e("span",{style:{width:focus===m.idx?22:7,background:focus===m.idx?cur.grad:"rgba(92,124,170,.22)"}})))));
+      e("div",{className:"task-tabs"},
+        modules.map(m=>e("button",{className:"task-tab",key:m.key,"aria-label":"切换到"+m.name,"aria-pressed":focus===m.idx,onClick:()=>select(m.idx)},
+          e("span",{className:"task-tab-icon",style:{background:focus===m.idx?m.grad:m.bg}},icon(m,16,focus===m.idx?"#fff":m.accent)),
+          e("span",{className:"task-tab-label"},m.name,m.done&&e("span",{className:"task-done-dot","aria-label":"已点亮"}))))));
   }
 
   buildHeroMascot(level,gender){
     const isGirl=gender==="girl";
     return this.e("img",{
+      key:gender+"-"+this.state.mascotMood,
       src:isGirl?"./uploads/health-mascot-girl.png":"./uploads/health-mascot.png",
       alt:isGirl?"女孩健康小助手":"男孩健康小助手"
     });
@@ -809,7 +857,7 @@ class Component extends DCLogic {
       greeting:"正在充电…", dateStr:"", streak:0, heroBig:"", heroSub:"",
       bgParticles:this.bgParticles(), energyCore:null, isToday:true, isTrend:false,
       ribbonCols:[], ranges:[], sheet:null, taskCarousel:null,
-      mascotEl:this.buildHeroMascot(0,"boy"), goalDots:[], chatToastShow:false, chatToastText:"",
+      mascotEl:this.buildHeroMascot(0,"boy"), heroBubble:"今天也要元气满满",mascotTap:()=>{},dailyCharge:null,openWater:()=>{},waterStatus:"0/8 杯", goalDots:[], chatToastShow:false, chatToastText:"",
       boyMascotStyle:{}, girlMascotStyle:{},
       weightToggleLabel:"展开", weightVal:"60.0",
       chatKey:()=>{}, voiceTap:()=>{}, plusTap:()=>{}, goToday:()=>{}, goTrend:()=>{}, openDiet:()=>{},
@@ -841,7 +889,7 @@ class Component extends DCLogic {
 
     // Tab
     const tabBase={flex:1,minHeight:36,padding:"8px 12px",border:"none",borderRadius:10,fontSize:14,cursor:"pointer",fontFamily:"inherit",fontWeight:650,transition:".2s"};
-    const tabOn={...tabBase,background:"#fff",color:"#2478EF",boxShadow:"0 2px 6px rgba(71,114,161,.06)"}; const tabOff={...tabBase,background:"transparent",color:"#61768F"};
+    const tabOn={...tabBase,backgroundImage:"linear-gradient(120deg,#3889F6,#27CFD5)",color:"#fff",boxShadow:"none"}; const tabOff={...tabBase,background:"transparent",color:"#61768F"};
 
     // 趋势数据
     const range=this.state.range; const days=this.lastNDays(range);
@@ -896,6 +944,9 @@ class Component extends DCLogic {
       ranges, avgSleep, totalEx, avgWater, checkedDays, ...charts,
 
       mascotEl: this.buildHeroMascot(level,this.state.mascotGender),
+      heroBubble:["今天也要元气满满","慢慢来，我陪你","照顾自己，真不错"][this.state.mascotMood%3],
+      mascotTap:()=>this.setState(s=>({mascotMood:s.mascotMood+1})),
+      dailyCharge:this.renderDailyCharge(td),
       chooseBoy:()=>this.setState({mascotGender:"boy"}),
       chooseGirl:()=>this.setState({mascotGender:"girl"}),
       boyMascotStyle:mascotChip(this.state.mascotGender==="boy"),
