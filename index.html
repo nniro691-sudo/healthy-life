@@ -15,25 +15,70 @@
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{height:100%}
   body{background:#DCEBFF;font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased;font-feature-settings:"tnum"}
-  html{-webkit-text-size-adjust:100%;text-size-adjust:100%;scroll-padding-bottom:160px}
-  body{overflow-x:hidden}
+  :root{--ink:#16304E;--muted:#61768F;--accent:#2478EF;--line:rgba(100,137,174,.15)}
+  html{-webkit-text-size-adjust:100%;text-size-adjust:100%;scroll-padding-bottom:100px}
+  body{overflow-x:hidden;background:#EAF2FB;color:var(--ink)}
   #dc-root{width:100%;min-height:100%;isolation:isolate}
   button,input{font:inherit;-webkit-tap-highlight-color:transparent}
   button{touch-action:manipulation}
-  button:focus-visible,input:focus-visible{outline:2px solid #1265F3;outline-offset:3px}
-  .health-app{max-width:438px;margin-inline:auto;min-height:100svh!important}
-  .app-content{min-width:0;padding:calc(16px + env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) calc(164px + env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left))!important}
-  .chat-dock{left:50%!important;right:auto!important;width:100%;max-width:438px;transform:translateX(-50%);bottom:var(--keyboard-offset,0px)!important}
-  .chat-dock-inner{padding-bottom:calc(12px + env(safe-area-inset-bottom))!important}
-  .chat-input{font-size:16px!important;font-weight:500!important}
-  .chat-actions>button{min-height:44px}
-  .chat-dock:focus-within .chat-actions{display:none!important}
+  button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+  .health-app{max-width:438px;margin-inline:auto;min-height:100svh!important;background:linear-gradient(180deg,#D0EDFA 0,#E7F1FC 340px,#F5F9FC 680px)!important}
+  .app-content{min-width:0;padding:calc(16px + env(safe-area-inset-top)) max(20px,env(safe-area-inset-right)) calc(108px + env(safe-area-inset-bottom)) max(20px,env(safe-area-inset-left))!important}
+  .app-header{position:relative}
+  .topbar{height:36px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .topbar h1{font-size:18px;font-weight:750;line-height:1.4}
+  .streak-pill{display:flex;align-items:center;gap:6px;padding:8px 10px;border:1px solid rgba(255,255,255,.8);border-radius:16px;background:rgba(255,255,255,.56);font-size:11px;color:var(--muted);white-space:nowrap}
+  .streak-pill strong{font-size:14px;color:var(--ink);font-weight:750}
+  .hero-stage{height:208px;position:relative;display:flex;flex-direction:column;align-items:center;text-align:center}
+  .hero-mascot{width:224px;height:174px;display:flex;align-items:flex-start;justify-content:center;pointer-events:none}
+  .hero-mascot img{width:234px;height:234px;object-fit:contain;object-position:center top;transform:translateY(-8px);-webkit-mask-image:linear-gradient(#000 0%,#000 54%,rgba(0,0,0,.6) 70%,transparent 90%);mask-image:linear-gradient(#000 0%,#000 54%,rgba(0,0,0,.6) 70%,transparent 90%)}
+  .hero-hello{position:relative;font:italic 700 24px/1.1 Georgia,serif;color:#2169CE;margin-top:-10px}
+  .hero-caption{position:relative;font-size:13px;line-height:20px;font-weight:600;margin-top:4px;color:#49627F}
+  .mascot-switch{position:absolute;right:0;top:22px;z-index:4;display:flex;flex-direction:column;gap:3px;padding:3px;border:1px solid rgba(255,255,255,.8);border-radius:14px;background:rgba(255,255,255,.42)}
+  .mascot-switch button{min-width:46px;min-height:34px;border-radius:10px!important;padding:6px 8px!important;font-size:11px!important;box-shadow:none!important;font-weight:650!important}
+  .view-tabs{display:flex;gap:4px;min-height:44px;padding:4px;margin-top:8px;border:1px solid rgba(255,255,255,.8);border-radius:14px;background:rgba(255,255,255,.42)}
+  .today-content{display:flex;flex-direction:column;gap:0;margin-top:20px}
+  .task-heading{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;min-height:24px}
+  .task-heading h2{font-size:16px;line-height:24px;font-weight:750}
+  .task-count{font-size:11px;line-height:24px;font-weight:600;color:var(--muted);font-variant-numeric:tabular-nums}
+  .task-deck{position:relative;height:180px;touch-action:pan-y;user-select:none;overflow:hidden}
+  .task-card{min-width:0!important;width:calc(100% - 40px)!important;max-width:340px!important;height:164px!important;border-radius:22px!important;padding:16px!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.8)!important}
+  .task-card-content{gap:12px!important}
+  .task-card-icon{width:60px!important;height:72px!important}
+  .task-card-icon>span{animation:none!important}
+  .task-card-icon>span:last-child{width:56px!important;height:56px!important;border-radius:18px!important}
+  .task-tag{font-weight:650!important;letter-spacing:0!important}
+  .task-name{font-size:23px!important;line-height:1.3!important;font-weight:750!important}
+  .task-description{font-size:11px!important;font-weight:500!important;line-height:1.6!important;margin-top:3px!important}
+  .task-action{margin-top:8px!important;padding:0!important;min-height:26px;background:transparent!important;box-shadow:none!important;font-size:12px!important;font-weight:650!important}
+  .deck-edge{width:24px!important}
+  .task-pagination{height:28px;display:flex;align-items:center;justify-content:center;gap:4px}
+  .task-dot{width:28px;height:28px;display:flex;align-items:center;justify-content:center;border:0;background:transparent}
+  .task-dot>span{display:block;height:5px;border-radius:999px;transition:width .2s}
+  .week-section{padding:12px 0 10px;margin-top:12px;border-top:1px solid var(--line)}
+  .section-title{font-size:14px;line-height:20px;font-weight:700;margin-bottom:10px}
+  .weight-section{border-top:1px solid var(--line);overflow:hidden}
+  .weight-toggle{width:100%;min-height:52px;display:flex;justify-content:space-between;align-items:center;border:0;background:transparent;color:var(--ink);font-size:13px;font-weight:600;cursor:pointer}
+  .weight-toggle span{font-size:11px;color:var(--muted);font-weight:500}
+  .page-footer{text-align:center;font-size:10px;line-height:18px;color:#71849B;margin-top:16px}
+  .chat-dock{left:50%!important;right:auto!important;width:100%;max-width:438px;transform:translateX(-50%);bottom:var(--keyboard-offset,0px)!important;background:rgba(247,251,255,.94)!important;border-top:1px solid rgba(160,185,211,.18);padding-top:10px!important;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
+  .chat-dock-inner{padding:0 16px calc(10px + env(safe-area-inset-bottom))!important}
+  .chat-composer{min-height:52px;display:flex;align-items:center;gap:6px;border:1px solid #DFE8F2;border-radius:18px;background:rgba(255,255,255,.92);padding:4px 6px}
+  .chat-composer button{width:38px!important;height:42px!important;min-width:38px;flex-shrink:0;border:0!important;border-radius:12px!important;background:transparent!important;box-shadow:none!important;animation:none!important;color:var(--ink)!important}
+  .chat-composer button:last-child{background:#EAF2FF!important}
+  .chat-composer button:last-child svg{stroke:#2873D8}
+  .chat-input{font-size:16px!important;font-weight:400!important}
+  .trend-content{display:flex;flex-direction:column;gap:14px;margin-top:18px}
+  .trend-summary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .trend-summary>div{border-radius:12px!important;box-shadow:none!important;border:1px solid rgba(255,255,255,.8);background:rgba(255,255,255,.65)!important;padding:14px 8px!important}
+  .trend-summary>div>span:last-child{font-size:11px!important;color:var(--muted)!important}
+  .trend-content>section{box-shadow:none!important;border-radius:12px!important;border:1px solid var(--line)}
   .sheet-overlay{-webkit-backdrop-filter:blur(4px);overscroll-behavior:none}
   .sheet-panel{max-height:calc(var(--visible-height,100dvh) - max(16px,env(safe-area-inset-top)))!important}
   .sheet-header{flex-shrink:0;padding:16px!important}
   .sheet-close{min-width:44px;min-height:44px}
   .sheet-scroll{min-height:0;overscroll-behavior-y:contain;-webkit-overflow-scrolling:touch;padding:16px 16px calc(24px + env(safe-area-inset-bottom))!important}
-  .sheet-scroll>section{flex-shrink:0;min-width:0}
+  .sheet-scroll>section{flex-shrink:0;min-width:0;box-shadow:none!important;border-radius:16px!important;padding:16px!important}
   .sheet-scroll button{min-height:44px}
   .sheet-scroll .voice-toggle{min-height:28px}
   .voice-toggle::before{content:"";position:absolute;inset:-8px 0}
@@ -43,31 +88,22 @@
   .course-info{min-width:0}
   .course-level{flex-shrink:0;white-space:nowrap}
   .workout-name{font-size:26px!important;line-height:1.4;min-height:74px;width:100%;overflow-wrap:anywhere}
-  .task-card{min-width:0!important;width:76%!important;max-width:302px!important}
-  .task-card-content{gap:10px!important}
-  .task-card-icon{width:66px!important;height:76px!important}
-  .deck-edge{width:32px!important}
-  .task-dot{width:28px;height:32px;display:flex;align-items:center;justify-content:center;border:0;background:transparent}
-  .task-dot>span{display:block;height:7px;border-radius:999px;transition:width .2s}
-  .hero-word{font-size:72px!important;letter-spacing:0!important}
   @media(max-width:350px){
-    .app-content{padding-inline:12px!important}
-    .task-card{padding:12px!important;width:80%!important}
-    .task-card-icon{width:54px!important}
-    .task-card-icon>span:last-child{width:48px!important;height:48px!important}
-    .task-heading{gap:6px!important}
-    .task-caption{max-width:170px;line-height:1.5}
+    .app-content{padding-inline:16px!important}
+    .task-card{width:calc(100% - 32px)!important;padding:12px!important}
+    .task-card-content{gap:8px!important}
+    .task-card-icon{width:48px!important}
+    .task-card-icon>span:last-child{width:46px!important;height:46px!important;border-radius:14px!important}
     .sheet-scroll{padding-inline:10px!important}
     .sheet-scroll>section{padding:14px!important}
     .course-row{gap:8px!important;padding:10px!important}
     .course-level{padding:5px 7px!important}
-    .hero-badge{right:0!important;width:80px!important}
   }
-  @media(max-height:740px){
-    .hero-stage{min-height:240px!important}
-    .hero-mascot{width:210px!important;height:168px!important}
-    .hero-mascot img{width:204px!important;height:204px!important}
-    .hero-badge{top:32px!important}
+  @media(max-height:700px){
+    .hero-stage{height:184px}
+    .hero-mascot{height:144px;width:200px}
+    .hero-mascot img{width:202px;height:202px}
+    .mascot-switch{top:14px}
     .workout-player{padding:18px 8px!important;min-height:0!important}
     .workout-name{min-height:60px;font-size:22px!important}
   }
@@ -109,92 +145,76 @@
 
   <div class="app-content" style="width:100%;max-width:438px;padding:18px 16px 156px;position:relative;z-index:2">
 
-    <!-- ════ HERO ════ -->
-    <header style="position:relative;animation:fadeIn .5s both">
-      <div style="display:flex;align-items:center;justify-content:space-between;padding:2px 2px 0">
-        <div style="display:flex;align-items:center;gap:9px">
-          <span style="width:34px;height:34px;border-radius:12px;background:rgba(255,255,255,.62);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.82)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0D2447" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></span>
-          <span style="font-size:17px;font-weight:800;color:#12264D;letter-spacing:.5px;white-space:nowrap">健康小目标</span>
-        </div>
-        <div style="display:flex;align-items:center;gap:7px;padding:7px 13px;border-radius:999px;background:rgba(255,255,255,.62);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.82);white-space:nowrap">
-          <span style="display:inline-flex;animation:bob 2.6s ease-in-out infinite"><svg width="16" height="16" viewBox="0 0 24 24" fill="#706BFF"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/></svg></span>
-          <span style="font-size:15px;font-weight:800;color:#12264D">{{ streak }}</span>
-          <span style="font-size:11px;font-weight:600;color:#7E8BA8">满电值</span>
+    <header class="app-header">
+      <div class="topbar">
+        <h1>健康小目标</h1>
+        <div class="streak-pill">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="#5579E8" aria-hidden="true"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/></svg>
+          <strong>{{ streak }}</strong><span>满电值</span>
         </div>
       </div>
-
-      <div class="hero-stage" style="position:relative;min-height:286px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;margin-top:0;text-align:center">
-        <div class="hero-word" style="position:absolute;top:14px;left:-18px;right:-18px;text-align:center;font-size:88px;font-weight:900;color:rgba(255,255,255,.34);letter-spacing:8px;pointer-events:none;user-select:none;line-height:1;text-shadow:0 18px 32px rgba(90,150,220,.14)">HEALTH</div>
-        <div class="hero-badge" style="position:absolute;right:10px;top:46px;width:96px;border-radius:18px;background:rgba(255,255,255,.46);border:1px solid rgba(255,255,255,.78);backdrop-filter:blur(22px) saturate(1.2);-webkit-backdrop-filter:blur(22px) saturate(1.2);padding:12px 10px;z-index:3">
-          <div style="font-size:18px;font-weight:900;color:#706BFF;line-height:1">{{ streak }}</div>
-          <div style="font-size:12px;font-weight:800;color:#526581;margin-top:5px">福气萌芽</div>
-        </div>
-        <div class="hero-mascot" style="position:relative;z-index:2;width:236px;height:214px;margin-top:10px;display:flex;align-items:flex-start;justify-content:center;animation:softWiggle 4.6s ease-in-out infinite;filter:drop-shadow(0 24px 24px rgba(62,100,210,.30))">{{ mascotEl }}</div>
-        <p style="position:relative;z-index:3;font-size:28px;font-weight:900;color:#1265F3;letter-spacing:.2px;margin-top:-13px;font-family:Georgia,'Times New Roman',serif;font-style:italic;line-height:.9;animation:pencilHello 3.2s ease-in-out infinite;text-shadow:0 8px 16px rgba(18,101,243,.16)">Hello</p>
-        <p style="position:relative;z-index:3;font-size:16px;font-weight:900;color:#12264D;margin-top:6px;letter-spacing:.2px">制定你的健康小目标</p>
-        <div style="position:relative;z-index:4;display:flex;align-items:center;gap:5px;margin-top:14px;padding:5px;border-radius:999px;background:rgba(255,255,255,.52);border:1px solid rgba(255,255,255,.78);backdrop-filter:blur(16px) saturate(1.2);-webkit-backdrop-filter:blur(16px) saturate(1.2);box-shadow:inset 0 1px 0 rgba(255,255,255,.86)">
+      <div class="hero-stage">
+        <div class="mascot-switch" role="group" aria-label="选择人物">
           <button onClick="{{ chooseBoy }}" style="{{ boyMascotStyle }}">男孩</button>
           <button onClick="{{ chooseGirl }}" style="{{ girlMascotStyle }}">女孩</button>
         </div>
+        <div class="hero-mascot">{{ mascotEl }}</div>
+        <p class="hero-hello">Hello</p>
+        <p class="hero-caption">制定你的健康小目标</p>
       </div>
-
     </header>
 
-    <!-- ════ Tab ════ -->
-    <nav style="display:flex;gap:7px;background:rgba(255,255,255,.36);backdrop-filter:blur(24px) saturate(1.35);-webkit-backdrop-filter:blur(24px) saturate(1.35);border:1px solid rgba(255,255,255,.66);border-radius:20px;padding:6px;margin-top:14px;box-shadow:inset 0 1px 0 rgba(255,255,255,.78)">
+    <nav class="view-tabs" aria-label="健康记录视图">
       <button onClick="{{ goToday }}" style="{{ todayTabStyle }}">今日</button>
       <button onClick="{{ goTrend }}" style="{{ trendTabStyle }}">趋势</button>
     </nav>
 
     <!-- ════ 今日 ════ -->
     <sc-if value="{{ isToday }}" hint-placeholder-val="{{ true }}">
-    <main style="display:flex;flex-direction:column;gap:13px;margin-top:15px">
-
+    <main class="today-content">
       {{ taskCarousel }}
 
-      <!-- 体重 -->
-      <section style="background:rgba(255,255,255,.72);backdrop-filter:blur(18px) saturate(1.2);-webkit-backdrop-filter:blur(18px) saturate(1.2);border:1px solid rgba(255,255,255,.82);border-radius:22px;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,.88);animation:rise .5s .4s both">
-        <button onClick="{{ toggleWeight }}" style="width:100%;padding:15px 18px;border:none;background:transparent;display:flex;justify-content:space-between;align-items:center;font-size:14px;color:#5A6480;cursor:pointer;font-family:inherit;font-weight:600">⚖️ 记录体重（可选）<span style="font-size:12px;color:#9AA3BE">{{ weightToggleLabel }}</span></button>
-        <sc-if value="{{ showWeight }}" hint-placeholder-val="{{ false }}">
-          <div style="padding:0 18px 18px">
-            <div style="display:flex;align-items:center;justify-content:space-between;background:rgba(123,150,255,.1);border-radius:15px;padding:6px">
-              <button onClick="{{ weightDown }}" style="width:42px;height:42px;border:none;border-radius:12px;font-size:23px;color:#fff;cursor:pointer;line-height:1;background:linear-gradient(135deg,#3BA0FF,#5B6CFF);box-shadow:0 6px 12px -5px rgba(0,0,0,.3)" style-active="transform:scale(.9)">−</button>
-              <span style="font-size:21px;font-weight:800;color:#2A3550">{{ weightVal }}<em style="font-style:normal;font-size:13px;color:#9AA3BE;font-weight:600;margin-left:3px">kg</em></span>
-              <button onClick="{{ weightUp }}" style="width:42px;height:42px;border:none;border-radius:12px;font-size:23px;color:#fff;cursor:pointer;line-height:1;background:linear-gradient(135deg,#3BA0FF,#5B6CFF);box-shadow:0 6px 12px -5px rgba(0,0,0,.3)" style-active="transform:scale(.9)">+</button>
+      <section class="week-section" aria-label="本周能量">
+        <h2 class="section-title">本周能量</h2>
+        <div style="display:flex;justify-content:space-between;gap:8px">
+          <sc-for list="{{ ribbonCols }}" as="col" hint-placeholder-count="7">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:8px;flex:1;min-width:0">
+              <div style="{{ col.stackStyle }}">
+                <sc-for list="{{ col.cells }}" as="cell" hint-placeholder-count="5">
+                  <span style="{{ cell.style }}"></span>
+                </sc-for>
+              </div>
+              <span style="{{ col.dowStyle }}">{{ col.dow }}</span>
             </div>
-            <p style="font-size:12px;color:#9AA3BE;margin-top:12px;line-height:1.7">仅供参考，不必每天称。健康是长期的节律，一两天的浮动很正常。</p>
+          </sc-for>
+        </div>
+      </section>
+
+      <section class="weight-section">
+        <button class="weight-toggle" onClick="{{ toggleWeight }}">记录体重<span>可选 · {{ weightToggleLabel }}</span></button>
+        <sc-if value="{{ showWeight }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:0 0 16px">
+            <div style="display:flex;align-items:center;justify-content:space-between;background:rgba(123,150,255,.08);border-radius:12px;padding:6px">
+              <button onClick="{{ weightDown }}" aria-label="减少体重" style="width:44px;height:44px;border:none;border-radius:10px;font-size:23px;color:#2478EF;cursor:pointer;line-height:1;background:#fff">−</button>
+              <span style="font-size:21px;font-weight:750;color:#2A3550">{{ weightVal }}<em style="font-style:normal;font-size:12px;color:#61768F;font-weight:500;margin-left:3px">kg</em></span>
+              <button onClick="{{ weightUp }}" aria-label="增加体重" style="width:44px;height:44px;border:none;border-radius:10px;font-size:23px;color:#2478EF;cursor:pointer;line-height:1;background:#fff">+</button>
+            </div>
+            <p style="font-size:12px;color:#61768F;margin-top:10px;line-height:1.7">仅供参考，不必每天称。健康是长期的节律，一两天的浮动很正常。</p>
           </div>
         </sc-if>
       </section>
     </main>
-
-    <!-- ════ 本周能量带 ════ -->
-    <div style="background:rgba(255,255,255,.72);backdrop-filter:blur(18px) saturate(1.2);-webkit-backdrop-filter:blur(18px) saturate(1.2);border:1px solid rgba(255,255,255,.82);border-radius:24px;padding:16px 18px;margin-top:14px;box-shadow:inset 0 1px 0 rgba(255,255,255,.88);animation:rise .55s .08s both">
-      <p style="font-size:12px;color:#577190;letter-spacing:1.5px;font-weight:900;margin-bottom:13px">本 周 能 量</p>
-      <div style="display:flex;justify-content:space-between;gap:7px">
-        <sc-for list="{{ ribbonCols }}" as="col" hint-placeholder-count="7">
-          <div style="display:flex;flex-direction:column;align-items:center;gap:8px;flex:1">
-            <div style="{{ col.stackStyle }}">
-              <sc-for list="{{ col.cells }}" as="cell" hint-placeholder-count="5">
-                <span style="{{ cell.style }}"></span>
-              </sc-for>
-            </div>
-            <span style="{{ col.dowStyle }}">{{ col.dow }}</span>
-          </div>
-        </sc-for>
-      </div>
-    </div>
     </sc-if>
 
     <!-- ════ 趋势 ════ -->
     <sc-if value="{{ isTrend }}" hint-placeholder-val="{{ false }}">
-    <main style="display:flex;flex-direction:column;gap:13px;margin-top:14px;animation:fadeIn .4s both">
+    <main class="trend-content">
       <div style="display:flex;gap:7px">
         <sc-for list="{{ ranges }}" as="r" hint-placeholder-count="3">
           <button onClick="{{ r.onClick }}" style="{{ r.style }}">{{ r.label }}</button>
         </sc-for>
       </div>
-      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:9px">
+      <div class="trend-summary">
         <div style="background:#fff;border-radius:17px;padding:15px 6px;text-align:center;box-shadow:0 8px 20px -16px rgba(32,36,46,.3)"><span style="display:block;font-size:23px;font-weight:800;line-height:1.1;color:#7C6CFF">{{ avgSleep }}</span><span style="display:block;font-size:10px;color:#9A9EB2;margin-top:6px;line-height:1.3;font-weight:500">平均睡眠 (h)</span></div>
         <div style="background:#fff;border-radius:17px;padding:15px 6px;text-align:center;box-shadow:0 8px 20px -16px rgba(32,36,46,.3)"><span style="display:block;font-size:23px;font-weight:800;line-height:1.1;color:#10C49A">{{ totalEx }}</span><span style="display:block;font-size:10px;color:#9A9EB2;margin-top:6px;line-height:1.3;font-weight:500">运动 (min)</span></div>
         <div style="background:#fff;border-radius:17px;padding:15px 6px;text-align:center;box-shadow:0 8px 20px -16px rgba(32,36,46,.3)"><span style="display:block;font-size:23px;font-weight:800;line-height:1.1;color:#23B5F0">{{ avgWater }}</span><span style="display:block;font-size:10px;color:#9A9EB2;margin-top:6px;line-height:1.3;font-weight:500">日均喝水 (杯)</span></div>
@@ -207,7 +227,7 @@
     </main>
     </sc-if>
 
-    <footer style="text-align:center;font-size:12px;color:#9A9EB2;margin-top:28px;letter-spacing:.5px;font-weight:500">把健康过成习惯 · 你就赢了大多数人</footer>
+    <footer class="page-footer">把健康过成习惯 · 你就赢了大多数人</footer>
   </div>
 
   <!-- ════ 对话输入栏 ════ -->
@@ -221,15 +241,11 @@
           </div>
         </div>
       </sc-if>
-      <div class="chat-actions" style="display:flex;gap:10px;margin-bottom:10px">
-        <button onClick="{{ goTrend }}" style="display:flex;align-items:center;gap:7px;padding:9px 15px;border:1px solid rgba(255,255,255,.82);border-radius:999px;background:rgba(255,255,255,.72);backdrop-filter:blur(16px) saturate(1.2);-webkit-backdrop-filter:blur(16px) saturate(1.2);font-size:13px;font-weight:900;color:#2E66D7;cursor:pointer;font-family:inherit;box-shadow:0 12px 24px -20px rgba(77,116,190,.45),inset 0 1px 0 rgba(255,255,255,.92)" style-active="transform:scale(.95)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#2E66D7" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m7 14 4-4 3 3 5-6"/></svg>我的能量</button>
-        <button onClick="{{ goToday }}" style="display:flex;align-items:center;gap:7px;padding:9px 15px;border:1px solid rgba(255,255,255,.82);border-radius:999px;background:rgba(255,255,255,.72);backdrop-filter:blur(16px) saturate(1.2);-webkit-backdrop-filter:blur(16px) saturate(1.2);font-size:13px;font-weight:900;color:#10224B;cursor:pointer;font-family:inherit;box-shadow:0 12px 24px -20px rgba(77,116,190,.45),inset 0 1px 0 rgba(255,255,255,.92)" style-active="transform:scale(.95)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#10224B" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>打卡任务</button>
-      </div>
-      <div style="display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.82);backdrop-filter:blur(24px) saturate(1.24);-webkit-backdrop-filter:blur(24px) saturate(1.24);border:1px solid rgba(255,255,255,.92);border-radius:999px;padding:8px 9px 8px 14px;box-shadow:0 18px 34px -28px rgba(72,108,180,.60),inset 0 1px 0 rgba(255,255,255,.96)">
-        <button onClick="{{ voiceTap }}" style="border:1px solid rgba(56,86,130,.16);background:rgba(255,255,255,.70);width:40px;height:40px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;animation:micPulse 2.2s ease-in-out infinite;box-shadow:inset 0 1px 0 rgba(255,255,255,.78)" style-active="transform:scale(.9)"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#10224B" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><path d="M12 19v3"/></svg></button>
-        <input class="chat-input" aria-label="生活健康问题" enterkeyhint="send" placeholder="生活健康问题，问我就行" onKeyDown="{{ chatKey }}" style="flex:1;min-width:0;border:none;background:none;outline:none;font-size:14px;color:#10224B;font-family:inherit;font-weight:700" />
-        <button onClick="{{ plusTap }}" style="width:38px;height:38px;border-radius:50%;border:1px solid rgba(56,86,130,.26);background:rgba(255,255,255,.70);color:#10224B;font-size:21px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:inset 0 1px 0 rgba(255,255,255,.78)" style-active="transform:scale(.88) rotate(90deg)">+</button>
-        <button onClick="{{ openDiet }}" style="width:42px;height:42px;border-radius:50%;border:1px solid rgba(255,255,255,.82);background:linear-gradient(135deg,#EEF4FF,#706BFF);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:inset 0 1px 0 rgba(255,255,255,.52)" style-active="transform:scale(.88)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3.2"/></svg></button>
+      <div class="chat-composer">
+        <button aria-label="语音输入" title="语音输入" onClick="{{ voiceTap }}" style="border:1px solid rgba(56,86,130,.16);background:rgba(255,255,255,.70);width:40px;height:40px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;animation:micPulse 2.2s ease-in-out infinite;box-shadow:inset 0 1px 0 rgba(255,255,255,.78)" style-active="transform:scale(.9)"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#10224B" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><path d="M12 19v3"/></svg></button>
+        <input class="chat-input" aria-label="生活健康问题" enterkeyhint="send" placeholder="问问小电…" onKeyDown="{{ chatKey }}" style="flex:1;min-width:0;border:none;background:none;outline:none;font-size:14px;color:#10224B;font-family:inherit;font-weight:700" />
+        <button aria-label="更多操作" title="更多操作" onClick="{{ plusTap }}" style="width:38px;height:38px;border-radius:50%;border:1px solid rgba(56,86,130,.26);background:rgba(255,255,255,.70);color:#10224B;font-size:21px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:inset 0 1px 0 rgba(255,255,255,.78)" style-active="transform:scale(.88) rotate(90deg)">+</button>
+        <button aria-label="拍照记录饮食" title="拍照记录饮食" onClick="{{ openDiet }}" style="width:42px;height:42px;border-radius:50%;border:1px solid rgba(255,255,255,.82);background:linear-gradient(135deg,#EEF4FF,#706BFF);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:inset 0 1px 0 rgba(255,255,255,.52)" style-active="transform:scale(.88)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3.2"/></svg></button>
       </div>
     </div>
   </div>
@@ -240,7 +256,7 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:390,&quot;height&quot;:844}}">
 class Component extends DCLogic {
-  C = { ink:"#10224B", inkSoft:"#566D8D", muted:"#95A5BD", line:"#E6EEF8", bg:"#F4F8FF", surface:"#FFFFFF",
+  C = { ink:"#10224B", inkSoft:"#566D8D", muted:"#71849B", line:"#E6EEF8", bg:"#F4F8FF", surface:"#FFFFFF",
     sleep:"#6E7BFF", move:"#20D9E5", diet:"#FF9F86", water:"#33CFE3", mood:"#7D89FF", streak:"#706BFF" };
   GRAD = {
     sleep:"linear-gradient(135deg,#4BA7FF,#706BFF)", move:"linear-gradient(135deg,#7EEBFF,#20D9E5)",
@@ -579,17 +595,7 @@ class Component extends DCLogic {
   // ════ 视觉元素 ════
   e = React.createElement;
 
-  bgParticles(){ const e=this.e; const blobs=[
-    {c:"#9ED6FF",s:160,l:"-8%",t:"8%",d:"floatY 11s",dl:"0s",o:.48},
-    {c:"#7EF1F3",s:130,l:"78%",t:"3%",d:"floatY2 13s",dl:"1s",o:.45},
-    {c:"#DDE7FF",s:112,l:"4%",t:"52%",d:"floatY 15s",dl:".6s",o:.48},
-    {c:"#B8F7FF",s:120,l:"72%",t:"58%",d:"floatY2 12s",dl:"2s",o:.40},
-    {c:"#AFC5FF",s:74,l:"42%",t:"28%",d:"floatY3 17s",dl:"1.4s",o:.34},
-    {c:"#EEF4FF",s:88,l:"28%",t:"82%",d:"floatY2 14s",dl:".3s",o:.42},
-  ];
-    return e("div",{style:{position:"fixed",inset:0,zIndex:0,pointerEvents:"none",filter:"blur(8px)"}},
-      blobs.map((b,i)=>e("div",{key:i,style:{position:"absolute",left:b.l,top:b.t,width:b.s,height:b.s,borderRadius:"50%",background:b.c,opacity:b.o,animation:b.d+" ease-in-out infinite",animationDelay:b.dl}})));
-  }
+  bgParticles(){ return null; }
 
   // 电池小精灵 — 随完成度充电、变表情
   buildMascot(level){
@@ -697,11 +703,7 @@ class Component extends DCLogic {
       e("span",{style:{position:"relative",zIndex:2,width:big?64:44,height:big?64:44,borderRadius:big?20:15,display:"flex",alignItems:"center",justifyContent:"center",background:m.grad,boxShadow:"inset 0 1px 0 rgba(255,255,255,.72),inset 0 -10px 18px rgba(255,255,255,.16)",animation:"bob "+(big?4.8:5.6)+"s ease-in-out infinite"}},icon(m,big?31:22)));
     const moveFocus=(delta)=>this.setState(s=>({taskFocus:((s.taskFocus+delta)%modules.length+modules.length)%modules.length}));
     const select=(i)=>this.setState({taskFocus:i});
-    const glassDecor=(m,small)=>e("span",{style:{position:"absolute",right:small?-8:16,top:small?-10:14,width:small?86:124,height:small?76:104,pointerEvents:"none",zIndex:1}},
-      e("span",{style:{position:"absolute",right:small?14:16,top:small?14:2,width:small?44:68,height:small?44:68,borderRadius:small?16:22,background:"linear-gradient(145deg,rgba(255,255,255,.34),rgba(255,255,255,.08))",border:"1px solid rgba(255,255,255,.58)",backdropFilter:"blur(14px)",WebkitBackdropFilter:"blur(14px)",transform:"rotate(16deg)",boxShadow:"inset 0 1px 0 rgba(255,255,255,.72)"}}),
-      e("span",{style:{position:"absolute",right:small?2:0,top:small?48:60,width:small?34:52,height:small?12:14,borderRadius:999,background:"rgba(255,255,255,.22)",border:"1px solid rgba(255,255,255,.48)",transform:"rotate(-4deg)"}}),
-      e("span",{style:{position:"absolute",right:small?10:8,top:small?64:82,width:small?42:62,height:small?9:11,borderRadius:999,background:"rgba(255,255,255,.16)",border:"1px solid rgba(255,255,255,.38)",transform:"rotate(-4deg)"}}),
-      e("span",{style:{position:"absolute",right:small?62:86,top:small?6:18,width:small?13:16,height:small?13:16,borderRadius:"50%",background:m.grad,opacity:.24,border:"1px solid rgba(255,255,255,.45)"}}));
+    const glassDecor=()=>e("span",{"aria-hidden":true,style:{position:"absolute",right:18,top:16,width:44,height:44,borderRadius:14,border:"1px solid rgba(255,255,255,.78)",background:"rgba(222,243,255,.36)",transform:"rotate(14deg)",pointerEvents:"none"}});
     const startDrag=(ev)=>{if(ev.button!==0||ev.isPrimary===false)return;this._deckX=ev.clientX;this._deckY=ev.clientY;this._deckMoved=false;ev.target.setPointerCapture(ev.pointerId);};
     const endDrag=(ev)=>{if(this._deckX==null)return;const dx=ev.clientX-this._deckX,dy=ev.clientY-this._deckY;if(Math.abs(dx)>38&&Math.abs(dx)>Math.abs(dy)*1.2){this._deckMoved=true;moveFocus(dx<0?1:-1);}this._deckX=null;this._deckY=null;};
     const cancelDrag=()=>{this._deckX=null;this._deckY=null;this._deckMoved=false;};
@@ -710,58 +712,48 @@ class Component extends DCLogic {
       const raw=(m.idx-focus+modules.length)%modules.length;
       const signed=raw>modules.length/2?raw-modules.length:raw;
       const front=signed===0, side=Math.abs(signed)===1, back=Math.abs(signed)===2;
-      const x=front?0:(signed<0?-122:(signed>1?0:122));
-      const y=front?14:(side?46:10);
-      const scale=front?1:(side ? .80 : .68);
-      const rotate=front?0:(signed<0?-4:(signed>1?1:4));
-      const opacity=front?1:(side ? .80 : .48);
+      const x=front?0:(signed<0?-92:(signed>1?0:92));
+      const y=front?8:(side?24:12);
+      const scale=front?1:(side ? .88 : .78);
+      const rotate=front?0:(signed<0?-3:(signed>1?0:3));
+      const opacity=front?1:(side ? .64 : .36);
       const z=front?30:(side?18:8);
       const blur=front?"none":(side?"saturate(.9)":"saturate(.78) blur(.4px)");
       return e("button",{className:"task-card",key:m.key,onClick:()=>{if(this._deckMoved){this._deckMoved=false;return;} front?m.open():select(m.idx);},style:{position:"absolute",left:"50%",top:0,width:"72%",maxWidth:302,minWidth:244,height:174,border:front?"1px solid rgba(255,255,255,.92)":"1px solid transparent",borderRadius:30,padding:16,display:"flex",alignItems:"center",gap:14,textAlign:"left",fontFamily:"inherit",cursor:front?"pointer":"grab",overflow:"hidden",background:front?"linear-gradient(180deg,rgba(255,255,255,.98) 0%,rgba(255,255,255,.88) 100%)":m.card,backdropFilter:"blur(22px) saturate(1.18)",WebkitBackdropFilter:"blur(22px) saturate(1.18)",boxShadow:front?"0 22px 42px -32px rgba(68,112,210,.70),inset 0 1px 0 rgba(255,255,255,.96),inset 0 -28px 42px rgba(226,238,255,.34)":"none",transform:"translateX(-50%) translateX("+x+"px) translateY("+y+"px) scale("+scale+") rotate("+rotate+"deg)",transformOrigin:"center bottom",zIndex:z,opacity:opacity,filter:blur,transition:"transform .34s cubic-bezier(.2,.9,.22,1), opacity .28s, filter .28s",touchAction:"pan-y",WebkitTapHighlightColor:"transparent"}},
       e("span",{style:{position:"absolute",inset:0,background:front?"radial-gradient(circle at 72% 8%,rgba(112,236,255,.22),rgba(112,236,255,0) 38%),linear-gradient(145deg,rgba(255,255,255,.34),rgba(255,255,255,0) 44%)":"linear-gradient(145deg,rgba(255,255,255,.24),rgba(255,255,255,0) 45%,rgba(28,74,150,.08) 100%)"}}),
       e("span",{style:{position:"absolute",left:18,right:18,top:14,height:1,borderRadius:999,background:"rgba(255,255,255,.44)"}}),
-      e("span",{style:{position:"absolute",right:-28,top:-24,width:126,height:126,borderRadius:36,background:"rgba(255,255,255,.22)",border:"1px solid rgba(255,255,255,.32)",transform:"rotate(18deg)"}}),
-      front&&glassDecor(m,false),
+      front&&glassDecor(),
       !front&&e("span",{style:{position:"absolute",left:signed<0?18:"auto",right:signed>0?18:"auto",top:22,width:52,height:52,borderRadius:18,display:"flex",alignItems:"center",justifyContent:"center",background:"rgba(255,255,255,.38)",border:"1px solid rgba(255,255,255,.46)",boxShadow:"inset 0 1px 0 rgba(255,255,255,.48)"}},icon(m,24,"rgba(255,255,255,.92)")),
-      front&&e("span",{style:{position:"absolute",left:22,right:22,bottom:18,height:8,borderRadius:999,background:m.done?m.grad:"rgba(93,124,170,.13)",opacity:1}}),
-      front&&e("span",{style:{position:"absolute",right:18,bottom:17,width:34,height:23,borderRadius:8,background:"rgba(255,255,255,.32)",border:"1px solid rgba(255,255,255,.42)",boxShadow:"inset 0 1px 0 rgba(255,255,255,.46)",opacity:.85}}),
       e("div",{className:"task-card-content",style:{position:"relative",zIndex:2,display:front?"flex":"none",alignItems:"center",gap:14,width:"100%",minWidth:0}},
         icon3d(m,front),
         e("div",{style:{flex:1,minWidth:0,paddingTop:front?0:3}},
           e("div",{style:{display:"flex",alignItems:"center",gap:8,marginBottom:front?8:6}},
-            e("span",{style:{fontSize:11,fontWeight:900,letterSpacing:2.1,color:m.accent}},m.tag),
+            e("span",{className:"task-tag",style:{fontSize:11,fontWeight:900,letterSpacing:2.1,color:m.accent}},m.tag),
             m.done&&e("span",{style:{fontSize:10.5,fontWeight:900,color:"#fff",padding:"4px 8px",borderRadius:999,background:m.grad,opacity:front?1:.65}},"已点亮")),
-          e("div",{style:{fontSize:24,fontWeight:900,color:"#10224B",lineHeight:1.08,textShadow:"0 1px 0 rgba(255,255,255,.30)",whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}},m.name),
-          e("div",{style:{fontSize:12,color:"#5A6F8C",fontWeight:800,lineHeight:1.42,marginTop:6,textShadow:"0 1px 0 rgba(255,255,255,.20)",display:front?"block":"none"}},m.sub),
-          e("div",{style:{display:"inline-flex",alignItems:"center",gap:7,marginTop:12,padding:"7px 12px",borderRadius:999,background:"rgba(255,255,255,.72)",backdropFilter:"blur(16px) saturate(1.2)",WebkitBackdropFilter:"blur(16px) saturate(1.2)",boxShadow:"inset 0 1px 0 rgba(255,255,255,.82)",fontSize:12.5,fontWeight:900,color:"#10224B",maxWidth:"100%"}},
+          e("div",{className:"task-name",style:{fontSize:24,fontWeight:900,color:"#10224B",lineHeight:1.08,textShadow:"0 1px 0 rgba(255,255,255,.30)",whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}},m.name),
+          e("div",{className:"task-description",style:{fontSize:12,color:"#5A6F8C",fontWeight:800,lineHeight:1.42,marginTop:6,textShadow:"0 1px 0 rgba(255,255,255,.20)",display:front?"block":"none"}},m.sub),
+          e("div",{className:"task-action",style:{display:"inline-flex",alignItems:"center",gap:7,marginTop:12,padding:"7px 12px",borderRadius:999,background:"rgba(255,255,255,.72)",backdropFilter:"blur(16px) saturate(1.2)",WebkitBackdropFilter:"blur(16px) saturate(1.2)",boxShadow:"inset 0 1px 0 rgba(255,255,255,.82)",fontSize:12.5,fontWeight:900,color:"#10224B",maxWidth:"100%"}},
             m.status,
             e("span",{style:{fontSize:15,color:m.accent,display:front?"inline":"none"}},"›")))));
     };
     return e("section",{style:{animation:"rise .48s .12s both"}},
-      e("div",{className:"task-heading",style:{display:"flex",alignItems:"center",justifyContent:"space-between",margin:"0 2px 10px"}},
-        e("div",null,
-          e("div",{style:{fontSize:12,fontWeight:900,letterSpacing:2,color:"#4F6B8C"}},"打 卡 任 务"),
-          e("div",{className:"task-caption",style:{fontSize:12,color:"#7E8CA6",fontWeight:700,marginTop:4}},"睡眠、运动、饮食、心情一屏切换")),
-        e("div",{style:{fontSize:11,fontWeight:900,color:"#4F6B8C",padding:"7px 11px",borderRadius:999,background:"rgba(255,255,255,.56)",border:"1px solid rgba(255,255,255,.82)",backdropFilter:"blur(14px)",WebkitBackdropFilter:"blur(14px)"}},"滑动切换")),
-      e("div",{onPointerDown:startDrag,onPointerUp:endDrag,onPointerCancel:cancelDrag,style:{position:"relative",height:218,margin:"0 -10px",touchAction:"pan-y",userSelect:"none",overflow:"hidden"}},
-        e("span",{style:{position:"absolute",left:"21%",right:"21%",top:22,height:42,borderRadius:999,background:"linear-gradient(90deg,#2E77FF,#24F0DD)",boxShadow:"0 12px 24px -16px rgba(46,119,255,.75)",opacity:.88,zIndex:10}}),
+      e("div",{className:"task-heading"},
+        e("h2",null,"打卡任务"),
+        e("span",{className:"task-count"},String(focus+1).padStart(2,"0")+" / "+String(modules.length).padStart(2,"0"))),
+      e("div",{className:"task-deck",onPointerDown:startDrag,onPointerUp:endDrag,onPointerCancel:cancelDrag},
         modules.map(coverCard),
         e("button",{className:"deck-edge","aria-label":"上一张任务卡",onClick:()=>edgeClick(-1),style:{position:"absolute",left:0,top:28,width:64,height:154,zIndex:36,border:"none",outline:"none",background:"transparent",cursor:"grab",WebkitTapHighlightColor:"transparent"}}),
         e("button",{className:"deck-edge","aria-label":"下一张任务卡",onClick:()=>edgeClick(1),style:{position:"absolute",right:0,top:28,width:64,height:154,zIndex:36,border:"none",outline:"none",background:"transparent",cursor:"grab",WebkitTapHighlightColor:"transparent"}})),
-      e("div",{style:{display:"flex",justifyContent:"center",gap:7,marginTop:0}},
+      e("div",{className:"task-pagination"},
         modules.map(m=>e("button",{className:"task-dot",key:m.key,"aria-label":"切换到"+m.name,"aria-pressed":focus===m.idx,onClick:()=>select(m.idx)},e("span",{style:{width:focus===m.idx?22:7,background:focus===m.idx?cur.grad:"rgba(92,124,170,.22)"}})))));
   }
 
   buildHeroMascot(level,gender){
-    const e=this.e;
     const isGirl=gender==="girl";
-    const src=isGirl?"./uploads/health-mascot-girl.png":"./uploads/health-mascot.png";
-    const alt=isGirl?"女孩健康小助手":"男孩健康小助手";
-    return e("div",{style:{position:"relative",width:"100%",height:"100%",display:"flex",alignItems:"flex-start",justifyContent:"center"}},
-      e("div",{style:{position:"absolute",left:20,right:20,bottom:12,height:38,borderRadius:"50%",background:"radial-gradient(ellipse,rgba(50,106,220,.20),rgba(50,106,220,0) 68%)"}}),
-      e("img",{src,alt,style:{position:"relative",zIndex:2,width:isGirl?246:238,height:isGirl?246:238,objectFit:"contain",objectPosition:"center top",transform:isGirl?"translateY(-18px)":"translateY(-14px)",filter:"drop-shadow(0 18px 18px rgba(77,91,170,.22))",WebkitMaskImage:"linear-gradient(180deg,#000 0%,#000 54%,rgba(0,0,0,.72) 66%,rgba(0,0,0,.20) 80%,transparent 92%)",maskImage:"linear-gradient(180deg,#000 0%,#000 54%,rgba(0,0,0,.72) 66%,rgba(0,0,0,.20) 80%,transparent 92%)"}}),
-      e("span",{style:{position:"absolute",left:15,top:60,zIndex:3,padding:"7px 12px",borderRadius:14,background:"rgba(255,255,255,.86)",border:"1px solid rgba(255,255,255,.9)",boxShadow:"0 12px 24px -14px rgba(30,80,190,.6)",fontSize:13,fontWeight:900,color:"#1265F3"}},"Hi!"),
-      e("span",{style:{position:"absolute",right:12,top:126,zIndex:3,padding:"7px 10px",borderRadius:999,background:level>=5?"linear-gradient(135deg,#13E7AB,#19C7FF)":"rgba(255,255,255,.82)",boxShadow:"0 12px 24px -16px rgba(30,80,190,.6)",fontSize:12,fontWeight:900,color:level>=5?"#fff":"#5C6F8C"}},"+"+level+" 格"));
+    return this.e("img",{
+      src:isGirl?"./uploads/health-mascot-girl.png":"./uploads/health-mascot.png",
+      alt:isGirl?"女孩健康小助手":"男孩健康小助手"
+    });
   }
 
   // ── 趋势图 ──
@@ -773,8 +765,11 @@ class Component extends DCLogic {
     const min=domain?domain[0]:0;
     const X=i=>PL+(data.length<=1?iw/2:iw*i/(data.length-1));
     const Y=v=>PT+ih*(1-(v-min)/(max-min||1));
-    const labels=e("g",null,data.map((d,i)=>{ if(data.length>10&&i%Math.ceil(data.length/7)!==0&&i!==data.length-1)return null;
-      return e("text",{key:i,x:X(i),y:H-6,fontSize:9.5,fill:"#9A9EB2",textAnchor:"middle"},d.label); }));
+    const labelStep=Math.max(1,Math.ceil((data.length-1)/5)),lastLabel=data.length-1;
+    const labels=e("g",null,data.map((d,i)=>{
+      if(i!==lastLabel&&(i%labelStep!==0||lastLabel-i<labelStep))return null;
+      return e("text",{key:i,x:X(i),y:H-6,fontSize:9.5,fill:"#71849B",textAnchor:i===0?"start":i===lastLabel?"end":"middle"},d.label);
+    }));
     let plot;
     if(type==="bar"){
       const bw=Math.min(16,iw/data.length*0.62);
@@ -828,11 +823,11 @@ class Component extends DCLogic {
     const ribbonCols=this.lastNDays(7).map(k=>{
       const e2=ent[k], isToday=k===this.today(), cnt=this.doneCount(e2);
       const cells=this.MODULES.map(m=>{ const on=this.moduleDone(m.key,e2);
-        return { style: on?{height:9,borderRadius:3,background:G[m.key==="exercise"?"move":m.key],boxShadow:"0 0 7px "+m.accent+"66",transition:"all .4s"}:{height:9,borderRadius:3,background:C.line,transition:"all .4s"} }; });
+        return { style: on?{height:7,borderRadius:3,background:G[m.key==="exercise"?"move":m.key],boxShadow:"none",transition:"all .4s"}:{height:7,borderRadius:3,background:C.line,transition:"all .4s"} }; });
       return { isToday, cells,
-        stackStyle:{display:"flex",flexDirection:"column",gap:3,width:"100%",transform:isToday?"scale(1.07)":"none",transition:"transform .3s"},
-        dow: cnt>=5?"⚡":this.WEEK[new Date(k).getDay()],
-        dowStyle:{fontSize:cnt>=5?13:11,color:isToday?C.ink:C.muted,fontWeight:isToday?800:600,height:14,display:"flex",alignItems:"center"} };
+        stackStyle:{display:"flex",flexDirection:"column",gap:2,width:"100%",transform:isToday?"scale(1.07)":"none",transition:"transform .3s"},
+        dow:this.WEEK[new Date(k).getDay()],
+        dowStyle:{fontSize:11,color:isToday?C.ink:C.muted,fontWeight:isToday?700:500,height:14,display:"flex",alignItems:"center"} };
     });
 
     // 状态文字
@@ -845,8 +840,8 @@ class Component extends DCLogic {
     const pill=(done,key)=>done?{fontSize:12,fontWeight:900,color:"#fff",padding:"6px 12px",borderRadius:999,whiteSpace:"nowrap",backgroundImage:G[key==="exercise"?"move":key],boxShadow:"0 8px 16px -10px rgba(0,80,180,.6)"}:{fontSize:12,fontWeight:800,color:C.inkSoft,background:"rgba(255,255,255,.82)",padding:"6px 12px",borderRadius:999,whiteSpace:"nowrap",boxShadow:"inset 0 0 0 1px rgba(255,255,255,.9)"};
 
     // Tab
-    const tabBase={flex:1,padding:"12px",border:"none",borderRadius:14,fontSize:14.5,cursor:"pointer",fontFamily:"inherit",fontWeight:900,transition:".25s"};
-    const tabOn={...tabBase,backgroundImage:"linear-gradient(135deg,#2E77FF,#24F0DD)",color:"#fff",boxShadow:"0 10px 20px -12px rgba(46,119,255,.55)"}; const tabOff={...tabBase,background:"transparent",color:"#526B8A"};
+    const tabBase={flex:1,minHeight:36,padding:"8px 12px",border:"none",borderRadius:10,fontSize:14,cursor:"pointer",fontFamily:"inherit",fontWeight:650,transition:".2s"};
+    const tabOn={...tabBase,background:"#fff",color:"#2478EF",boxShadow:"0 2px 6px rgba(71,114,161,.06)"}; const tabOff={...tabBase,background:"transparent",color:"#61768F"};
 
     // 趋势数据
     const range=this.state.range; const days=this.lastNDays(range);
