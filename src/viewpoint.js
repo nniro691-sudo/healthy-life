@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 
 export const EYE_HEIGHT=1.65;
+export const compactViewport=(width,height)=>width<600||(width<=1000&&height<=520);
 export function lookHeight(position){
  // A person naturally looks upward on approaching the tall sanctuary.
  const hallGaze=THREE.MathUtils.lerp(1.85,1.40,THREE.MathUtils.smoothstep(position.z,12,18));
@@ -17,7 +18,7 @@ export function keepEyeHeight(camera){camera.position.y=THREE.MathUtils.clamp(ca
 // than raising the visitor's eye level or changing their orbit direction.
 export function frameMobileVisitor(camera,position,{width,height,top=90,bottom=height-160,left=16,right=width-16,landmark=null}){
  camera.clearViewOffset();camera.zoom=1;camera.updateProjectionMatrix();
- if(width>=600)return;
+ if(!compactViewport(width,height))return;
  camera.updateMatrixWorld(true);
  // A stable envelope includes standing, hands, incense and the forward reach
  // of a full prostration, so the framing does not pulse with the animation.
@@ -33,7 +34,7 @@ export function frameMobileVisitor(camera,position,{width,height,top=90,bottom=h
  if(landmark){const p=landmark.clone().project(camera);if(p.z<1&&Math.abs(p.x)<1.5)yPoints.push(landmark);}
  const extent=()=>{const xs=points.map(p=>pixels(p).x),ys=yPoints.map(p=>pixels(p).y);return {minX:Math.min(...xs),maxX:Math.max(...xs),minY:Math.min(...ys),maxY:Math.max(...ys)};};
  let box=extent();if(!Object.values(box).every(Number.isFinite))return;
- const scale=Math.min(1,Math.max(80,right-left)/(box.maxX-box.minX),Math.max(120,bottom-top)/(box.maxY-box.minY));
+ const scale=Math.min(1,Math.max(80,right-left)/(box.maxX-box.minX),Math.max(40,bottom-top)/(box.maxY-box.minY));
  if(scale<1){camera.zoom=Math.max(.01,scale);camera.updateProjectionMatrix();box=extent();}
  const shiftX=THREE.MathUtils.clamp(0,left-box.minX,right-box.maxX),shiftY=THREE.MathUtils.clamp(0,top-box.minY,bottom-box.maxY);
  if(Math.abs(shiftX)>.25||Math.abs(shiftY)>.25)camera.setViewOffset(width,height,-shiftX,-shiftY,width,height);

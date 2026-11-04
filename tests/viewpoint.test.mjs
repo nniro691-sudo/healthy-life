@@ -49,14 +49,27 @@ test('entire palms and bow geometry stays above mobile HUD through every movemen
 
 test('mobile drag through 360 degrees and both zoom limits keep the full action footprint in the safe viewport',async()=>{
  const {frameMobileVisitor}=await import('../src/viewpoint.js');
- for(const [width,height] of [[375,560],[390,680],[430,740]])for(const z of [7,-5,-9.5])for(const distance of [2.2,3.5,6.4,9])for(let angle=0;angle<Math.PI*2;angle+=Math.PI/4)for(const polar of [1.2,2.3]){
+ for(const [width,height] of [[375,560],[390,680],[430,740],[844,390],[740,280],[568,260]])for(const z of [7,-5,-9.5])for(const distance of [2.2,3.5,6.4,9])for(let angle=0;angle<Math.PI*2;angle+=Math.PI/4)for(const polar of [1.2,2.3]){
   const visitor=new THREE.Vector3(0,0,z),camera=new THREE.PerspectiveCamera(58,width/height,.1,160),target=visitor.clone().add(new THREE.Vector3(0,lookHeight(visitor),0));
   camera.position.copy(target).add(new THREE.Vector3().setFromSpherical(new THREE.Spherical(distance,polar,angle)));keepEyeHeight(camera);camera.position.z=Math.max(camera.position.z,-10.6);camera.lookAt(target);
-  const safe={width,height,top:90,bottom:height-170,left:72,right:width-82,landmark:z<3?new THREE.Vector3(0,12.5,-13.65):null};frameMobileVisitor(camera,visitor,safe);camera.updateMatrixWorld(true);
+  const landscape=width>height;const safe={width,height,top:landscape?62:90,bottom:height-(landscape?90:170),left:72,right:width-(landscape?110:82),landmark:z<3?new THREE.Vector3(0,12.5,-13.65):null};frameMobileVisitor(camera,visitor,safe);camera.updateMatrixWorld(true);
   for(const x of [-.7,.7])for(const y of [-.02,1.45])for(const dz of [-.7,.7]){const p=visitor.clone().add(new THREE.Vector3(x,y,dz)).project(camera),px=(p.x+1)*width/2,py=(1-p.y)*height/2;
    assert.ok(p.z<1&&p.z>-1,'whole visitor stays in front of the camera');
    assert.ok(px>=safe.left-.5&&px<=safe.right+.5,`horizontal clipping: angle=${angle} distance=${distance}, x=${px}`);
    assert.ok(py>=safe.top-.5&&py<=safe.bottom+.5,`HUD overlap: angle=${angle} distance=${distance}, y=${py}`);
   }
+ }
+});
+
+test('rotating between portrait and compact landscape recalculates framing without losing the visitor',async()=>{
+ const {frameMobileVisitor,compactViewport}=await import('../src/viewpoint.js');
+ const visitor=new THREE.Vector3(0,0,-9.5),camera=new THREE.PerspectiveCamera(58,1,.1,160),controls={target:new THREE.Vector3(),update(){camera.lookAt(this.target);}};
+ resetEyeView(camera,controls,visitor,true);
+ for(const [width,height] of [[390,680],[844,390],[740,280],[568,260],[390,680],[932,430],[430,740],[1143,720]]){
+  camera.aspect=width/height;camera.updateProjectionMatrix();
+  const landscape=width>height,top=landscape?62:90,bottom=height-(landscape?90:170);
+  frameMobileVisitor(camera,visitor,{width,height,top,bottom,left:72,right:width-(landscape?110:82),landmark:new THREE.Vector3(0,12.5,-13.65)});camera.updateMatrixWorld(true);
+  if(!compactViewport(width,height)){assert.equal(camera.zoom,1);assert.ok(!camera.view?.enabled);continue;}
+  for(const x of [-.7,.7])for(const y of [-.02,1.45])for(const z of [-.7,.7]){const p=visitor.clone().add(new THREE.Vector3(x,y,z)).project(camera),py=(1-p.y)*height/2;assert.ok(py>=top-.5&&py<=bottom+.5,`rotation clipping at ${width}x${height}: ${py}`);}
  }
 });

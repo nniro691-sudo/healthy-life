@@ -10,3 +10,26 @@
 .greeting-notice .greeting-dismiss{position:absolute;top:3px;right:5px;width:23px;height:23px;padding:0;background:transparent;color:#dbceb5;font-size:18px}.greeting-notice p{padding-right:12px}
 
 .asset-notice{position:absolute;z-index:20;left:50%;top:145px;transform:translateX(-50%);padding:10px 16px;border:1px solid #d4b47a70;border-radius:20px;background:#25271fee;color:#f4e6c8;font-size:12px;max-width:90%;white-space:nowrap}.asset-notice[hidden]{display:none}
+
+/* Compact phone landscape: keep controls inside the visible browser viewport. */
+@media (orientation:landscape) and (max-width:1000px) and (max-height:520px){
+ #app{height:100dvh;min-height:0}
+ header{top:max(10px,env(safe-area-inset-top));left:max(12px,env(safe-area-inset-left));right:max(12px,env(safe-area-inset-right));gap:10px}
+ .brand{gap:8px}.brand strong{font-size:24px;letter-spacing:4px}.brand-seal{width:32px;height:32px}.brand-seal svg{width:22px}
+ .brand-note,.scene-quote,.practice-summary,.wish-shortcut,.walk-hint,.bottom-caption{display:none}
+ .top-actions{gap:7px}.round{width:31px;height:31px}.round svg{width:16px}.online-status{font-size:9px;padding:8px 11px}
+ .location{top:15px;gap:12px}.location h1{font-size:18px;letter-spacing:4px}.location>span{width:22px}.location p{top:25px;font-size:9px;letter-spacing:2px}
+ .scene-nav{left:max(12px,env(safe-area-inset-left));top:76px;width:44px;padding:6px 4px;border-radius:23px}
+ .scene-nav button{justify-content:center;padding:8px 4px;border-radius:18px}.scene-nav button svg{width:20px;height:20px}.scene-nav button span,.scene-nav button small,.nav-foot{display:none}
+ .scene-nav button.active:before{left:-8px;width:4px;height:4px}
+ .bottom-area{width:480px;max-width:calc(100% - 200px);bottom:max(8px,env(safe-area-inset-bottom))}
+ .status-line{font-size:10px;letter-spacing:1px;margin-bottom:6px}.practice-bar{padding:5px}.practice-bar button{flex-direction:row;gap:7px;font-size:11px;padding:8px 3px;letter-spacing:1px}.practice-bar button svg{width:21px;height:21px}.divider{height:22px}
+ .camera-tools{right:max(12px,env(safe-area-inset-right));top:76px;bottom:auto;display:grid;grid-template-columns:repeat(2,42px);gap:5px}.camera-tools button{min-width:0;height:29px;font-size:11px}.camera-tools button:first-child{grid-column:span 2}
+ .movement-pad{left:max(12px,env(safe-area-inset-left));bottom:max(9px,env(safe-area-inset-bottom));transform:scale(.85);transform-origin:left bottom}
+ .route-button{right:max(14px,env(safe-area-inset-right));bottom:max(10px,env(safe-area-inset-bottom));width:43px;height:43px;font-size:9px;gap:0}.route-button svg{width:18px;height:18px}
+ .tour-stop{right:70px;bottom:12px;padding:8px 12px;font-size:10px}.asset-notice{top:57px;font-size:10px;padding:6px 12px}
+}
+@media (orientation:landscape) and (max-width:1000px) and (max-height:320px){
+ .scene-nav{top:62px;padding:4px}.scene-nav button{padding:4px}.scene-nav button svg{width:18px;height:18px}
+ .camera-tools{top:62px}
+}

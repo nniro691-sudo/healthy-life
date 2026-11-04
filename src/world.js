@@ -1,6 +1,6 @@
 import {assetUrl} from './asset-url.js';
 import * as THREE from 'three';
-import {resetEyeView,keepEyeHeight,lookHeight,frameMobileVisitor} from './viewpoint.js';
+import {resetEyeView,keepEyeHeight,lookHeight,frameMobileVisitor,compactViewport} from './viewpoint.js';
 import {regionAt,clampToWalkable,needsEntrance} from './navigation.js';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {createMonk,BOW_DURATION,INCENSE_DURATION} from './monk.js';
@@ -29,7 +29,7 @@ export function createWorld(canvas,onWalk,onBowComplete,onMatSelect){
  const ring=new THREE.Mesh(new THREE.RingGeometry(.16,.19,48),new THREE.MeshBasicMaterial({color:0xe8ce8d,side:THREE.DoubleSide,transparent:true,opacity:.75}));ring.rotation.x=-Math.PI/2;ring.position.y=.025;ring.visible=false;scene.add(ring);
  let waypoints=[];
  const raycaster=new THREE.Raycaster(),pointer=new THREE.Vector2();let pointerStart=null,dragged=false;
- function resetView(){resetEyeView(camera,controls,monk.position,innerWidth<600);}
+ function resetView(){resetEyeView(camera,controls,monk.position,compactViewport(innerWidth,innerHeight));}
  resetView();
  function floorHeight(x,z){let elevation=0;for(const m of MATS){const edge=Math.max(Math.abs(x-m.x)/(.44*MAT_SCALE),Math.abs(z-m.z)/(.79*MAT_SCALE));elevation=Math.max(elevation,MAT_HEIGHT*(1-THREE.MathUtils.smoothstep(edge,.75,1.10)));}return elevation;}
  function occupiedMats(){return new Set(remoteActors.filter(a=>a.mat).map(a=>a.mat));}
@@ -49,8 +49,8 @@ export function createWorld(canvas,onWalk,onBowComplete,onMatSelect){
  document.querySelector('#camera-far').onclick=()=>{camera.position.sub(controls.target).multiplyScalar(1.18).add(controls.target);controls.update();};
  let framing={width:innerWidth,height:innerHeight};
  function measureFraming(){const hud=document.querySelector('.bottom-area')?.getBoundingClientRect(),header=document.querySelector('header')?.getBoundingClientRect(),nav=document.querySelector('.scene-nav')?.getBoundingClientRect(),tools=document.querySelector('.camera-tools')?.getBoundingClientRect();framing={width:innerWidth,height:innerHeight,top:(header?.bottom||70)+16,bottom:Math.min(innerHeight-16,(hud?.top||innerHeight-150)-18),left:(nav?.right||60)+12,right:(tools?.left||innerWidth-70)-12};}
- new ResizeObserver(measureFraming).observe(document.querySelector('.bottom-area'));
- function resize(){measureFraming();renderer.setSize(innerWidth,innerHeight);camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();}addEventListener('resize',resize);resize();
+ const hudObserver=new ResizeObserver(measureFraming);for(const selector of ['.bottom-area','header','.scene-nav','.camera-tools'])hudObserver.observe(document.querySelector(selector));
+ function resize(){measureFraming();renderer.setSize(innerWidth,innerHeight);camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();}addEventListener('resize',resize);addEventListener('orientationchange',()=>requestAnimationFrame(resize));window.visualViewport?.addEventListener('resize',resize);new ResizeObserver(resize).observe(app);resize();
  function project(node,position){const p=position.project(camera);node.hidden=Math.abs(p.x)>1||Math.abs(p.y)>1||p.z>1;node.style.left=`${(p.x*.5+.5)*innerWidth}px`;node.style.top=`${(-p.y*.5+.5)*innerHeight}px`;}
  let frames=0;
  function animate(){requestAnimationFrame(animate);const dt=Math.min(clock.getDelta(),.05),t=clock.elapsedTime,old=monk.position.clone();
