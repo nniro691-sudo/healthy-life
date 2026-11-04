@@ -48,7 +48,7 @@ export function createWorld(canvas,onWalk,onBowComplete,onMatSelect){
  document.querySelector('#camera-near').onclick=()=>{camera.position.sub(controls.target).multiplyScalar(.85).add(controls.target);controls.update();};
  document.querySelector('#camera-far').onclick=()=>{camera.position.sub(controls.target).multiplyScalar(1.18).add(controls.target);controls.update();};
  let framing={width:innerWidth,height:innerHeight};
- function measureFraming(){const hud=document.querySelector('.bottom-area')?.getBoundingClientRect(),header=document.querySelector('header')?.getBoundingClientRect();framing={width:innerWidth,height:innerHeight,top:(header?.bottom||70)+16,bottom:Math.min(innerHeight-16,(hud?.top||innerHeight-150)-18)};}
+ function measureFraming(){const hud=document.querySelector('.bottom-area')?.getBoundingClientRect(),header=document.querySelector('header')?.getBoundingClientRect(),nav=document.querySelector('.scene-nav')?.getBoundingClientRect(),tools=document.querySelector('.camera-tools')?.getBoundingClientRect();framing={width:innerWidth,height:innerHeight,top:(header?.bottom||70)+16,bottom:Math.min(innerHeight-16,(hud?.top||innerHeight-150)-18),left:(nav?.right||60)+12,right:(tools?.left||innerWidth-70)-12};}
  new ResizeObserver(measureFraming).observe(document.querySelector('.bottom-area'));
  function resize(){measureFraming();renderer.setSize(innerWidth,innerHeight);camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();}addEventListener('resize',resize);resize();
  function project(node,position){const p=position.project(camera);node.hidden=Math.abs(p.x)>1||Math.abs(p.y)>1||p.z>1;node.style.left=`${(p.x*.5+.5)*innerWidth}px`;node.style.top=`${(-p.y*.5+.5)*innerHeight}px`;}
