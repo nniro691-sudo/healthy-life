@@ -24,10 +24,10 @@ async function scanGeometry(file){
 test('museum scans preserve detailed volumetric geometry and fit the altar without distortion',async()=>{
  for(const [kind,asset] of Object.entries(STATUE_ASSETS)){
   const {scene,metadata}=await scanGeometry(new URL('../public'+asset.url,import.meta.url));
-  assert.match(metadata.asset.extras.author,kind==='seated'?/Miguel Bandera/:/Minneapolis Institute of Art/);
-  assert.match(metadata.asset.extras.license,kind==='seated'?/CC-BY-4.0/:/CC-BY-SA/);
+  assert.match(metadata.asset.extras.author,/Minneapolis Institute of Art/);
+  assert.match(metadata.asset.extras.license,/CC-BY-SA/);
   let triangles=0;scene.traverse(o=>{if(o.isMesh){triangles+=(o.geometry.index?.count||o.geometry.attributes.position.count)/3;for(const n of o.geometry.attributes.position.array)assert.ok(Number.isFinite(n));}});
-  assert.ok(triangles>(kind==='seated'?15000:60000),'actual detailed scan, not a coarse procedural substitute');
+  assert.ok(triangles>60000,'actual detailed scan, not a coarse procedural substitute');
   const fitted=fitStatue(scene,asset),bounds=scanBounds(fitted),size=bounds.getSize(new THREE.Vector3());
   assert.ok(Math.abs(size.y-asset.height)<1e-5);
   assert.ok(Math.abs(bounds.min.y)<1e-5,'scan base touches the altar');

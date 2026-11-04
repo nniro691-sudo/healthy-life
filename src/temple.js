@@ -66,7 +66,7 @@ export function createTemple({loadTextures=true}={}){
   for(const dx of [-2,2]){cylinder(.18,.23,6.6,gold,x+dx,3.9,-15.2);box(.48,.20,.6,gilt,x+dx,7.25,-15.2);}
   box(4.9,.35,1.25,gold,x,7.5,-15.4);box(5.25,.16,1.5,lacquer,x,7.77,-15.4);
   box(4.2,.5,2.3,lacquer,x,.40,-14.4);box(4.45,.13,2.5,gold,x,.72,-14.4);
-  const attendant=createStatue({standing:true,loadAssets:loadTextures});attendant.position.set(x,.84,-14.1);group.add(attendant);statueLoads.push(attendant.userData.ready);
+  const attendant=createStatue({loadAssets:loadTextures});attendant.position.set(x,.84,-14.1);group.add(attendant);statueLoads.push(attendant.userData.ready);
 
  }
  // The curved roof is built as sloping strips with raised eaves, not a backdrop.
@@ -101,7 +101,7 @@ export function createTemple({loadTextures=true}={}){
  function lantern(x,y,z){const glow=material(0xe5bd76,.5);glow.emissive=new THREE.Color(0xe9ae50);glow.emissiveIntensity=.55;cylinder(.36,.36,.72,glow,x,y,z);for(let i=0;i<6;i++){const a=i/6*Math.PI*2;beam([x+Math.sin(a)*.37,y-.4,z+Math.cos(a)*.37],[x+Math.sin(a)*.37,y+.4,z+Math.cos(a)*.37],.025,darkWood);}cylinder(.43,.43,.08,gold,x,y+.42,z);cylinder(.43,.43,.08,gold,x,y-.42,z);beam([x,y+.4,z],[x,y+1.4,z],.02,darkWood);const light=new THREE.PointLight(0xffc47d,100,18,2);light.position.set(x,y-.2,z);if(z===-8)group.add(light);}
  for(const x of [-8,8])for(const z of [-8,2,11])lantern(x,5.5,z);
  // Courtyard, wish tree, temple gate and mountain enclosure inhabit the same space.
- const foliageTexture=loadTextures?new THREE.TextureLoader().load(assetUrl('/assets/pine-canopy.png')):new THREE.Texture();foliageTexture.colorSpace=THREE.SRGBColorSpace;
+ const foliageTexture=loadTextures?new THREE.TextureLoader().load(assetUrl('/assets/pine-canopy.webp')):new THREE.Texture();foliageTexture.colorSpace=THREE.SRGBColorSpace;
  const foliageMaterial=new THREE.MeshStandardMaterial({map:foliageTexture,alphaTest:.42,side:THREE.DoubleSide,roughness:1,color:0xd5dda5});
  foliageMaterial.onBeforeCompile=shader=>{shader.fragmentShader=shader.fragmentShader.replace('#include <alphatest_fragment>','diffuseColor.a *= smoothstep(1.8,4.6,length(vViewPosition));\n#include <alphatest_fragment>');};
  const grass=material(0x677649);grass.map=surface('stone');for(const x of [-24,24]){const lawn=mesh(new THREE.PlaneGeometry(22,46),grass,x,.026,24);lawn.rotation.x=-Math.PI/2;}

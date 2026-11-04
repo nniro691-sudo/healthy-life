@@ -10,4 +10,5 @@ for(const [name,path,settings] of variants){
 await rm('dist',{recursive:true,force:true});await mkdir('dist',{recursive:true});
 await cp('.pages-build/single','dist',{recursive:true});
 await cp('.pages-build/multiplayer','dist/multiplayer',{recursive:true});
+await rm('.pages-build',{recursive:true,force:true});
 console.log('Published variants: /healthy-life/ (single), /healthy-life/multiplayer/ (online)');

@@ -3,7 +3,7 @@ import {assetUrl} from './asset-url.js';
 import * as THREE from 'three';
 
 export const PRINCIPAL_HEIGHT=11.6;
-export const PRINCIPAL_IMAGE=assetUrl('/assets/shakyamuni-gold-hd.png');
+export const PRINCIPAL_IMAGE=assetUrl('/assets/shakyamuni-gold-hd.webp');
 
 // A high-resolution transparent devotional image inside the real 3D sanctuary.
 // It is deliberately a fixed image surface, not presented as a scanned 3D statue.
