@@ -1,5 +1,7 @@
+import {connectCloudRoom} from './cloud-multiplayer.js';
 export function connectRoom({getState,onActors,onStatus,onSpawn,onOccupied,onGreeting}){
  const room=new URLSearchParams(location.search).get('room')||'mountain-temple';
+ if(import.meta.env?.VITE_ROOM_API)return connectCloudRoom({getState,onActors,onStatus,onSpawn,onOccupied,onGreeting},room);
  if(import.meta.env?.VITE_STATIC_DEMO==='true'){onStatus('local',1);return {room,greet:async()=>false,close(){}};}
  const suffix=`?room=${encodeURIComponent(room)}`,actors=new Map();let session=null,busy=false,closed=false,lastPayload='',lastSent=0;
  const events=new EventSource(`/api/room/events${suffix}`);

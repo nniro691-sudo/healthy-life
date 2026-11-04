@@ -45,3 +45,7 @@ Scanning authors: **Miguel Bandera** (archived 3D study) and **Minneapolis Insti
 
 ## Adaptations
 Original scanned geometry and proportions retained. Original painted color textures removed; gold-leaf PBR material substituted. Original normal and ambient-occlusion textures retained where available. Scene placement, uniform scaling and orientation applied at runtime. Processing script: `scripts/prepare-statue-scans.py`. No institution endorsement is implied.
+
+### Web delivery optimization
+
+`bodhisattva-compact.glb` is the same attributed CC BY-SA 4.0 Bodhisattva scan, encoded with glTF Transform 4.5.1: Meshopt geometry compression (16-bit positions, 12-bit normals) and WebP textures at quality 95. Original detailed geometry and attribution retained; file reduced from 12,214,492 to approximately 2,340,000 bytes. This derivative remains CC BY-SA 4.0.

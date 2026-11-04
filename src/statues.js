@@ -1,10 +1,12 @@
+import {MeshoptDecoder} from 'three/addons/libs/meshopt_decoder.module.js';
+import {loadResource} from './load-resource.js';
 import {assetUrl} from './asset-url.js';
 import * as THREE from 'three';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 
 export const STATUE_ASSETS={
  seated:{url:assetUrl('/assets/models/tiantan-buddha.glb'),height:7.2,rotation:0},
- standing:{url:assetUrl('/assets/models/bodhisattva.glb'),height:5.9,rotation:0},
+ standing:{url:assetUrl('/assets/models/bodhisattva-compact.glb'),height:5.9,rotation:0},
 };
 const cache=new Map();
 
@@ -26,7 +28,7 @@ export function fitStatue(model,{height,rotation=0}){
 }
 
 function loadScan(asset){
- if(!cache.has(asset.url))cache.set(asset.url,new GLTFLoader().loadAsync(asset.url).then(gltf=>{
+ if(!cache.has(asset.url))cache.set(asset.url,loadResource(new GLTFLoader().setMeshoptDecoder(MeshoptDecoder),asset.url).then(gltf=>{
   gltf.scene.traverse(object=>{if(!object.isMesh)return;
    // Geometry and the attendant's baked normal/occlusion maps remain intact.
    // Replace the aged paint finish with restrained gold leaf, never self-lit.

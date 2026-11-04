@@ -1,3 +1,4 @@
+import {loadResource} from './load-resource.js';
 import {assetUrl} from './asset-url.js';
 import * as THREE from 'three';
 
@@ -27,7 +28,7 @@ export function createPrincipalBuddha({loadTextures=true}={}){
   }
   return figure;
  }
- if(loadTextures){group.userData.ready=new THREE.TextureLoader().loadAsync(PRINCIPAL_IMAGE).then(texture=>{texture.colorSpace=THREE.SRGBColorSpace;texture.anisotropy=8;mount(texture);return group;}).catch(error=>{console.error('主佛图像加载失败',error);if(typeof window!=='undefined')window.dispatchEvent(new CustomEvent('statue-load-error'));});}
+ if(loadTextures){group.userData.ready=loadResource(new THREE.TextureLoader(),PRINCIPAL_IMAGE).then(texture=>{texture.colorSpace=THREE.SRGBColorSpace;texture.anisotropy=8;mount(texture);return group;}).catch(error=>{console.error('主佛图像加载失败',error);if(typeof window!=='undefined')window.dispatchEvent(new CustomEvent('statue-load-error'));});}
  else{mount(new THREE.Texture());group.userData.ready=Promise.resolve(group);}
  return group;
 }

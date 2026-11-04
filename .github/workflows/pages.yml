@@ -27,7 +27,7 @@ jobs:
       - run: npm run build
         env:
           VITE_BASE_PATH: /healthy-life/
-          VITE_STATIC_DEMO: 'true'
+          VITE_ROOM_API: https://shan-si-multiplayer.tingzhang1119.chatgpt.site
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

@@ -1,0 +1,1 @@
+export default function Home(){return <main style={{maxWidth:640,margin:'15vh auto',padding:28,fontFamily:'serif',color:'#ecddb8',background:'#25271f',borderRadius:24}}><h1>山寺 · 多人共修</h1><p>与朋友同入山寺，静心参拜，合十相见。</p><a style={{color:'#efd29a'}} href="https://nniro691-sudo.github.io/healthy-life/">进入山寺 →</a></main>}
