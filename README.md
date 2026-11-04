@@ -1,10 +1,12 @@
 # 山寺 · 清心一隅
 
-公开多人入口：https://nniro691-sudo.github.io/healthy-life/ 。GitHub Pages 网页已连接 Sites 云端房间接口，无需 Render 绑卡。分享同一 `?room=...` 链接即可共同参拜、合十问候和回礼。
+单人版入口：https://nniro691-sudo.github.io/healthy-life/ 。
+
+多人版入口：https://nniro691-sudo.github.io/healthy-life/multiplayer/ 。GitHub Pages 网页已连接 Sites 云端房间接口，无需 Render 绑卡。分享同一 `?room=...` 链接即可共同参拜、合十问候和回礼。
 
 云端接口：`https://shan-si-multiplayer.tingzhang1119.chatgpt.site`。使用 D1 保存共享房间状态，短间隔同步位置和动作，通过数据库唯一索引防止拜垫重复占用。访客正常退出立即释放位置，断线 15 秒后过期；回到页面自动重连。当前验证双用户联机，未做 64 人满员压测。
 
-`cloud-deployment/` 保存已发布后端源码及迁移；更新后端需通过 Sites 标准发布流程重新构建、同步和部署。GitHub Actions 的 `VITE_ROOM_API` 指向云端接口。`node scripts/check-cloud-room.mjs` 验证公开双用户参拜、上香、互相问候和退出释放。原 Node/SSE 服务仍可独立部署。
+`cloud-deployment/` 保存已发布后端源码及迁移；更新后端需通过 Sites 标准发布流程重新构建、同步和部署。`npm run build:pages` 同时构建两个版本：根目录单人版不连接后端，`multiplayer/` 通过 `VITE_ROOM_API` 连接云端接口。`node scripts/check-cloud-room.mjs` 验证公开双用户参拜、上香、互相问候和退出释放。原 Node/SSE 服务仍可独立部署。
 
 两侧菩萨改用约 2.34 MB 的 Meshopt/WebP 压缩版（原约 12.21 MB），保持原模型细节和署名。主佛优先下载，佛像下载失败自动重试；网络较慢时显示下载状态，失败时可点击重新加载。心愿和修行计数仍只存本机，云端仅同步匿名人物状态及短时问候。
 

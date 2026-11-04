@@ -13,3 +13,5 @@ dist/
 !.env.example
 
 /multiplayer-cloud/
+
+.pages-build/
