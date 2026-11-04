@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {createServer} from 'node:http';
+import {createServer,request} from 'node:http';
 import {once} from 'node:events';
 import {MATS,MAT_FOOT_OFFSET} from '../src/mats.js';
 import {createRoomService} from '../server/rooms.js';
@@ -21,3 +21,8 @@ test('independent clients see each other, synchronize prayer, and cannot reserve
  const invalid=await fetch(`${base}/api/room/state?room=test`,{method:'POST',body:JSON.stringify({id:b.welcome.id,token:'wrong',state:pose})});assert.equal(invalid.status,401);
  }finally{await a?.close();await b?.close();service.close();server.closeAllConnections();await new Promise(r=>server.close(r));}
 });
+
+ test('invitation URL uses HTTPS behind a hosting proxy',async()=>{
+ const service=createRoomService(),server=createServer(service.middleware);server.listen(0,'127.0.0.1');await once(server,'listening');
+ try{const data=await new Promise((resolve,reject)=>{const req=request({hostname:'127.0.0.1',port:server.address().port,path:'/api/room/info?room=friends',headers:{host:'temple.example.com','x-forwarded-proto':'https'}},res=>{let body='';res.on('data',chunk=>body+=chunk);res.on('end',()=>resolve(JSON.parse(body)));});req.on('error',reject);req.end();});assert.equal(data.url,'https://temple.example.com/?room=friends');}finally{service.close();server.closeAllConnections();await new Promise(r=>server.close(r));}
+ });

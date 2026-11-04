@@ -61,3 +61,9 @@ Node.js 服务默认监听 `0.0.0.0:5173`，可使用 `PORT` 设置端口。服�
 主佛采用高清透明底金身图像，固定放置在真实三维佛龛内，以保证眉眼、唇线、手指和衣褶的清晰度。此主像是项目通过内置 imagegen 生成的图像资产，不是扫描三维模型；侧面观看会呈现图像平面的透视。图像为 `public/assets/shakyamuni-gold-hd.png`，生成提示词见同目录的 `.prompt.txt`。两侧菩萨继续使用 Minneapolis Institute of Art 的完整三维扫描（CC BY-SA 4.0），来源见 [模型署名](public/assets/models/CREDITS.md)。之前试用的免费主佛扫描保留为资料，不参与当前主像渲染。
 
 主佛图像高度约 11.6 米，梁顶约 17.3 米、屋脊约 19.6 米。柱梁、上层窗格、藻井与佛龛同步增高。人物大小及世界行走路径保持原样。默认镜头保持约 1.65 米的人眼高度，走近高大佛像时自然仰视。
+
+## 多人公网部署
+
+通过 [Render 部署此仓库](https://render.com/deploy?repo=https://github.com/nniro691-sudo/healthy-life)，使用 `render.yaml` 中的免费 Node Web Service 配置。健康检查为 `/healthz`，整个站点由同一个服务提供，勿设置 `VITE_STATIC_DEMO=true`。仅运行一个实例以共享内存中的房间。Render 免费服务闲置后会休眠，首次唤醒需要等待。
+
+部署成功后运行 `node scripts/check-public-room.mjs https://实际服务域名`，验证两个独立公网连接的跪拜、上香、拜垫占用、合十问候及离线释放。分享服务链接时保留相同的 `?room=...` 参数；HTTPS 代理后的邀请链接会保持 HTTPS。

@@ -6,6 +6,7 @@ const MODES=new Set(['idle','walk','palms','bow','incense']);
 const MAT_IDS=new Set(MATS.map(m=>m.id));
 export function createRoomService(){
  const rooms=new Map();
+ const publicUrl=process.env.PUBLIC_URL?new URL(process.env.PUBLIC_URL):null;
  const send=(res,type,data)=>res.write(`event: ${type}\ndata: ${JSON.stringify(data)}\n\n`);
  const publicActor=c=>({id:c.id,name:c.name,...c.state});
  const publish=(room,type,data)=>{for(const c of room.values())send(c.res,type,data);};
@@ -18,7 +19,9 @@ export function createRoomService(){
   if(req.method==='GET'&&url.pathname==='/api/room/info'){
    const host=req.headers.host||'localhost:5173',local=/^(localhost|127\.0\.0\.1)(:|$)/.test(host);let sharedHost=host;
    if(local){const address=Object.values(networkInterfaces()).flat().find(a=>a&&a.family==='IPv4'&&!a.internal&&(/^(192\.168\.|10\.)/.test(a.address)||/^172\.(1[6-9]|2[0-9]|3[01])\./.test(a.address)));if(address)sharedHost=address.address+(host.includes(':')?':'+host.split(':').pop():'');}
-   return reply(res,200,{url:`${req.socket.encrypted?'https':'http'}://${sharedHost}/?room=${encodeURIComponent(roomId)}`});
+   const protocol=req.socket.encrypted||req.headers['x-forwarded-proto']?.split(',')[0].trim()==='https'?'https':'http';
+   const invite=new URL(publicUrl?.href||`${protocol}://${sharedHost}/`);invite.searchParams.set('room',roomId);
+   return reply(res,200,{url:invite.href});
   }
   if(req.method==='GET'&&url.pathname==='/api/room/events'){
    let room=rooms.get(roomId);if(!room){room=new Map();rooms.set(roomId,room);}if(room.size>=64)return reply(res,503,{error:'room-full'});
