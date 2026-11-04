@@ -30,7 +30,7 @@ npm start
 
 Node.js 服务默认监听 `0.0.0.0:5173`，可使用 `PORT` 设置端口。服务同时提供 `dist/` 和多人接口；也可用 `npm run preview` 验证构建。
 
-多人功能需要运行 Node 服务，不能只把 dist 上传到纯静态托管。GitHub Pages 公开预览是单人版：https://nniro691-sudo.github.io/healthy-life/ 。完整多人版可使用仓库内 render.yaml 在 Render 部署 Node 服务，异地用户访问该服务的同一链接即可同步。反向代理需允许 SSE 长连接，关闭事件流缓冲。房间暂存在一个 Node 进程内，重启后重新加入；多实例部署需要进一步共享房间状态。
+本地生产命令使用 Node/SSE 服务，反向代理需允许 SSE 长连接并关闭缓冲，房间保存在单进程内。当前公开网页使用上述 Sites/D1 共享后端，不需要部署这个 Node 服务；纯静态构建若未设置 `VITE_ROOM_API` 则无法同步多人。`render.yaml` 保留为可选的 Node 托管配置。
 
 ## 使用
 
