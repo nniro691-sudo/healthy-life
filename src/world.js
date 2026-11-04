@@ -1,6 +1,6 @@
 import {assetUrl} from './asset-url.js';
 import * as THREE from 'three';
-import {resetEyeView,keepEyeHeight,lookHeight} from './viewpoint.js';
+import {resetEyeView,keepEyeHeight,lookHeight,frameMobileVisitor} from './viewpoint.js';
 import {regionAt,clampToWalkable,needsEntrance} from './navigation.js';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {createMonk,BOW_DURATION,INCENSE_DURATION} from './monk.js';
@@ -47,7 +47,10 @@ export function createWorld(canvas,onWalk,onBowComplete,onMatSelect){
  const turn=angle=>{camera.position.sub(controls.target).applyAxisAngle(new THREE.Vector3(0,1,0),angle).add(controls.target);controls.update();};document.querySelector('#camera-left').onclick=()=>turn(Math.PI/4);document.querySelector('#camera-right').onclick=()=>turn(-Math.PI/4);
  document.querySelector('#camera-near').onclick=()=>{camera.position.sub(controls.target).multiplyScalar(.85).add(controls.target);controls.update();};
  document.querySelector('#camera-far').onclick=()=>{camera.position.sub(controls.target).multiplyScalar(1.18).add(controls.target);controls.update();};
- function resize(){renderer.setSize(innerWidth,innerHeight);camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();}addEventListener('resize',resize);resize();
+ let framing={width:innerWidth,height:innerHeight};
+ function measureFraming(){const hud=document.querySelector('.bottom-area')?.getBoundingClientRect(),header=document.querySelector('header')?.getBoundingClientRect();framing={width:innerWidth,height:innerHeight,top:(header?.bottom||70)+16,bottom:Math.min(innerHeight-16,(hud?.top||innerHeight-150)-18)};}
+ new ResizeObserver(measureFraming).observe(document.querySelector('.bottom-area'));
+ function resize(){measureFraming();renderer.setSize(innerWidth,innerHeight);camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();}addEventListener('resize',resize);resize();
  function project(node,position){const p=position.project(camera);node.hidden=Math.abs(p.x)>1||Math.abs(p.y)>1||p.z>1;node.style.left=`${(p.x*.5+.5)*innerWidth}px`;node.style.top=`${(-p.y*.5+.5)*innerHeight}px`;}
  let frames=0;
  function animate(){requestAnimationFrame(animate);const dt=Math.min(clock.getDelta(),.05),t=clock.elapsedTime,old=monk.position.clone();
@@ -64,6 +67,8 @@ export function createWorld(canvas,onWalk,onBowComplete,onMatSelect){
   character.update(t,dt,walking?'walk':ritual,ritualTime,walking,reduceMotion);monk.updateMatrixWorld(true);
   // Camera follows translation while OrbitControls retains a genuine 360-degree orbit.
   const shift=monk.position.clone().sub(old);shift.y=0;controls.target.add(shift);controls.target.y=lookHeight(monk.position);camera.position.add(shift);controls.update();keepEyeHeight(camera);camera.lookAt(controls.target);if(monk.position.z<14&&camera.position.z<16){camera.position.x=THREE.MathUtils.clamp(camera.position.x,-10.6,10.6);camera.position.y=THREE.MathUtils.clamp(camera.position.y,1.50,1.85);camera.position.z=Math.max(camera.position.z,-10.6);camera.lookAt(controls.target);}for(const tree of [{x:-16,z:19},{x:-16,z:29},{x:-16,z:39},{x:16,z:19},{x:16,z:29},{x:16,z:39},{x:15,z:22}]){if(Math.hypot(camera.position.x-tree.x,camera.position.z-tree.z)<6.3&&camera.position.y>3.25){camera.position.y=3.25;camera.lookAt(controls.target);}}
+  const altarFocus=sceneId==='hall'&&monk.position.z<3?monk.position.clone().add(new THREE.Vector3(0,1.45,0)).lerp(new THREE.Vector3(0,12.5,-13.65),1-THREE.MathUtils.smoothstep(monk.position.z,-3,3)):null;
+  frameMobileVisitor(camera,monk.position,{...framing,landmark:altarFocus});
   if(frames++%3===0){project(label,character.headAnchor.clone().applyMatrix4(monk.matrixWorld));const occupied=occupiedMats();cushions.highlight(selectedMat,occupied);for(const {button,mat} of matButtons){project(button,new THREE.Vector3(mat.x,MAT_HEIGHT,mat.z));const left=new THREE.Vector3(mat.x-.30,MAT_HEIGHT,mat.z).project(camera),right=new THREE.Vector3(mat.x+.30,MAT_HEIGHT,mat.z).project(camera),front=new THREE.Vector3(mat.x,MAT_HEIGHT,mat.z+.52).project(camera),back=new THREE.Vector3(mat.x,MAT_HEIGHT,mat.z-.52).project(camera);button.style.width=`${Math.max(5,Math.min(25,Math.abs(right.x-left.x)*innerWidth*.38))}px`;button.style.height=`${Math.max(4,Math.min(16,Math.abs(front.y-back.y)*innerHeight*.38))}px`;button.setAttribute('aria-disabled',occupied.has(mat.id)?'true':'false');}}
   for(const remote of remotes.values()){const a=remote.actor;const visible=monk.position.distanceTo(new THREE.Vector3(a.x,0,a.z))<48;remote.character.root.visible=visible;remote.label.hidden=!visible;if(!visible)continue;remote.character.root.position.lerp(new THREE.Vector3(a.x,floorHeight(a.x,a.z),a.z),Math.min(1,dt*12));const diff=THREE.MathUtils.euclideanModulo(a.rotation-remote.character.root.rotation.y+Math.PI,Math.PI*2)-Math.PI;remote.character.root.rotation.y+=diff*Math.min(1,dt*12);remote.phase=['bow','incense'].includes(a.mode)?(remote.phase+dt)%(a.mode==='bow'?BOW_DURATION:INCENSE_DURATION):a.phase;remote.elapsed+=dt;if(remote.elapsed>.10){remote.character.update(t,remote.elapsed,a.mode,remote.phase,a.mode==='walk',reduceMotion);remote.elapsed=0;}remote.character.root.updateMatrixWorld(true);project(remote.label,remote.character.headAnchor.clone().applyMatrix4(remote.character.root.matrixWorld));remote.label.textContent=a.name+(a.mode==='bow'?' · 礼佛':'');if(monk.position.distanceTo(remote.character.root.position)>12)remote.label.hidden=true;remote.label.dataset.mode=a.mode;remote.label.dataset.mat=a.mat||'';}
   renderer.render(scene,camera);
