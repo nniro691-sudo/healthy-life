@@ -22,7 +22,10 @@ export function frameMobileVisitor(camera,position,{width,height,top=90,bottom=h
  const foot=position.clone().add(new THREE.Vector3(0,.01,0));
  const tip=position.clone().add(new THREE.Vector3(0,1.45,0));
  const pixels=point=>{const p=point.clone().project(camera);return (1-p.y)*height/2;};
+ // Include the full floor footprint: a prostration reaches forward beyond
+ // the standing root, which can project lower when the camera is rotated.
  const points=[tip,foot];
+ for(const x of [-.70,.70])for(const z of [-.70,.70])for(const y of [-.02,1.45])points.push(position.clone().add(new THREE.Vector3(x,y,z)));
  if(landmark){const p=landmark.clone().project(camera);if(p.z<1&&Math.abs(p.x)<1.5)points.push(landmark);}
  const extent=()=>{const ys=points.map(pixels);return [Math.min(...ys),Math.max(...ys)];};
  let [a,b]=extent();if(!Number.isFinite(a+b))return;

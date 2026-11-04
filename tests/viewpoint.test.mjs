@@ -27,3 +27,22 @@ test('mobile visitor feet and incense stay above the action bar throughout the a
   assert.equal(camera.position.y,1.65,'framing preserves human eye height');
  }
 });
+
+
+test('entire palms and bow geometry stays above mobile HUD through every movement phase',async()=>{
+ const {frameMobileVisitor}=await import('../src/viewpoint.js');
+ const {createMonk,BOW_DURATION}=await import('../src/monk.js');
+ const {CHARACTER_SCALE}=await import('../src/mats.js');
+ for(const [width,height] of [[375,560],[390,680],[430,740]])for(const z of [7,-5,-9.5])for(const angle of [0,Math.PI/4,Math.PI/2]){
+  const visitor=new THREE.Vector3(0,0,z),camera=new THREE.PerspectiveCamera(58,width/height,.1,160),controls={target:new THREE.Vector3(),update(){camera.lookAt(this.target);}};
+  resetEyeView(camera,controls,visitor,true);camera.position.sub(controls.target).applyAxisAngle(new THREE.Vector3(0,1,0),angle).add(controls.target);keepEyeHeight(camera);camera.lookAt(controls.target);
+  const bottom=height-170;frameMobileVisitor(camera,visitor,{width,height,top:90,bottom,landmark:z<3?new THREE.Vector3(0,12.5,-13.65):null});camera.updateMatrixWorld(true);
+  for(const mode of ['palms','bow']){const monk=createMonk();monk.root.position.copy(visitor);monk.root.scale.setScalar(CHARACTER_SCALE);
+   for(let t=0;t<=BOW_DURATION;t+=.4){monk.update(t,.4,mode,t,false,false);monk.root.updateMatrixWorld(true);
+    monk.root.traverseVisible(o=>{if(!o.isMesh)return;if(!o.geometry.boundingBox)o.geometry.computeBoundingBox();const box=o.geometry.boundingBox;
+     for(const x of [box.min.x,box.max.x])for(const y of [box.min.y,box.max.y])for(const z of [box.min.z,box.max.z]){const p=new THREE.Vector3(x,y,z).applyMatrix4(o.matrixWorld).project(camera),screen=(1-p.y)*height/2;assert.ok(screen<=bottom+.5,`${mode} at ${t.toFixed(1)}s hidden below HUD (${width}x${height})`);assert.ok(screen>=89.5,'whole head and body clear the header');}
+    });
+   }
+  }
+ }
+});
