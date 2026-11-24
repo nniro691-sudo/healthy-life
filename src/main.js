@@ -1,7 +1,8 @@
+import {scriptures} from './scriptures.js';
 import {HALLS,HALL_IDS} from './halls.js';
 import {assetUrl} from './asset-url.js';
 import './style.css';
-import {createIcons,Landmark,VolumeX,Volume2,SlidersHorizontal,DoorOpen,Trees,Leaf,ChevronRight,MousePointer2,HandHeart,PersonStanding,Drum,CircleDotDashed,Route,Ribbon,X,ArrowRight,Check,Pause,Play,Flame} from 'lucide';
+import {createIcons,BookOpen,Landmark,VolumeX,Volume2,SlidersHorizontal,DoorOpen,Trees,Leaf,ChevronRight,MousePointer2,HandHeart,PersonStanding,Drum,CircleDotDashed,Route,Ribbon,X,ArrowRight,Check,Pause,Play,Flame} from 'lucide';
 import {createWorld} from './world.js';
 import {connectRoom} from './multiplayer.js';
 import {createRitualViewer} from './ritual-viewer.js';
@@ -11,13 +12,13 @@ const Pray=[['path',{d:'M11 20V5c0-2-2-2-2 0v6L6 15v5m6 0V5c0-2 2-2 2 0v6l3 4v5M
 const Kneel=[['circle',{cx:14,cy:5,r:3}],['path',{d:'M12 9c-3 1-4 4-3 7l4 3H7c-3 0-4 3-1 3h12c2 0 2-2 0-3l-5-4 1-4 4 3 3-1'}]];
 const Woodfish=[['path',{d:'M20 12c0-5-4-8-9-7-6 1-9 6-8 11 1 5 8 5 13 3 4-2 6-5 4-7ZM3 13c5 2 11 1 17-1m-4-7c3-3 7-1 6 3M8 20l13-3'}],['circle',{cx:7,cy:14,r:1.6}]];
 const asIcon=paths=>['svg',{xmlns:'http://www.w3.org/2000/svg',width:24,height:24,viewBox:'0 0 24 24',fill:'none',stroke:'currentColor','stroke-width':1.5,'stroke-linecap':'round','stroke-linejoin':'round'},paths];
-const iconSet={Temple:asIcon(Temple),Pray:asIcon(Pray),Kneel:asIcon(Kneel),Woodfish:asIcon(Woodfish),Landmark,VolumeX,Volume2,SlidersHorizontal,DoorOpen,Trees,Leaf,ChevronRight,MousePointer2,HandHeart,PersonStanding,Drum,CircleDotDashed,Route,Ribbon,X,ArrowRight,Check,Pause,Play,Flame};
+const iconSet={Temple:asIcon(Temple),Pray:asIcon(Pray),Kneel:asIcon(Kneel),Woodfish:asIcon(Woodfish),BookOpen,Landmark,VolumeX,Volume2,SlidersHorizontal,DoorOpen,Trees,Leaf,ChevronRight,MousePointer2,HandHeart,PersonStanding,Drum,CircleDotDashed,Route,Ribbon,X,ArrowRight,Check,Pause,Play,Flame};
 const $=s=>document.querySelector(s);const $$=s=>[...document.querySelectorAll(s)];
 function icons(){document.querySelectorAll('[data-icon]').forEach(e=>e.setAttribute('data-lucide',e.dataset.icon));createIcons({icons:iconSet,attrs:{'stroke-width':1.5}});}
 const today=()=>new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Shanghai',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
 function readSaved(){try{return JSON.parse(localStorage.getItem('shansi-v1'))||{};}catch{return {};}}
 const saved=readSaved();const state={scene:'hall',active:null,muted:true,volume:saved.volume??.35,auto:false,woodSpeed:1100,quiet:saved.quiet??false,reduce:saved.reduce??matchMedia('(prefers-reduced-motion: reduce)').matches,quality:saved.quality||'high',counts:saved.counts||{palms:0,bow:0,wood:0,beads:0},daily:saved.date===today()?saved.daily||0:0,wishes:Array.isArray(saved.wishes)?saved.wishes:[],round:0};
-function persist(){try{localStorage.setItem('shansi-v1',JSON.stringify({counts:state.counts,daily:state.daily,date:today(),wishes:state.wishes,volume:state.volume,quiet:state.quiet,reduce:state.reduce,quality:state.quality}));}catch{toast('当前浏览器无法保存记录，本次仍可正常体验');}}
+function persist(){try{localStorage.setItem('shansi-v1',JSON.stringify({reading,counts:state.counts,daily:state.daily,date:today(),wishes:state.wishes,volume:state.volume,quiet:state.quiet,reduce:state.reduce,quality:state.quality}));}catch{toast('当前浏览器无法保存记录，本次仍可正常体验');}}
 const sceneInfo={gate:{name:'山门',poem:'入此山门，暂放尘事',description:'循着石径，走入一方清宁'},court:{name:'庭院',poem:'风过庭前，心随云闲',description:'听风观山，慢行于庭前'},hall:{name:'大雄宝殿',poem:'一念清净，万般自在',description:'合掌礼佛，安住当下'},tree:{name:'许愿树',poem:'将心中所愿，轻系于风',description:'系一缕心愿，愿万事从容'}};
 Object.assign(sceneInfo,Object.fromEntries(HALLS.map(h=>[h.id,h])));
 const routeOrder=['gate','court','hall',...HALLS.map(h=>h.id),'tree'];
@@ -71,7 +72,7 @@ function tapBead(){if(!$('#bead-count'))return;addCount('beads');state.round=sta
 function escapeText(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function openWish(){openModal(`<h2 id="modal-title">风知我心愿</h2><p class="intro">将愿望留在树下，也将希望留给自己。<br/>心愿仅保存在此设备，随时回来看看。</p><textarea id="wish-text" class="wish-input" maxlength="100" placeholder="愿我所念之人，平安喜乐……" aria-label="写下心愿"></textarea><div class="wish-presets">${['平安喜乐','家人安康','诸事顺遂','心有自在'].map(t=>`<button data-wish="${t}">${t}</button>`).join('')}</div><button id="save-wish" class="primary">系上心愿</button><div id="wish-list">${state.wishes.slice(-3).reverse().map(w=>`<div class="wish-entry">${escapeText(w.text)}<small>${escapeText(w.date)}</small></div>`).join('')}</div>`);$$('[data-wish]').forEach(b=>b.onclick=()=>{$('#wish-text').value=`愿${b.dataset.wish}。`;$('#wish-text').focus();});$('#save-wish').onclick=()=>{const text=$('#wish-text').value.trim();if(!text){toast('先写下一句心愿吧');$('#wish-text').focus();return;}state.wishes.push({text:text.slice(0,100),date:today()});state.wishes=state.wishes.slice(-100);persist();if(!state.muted)bellSound();closeModal();toast('心愿已系好，愿你所愿皆有回响');};}
 $('#wish-shortcut').onclick=openWish;
-$('#record').onclick=()=>{openModal(`<h2 id="modal-title">在山寺的时光</h2><p class="intro">不必追赶，每一次停留都有意义。</p><div class="record-grid">${[['incense','清香礼敬'],['palms','合掌静心'],['bow','虔心礼佛'],['wood','木鱼清音'],['beads','念珠修心']].map(([k,n])=>`<div><b>${state.counts[k]||0}</b><span>${n}</span></div>`).join('')}</div><p class="record-foot">今日修行 ${state.daily} 次 · 已留下 ${state.wishes.length} 个心愿<br/>记录自动保存在此设备，不会上传。</p><button class="primary secondary" id="back-scene">回到此刻</button>`);$('#back-scene').onclick=closeModal;};
+$('#record').onclick=()=>{openModal(`<h2 id="modal-title">在山寺的时光</h2><p class="intro">不必追赶，每一次停留都有意义。</p><div class="record-grid">${[['incense','清香礼敬'],['palms','合掌静心'],['bow','虔心礼佛'],['wood','木鱼清音'],['beads','念珠修心'],['chant','诵经']].map(([k,n])=>`<div><b>${state.counts[k]||0}</b><span>${n}</span></div>`).join('')}</div><p class="record-foot">今日修行 ${state.daily} 次 · 已留下 ${state.wishes.length} 个心愿<br/>记录自动保存在此设备，不会上传。</p><button class="primary secondary" id="back-scene">回到此刻</button>`);$('#back-scene').onclick=closeModal;};
 // Show the already rendered architecture immediately; secondary assets never block entry.
 requestAnimationFrame(()=>requestAnimationFrame(()=>{const loading=$('#loading');if(loading){loading.style.opacity='0';setTimeout(()=>loading.remove(),400);}}));
 let statueFailed=false,assetRequest=0,assetNoticeTimer;
@@ -82,3 +83,50 @@ addEventListener('scene-assets-loading',event=>observeAssets(event.detail.promis
 addEventListener('statue-load-error',()=>{statueFailed=true;clearTimeout(assetNoticeTimer);assetNotice.hidden=false;assetNotice.textContent='造像加载失败 · 点击重试';assetNotice.onclick=()=>location.reload();});
 
 $('#all-halls').onclick=()=>{openModal(`<h2 id="modal-title">五殿巡礼</h2><p class="intro">沿庭前石径，拜访五座新殿。<br/>各殿均可自由行走、上香与参拜。</p><div class="route-list">${HALLS.map((h,i)=>`<button class="route-stop" data-hall="${h.id}"><span>${String(i+1).padStart(2,'0')}</span><div><strong>${h.name}</strong><small>${h.description}</small></div><i data-icon="arrow-right"></i></button>`).join('')}</div>`);$$('[data-hall]').forEach(b=>b.onclick=()=>goScene(b.dataset.hall));};
+
+const lastReading = scriptures[saved.reading?.id] && Object.hasOwn(scriptures, saved.reading.id)
+ ? saved.reading : null;
+let reading = lastReading;
+
+function showScriptures() {
+ stopTour();
+ stopRitual();
+ const resume = reading ? '<button id="resume-chant" class="primary">继续诵经</button>' : '';
+ const choices = Object.entries(scriptures).map(([id, book]) =>
+  `<button class="route-stop" data-scripture="${id}"><div><strong>${book.title}</strong><small>${book.scope} · 请经</small></div></button>`
+ ).join('');
+ openModal(`<h2 id="modal-title">请经</h2><p class="intro">选一部经，静心逐段诵读。</p><div class="route-list">${choices}</div>${resume}`);
+ $$('#modal-root [data-scripture]').forEach(button => {
+  button.onclick = () => showChant(button.dataset.scripture, 0);
+ });
+ if (reading) $('#resume-chant').onclick = () => showChant(reading.id, reading.section);
+}
+
+function showChant(id, section) {
+ const book = scriptures[id];
+ const index = Number.isInteger(section) ? Math.max(0, Math.min(section, book.sections.length - 1)) : 0;
+ reading = {id, section: index};
+ persist();
+ const last = index === book.sections.length - 1;
+ openModal(`<h2 id="modal-title">诵经 · ${book.title}</h2>
+  <p class="intro">${book.scope} · 第 ${index + 1} / ${book.sections.length} 段</p>
+  <p class="scripture-text">${book.sections[index]}</p>
+  <div class="scripture-controls">
+   <button id="chant-prev" ${index === 0 ? 'disabled' : ''}>上一段</button>
+   <button id="chant-next">${last ? '完成诵读' : '下一段'}</button>
+  </div>
+  <button id="chant-catalog" class="primary secondary">返回经目</button>`, 'scripture-modal');
+ $('#chant-prev').onclick = () => showChant(id, index - 1);
+ $('#chant-catalog').onclick = showScriptures;
+ $('#chant-next').onclick = () => {
+  if (!last) return showChant(id, index + 1);
+  reading = null;
+  addCount('chant');
+  closeModal();
+  $('#status').textContent = `已完成《${book.title}》${book.scope}诵读`;
+ };
+ $('#modal-title').tabIndex = -1;
+ $('#modal-title').focus();
+}
+
+$('#scriptures').onclick = showScriptures;

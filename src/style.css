@@ -38,3 +38,30 @@
  .scene-nav{top:clamp(100px,22dvh,145px);max-height:calc(100dvh - 340px - clamp(100px,22dvh,145px));overflow-y:auto;scrollbar-width:none;padding:6px 5px}
  .scene-nav button{padding:8px 7px}.scene-nav button svg{width:20px;height:20px}
 }
+
+.scripture-text {
+ color: var(--cream);
+ font-size: clamp(19px, 4vw, 25px);
+ line-height: 1.9;
+ text-align: left;
+ margin: 18px 0 24px;
+}
+.scripture-controls {
+ display: flex;
+ gap: 12px;
+}
+.scripture-controls button {
+ flex: 1;
+ padding: 12px;
+ border: 1px solid var(--line);
+ border-radius: 12px;
+ background: #d4b47a20;
+}
+.scripture-controls button:disabled {
+ opacity: .45;
+ cursor: default;
+}
+@media (max-width: 600px), (max-height: 520px) {
+ .practice-bar:has(#scriptures) button {gap: 4px; letter-spacing: 0;}
+ .practice-bar:has(#scriptures) .divider {flex-shrink: 0;}
+}
