@@ -1,8 +1,6 @@
-import {MeshoptDecoder} from 'three/addons/libs/meshopt_decoder.module.js';
 import {loadResource} from './load-resource.js';
 import {assetUrl} from './asset-url.js';
 import * as THREE from 'three';
-import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 
 export const STATUE_ASSETS={
  standing:{url:assetUrl('/assets/models/bodhisattva-compact.glb'),height:5.9,rotation:0},
@@ -27,7 +25,7 @@ export function fitStatue(model,{height,rotation=0}){
 }
 
 function loadScan(asset){
- if(!cache.has(asset.url))cache.set(asset.url,loadResource(new GLTFLoader().setMeshoptDecoder(MeshoptDecoder),asset.url).then(gltf=>{
+ if(!cache.has(asset.url))cache.set(asset.url,Promise.all([import('three/addons/loaders/GLTFLoader.js'),import('three/addons/libs/meshopt_decoder.module.js')]).then(([{GLTFLoader},{MeshoptDecoder}])=>loadResource(new GLTFLoader().setMeshoptDecoder(MeshoptDecoder),asset.url)).then(gltf=>{
   gltf.scene.traverse(object=>{if(!object.isMesh)return;
    // Geometry and the attendant's baked normal/occlusion maps remain intact.
    // Replace the aged paint finish with restrained gold leaf, never self-lit.
@@ -40,18 +38,19 @@ function loadScan(asset){
  return cache.get(asset.url);
 }
 
-export function createStatue({loadAssets=true}={}){
+export function createStatue({loadAssets=true,defer=false}={}){
  const root=new THREE.Group();root.name='standing-bodhisattva';
  const asset=STATUE_ASSETS.standing;
  // A thin pierced mandorla sits behind the scan, never across its silhouette.
  const gold=new THREE.MeshStandardMaterial({color:0x96702f,metalness:.72,roughness:.48});
  const radius=2.12,center=3.0;
  for(let i=0;i<2;i++){const ring=new THREE.Mesh(new THREE.TorusGeometry(radius+i*.12,.035,8,128),gold);ring.position.set(0,center,-1.12);root.add(ring);}
- if(loadAssets){
-  root.userData.ready=loadScan(asset).then(model=>{const fitted=fitStatue(model.clone(true),asset);root.add(fitted);root.userData.loaded=true;return fitted;}).catch(error=>{
+ root.userData.load=()=>{if(root.userData.ready)return root.userData.ready;
+  return root.userData.ready=loadScan(asset).then(model=>{const fitted=fitStatue(model.clone(true),asset);root.add(fitted);root.userData.loaded=true;return fitted;}).catch(error=>{
    root.userData.error=error.message;console.error('佛像扫描资源加载失败',asset.url,error);
    if(typeof window!=='undefined')window.dispatchEvent(new CustomEvent('statue-load-error'));
   });
- }
+ };
+ if(loadAssets&&!defer)root.userData.load();
  return root;
 }

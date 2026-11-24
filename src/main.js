@@ -46,8 +46,8 @@ $('#online-status').onclick=()=>{
 };
 let toastTimer;function toast(message){$('#toast').textContent=message;$('#toast').classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('#toast').classList.remove('show'),2400);}
 function addCount(type){state.counts[type]=(state.counts[type]||0)+1;state.daily++;$('#merit').textContent=state.daily;persist();}
-let autoTimer=null,bowTimer=null,beadTimer=null,ritualViewer=null,sceneBusy=false,tourTimers=[];
-function stopRitual(){clearInterval(autoTimer);clearInterval(bowTimer);autoTimer=null;bowTimer=null;state.active=null;state.auto=false;world?.setRitual('idle');$$('[data-practice]').forEach(b=>b.classList.remove('active'));$('#character-label').textContent='自在小僧';}
+let autoTimer=null,beadTimer=null,ritualViewer=null,sceneBusy=false,tourTimers=[];
+function stopRitual(){clearInterval(autoTimer);autoTimer=null;state.active=null;state.auto=false;world?.setRitual('idle');$$('[data-practice]').forEach(b=>b.classList.remove('active'));$('#character-label').textContent='自在小僧';}
 async function goScene(id,{tour=false}={}){if(sceneBusy||!sceneInfo[id])return;if(!tour)stopTour();closeModal();stopRitual();if(id===state.scene){toast(`此刻已在${sceneInfo[id].name}`);return;}sceneBusy=true;world?.walkToAltar();$('#status').textContent=`沿石径前往${sceneInfo[id].name}…`;await new Promise(r=>setTimeout(r,550));$('#transition').classList.add('show');await new Promise(r=>setTimeout(r,550));state.scene=id;const info=sceneInfo[id];$('#scene-name').textContent=info.name;$('#scene-poem').textContent=info.poem;$('#status').textContent=info.poem;$('#wish-shortcut').hidden=id!=='tree';$$('[data-scene]').forEach(b=>{b.classList.toggle('active',b.dataset.scene===id);b.setAttribute('aria-current',b.dataset.scene===id?'location':'false');});world?.reset(id);await new Promise(r=>setTimeout(r,100));$('#transition').classList.remove('show');sceneBusy=false;}
 $$('[data-scene]').forEach(b=>{b.setAttribute('aria-label',sceneInfo[b.dataset.scene].name);b.onclick=()=>goScene(b.dataset.scene);});
 function stopTour(){tourTimers.forEach(clearTimeout);tourTimers=[];$('#tour-stop')?.remove();}
@@ -72,13 +72,13 @@ function escapeText(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':
 function openWish(){openModal(`<h2 id="modal-title">风知我心愿</h2><p class="intro">将愿望留在树下，也将希望留给自己。<br/>心愿仅保存在此设备，随时回来看看。</p><textarea id="wish-text" class="wish-input" maxlength="100" placeholder="愿我所念之人，平安喜乐……" aria-label="写下心愿"></textarea><div class="wish-presets">${['平安喜乐','家人安康','诸事顺遂','心有自在'].map(t=>`<button data-wish="${t}">${t}</button>`).join('')}</div><button id="save-wish" class="primary">系上心愿</button><div id="wish-list">${state.wishes.slice(-3).reverse().map(w=>`<div class="wish-entry">${escapeText(w.text)}<small>${escapeText(w.date)}</small></div>`).join('')}</div>`);$$('[data-wish]').forEach(b=>b.onclick=()=>{$('#wish-text').value=`愿${b.dataset.wish}。`;$('#wish-text').focus();});$('#save-wish').onclick=()=>{const text=$('#wish-text').value.trim();if(!text){toast('先写下一句心愿吧');$('#wish-text').focus();return;}state.wishes.push({text:text.slice(0,100),date:today()});state.wishes=state.wishes.slice(-100);persist();if(!state.muted)bellSound();closeModal();toast('心愿已系好，愿你所愿皆有回响');};}
 $('#wish-shortcut').onclick=openWish;
 $('#record').onclick=()=>{openModal(`<h2 id="modal-title">在山寺的时光</h2><p class="intro">不必追赶，每一次停留都有意义。</p><div class="record-grid">${[['incense','清香礼敬'],['palms','合掌静心'],['bow','虔心礼佛'],['wood','木鱼清音'],['beads','念珠修心']].map(([k,n])=>`<div><b>${state.counts[k]||0}</b><span>${n}</span></div>`).join('')}</div><p class="record-foot">今日修行 ${state.daily} 次 · 已留下 ${state.wishes.length} 个心愿<br/>记录自动保存在此设备，不会上传。</p><button class="primary secondary" id="back-scene">回到此刻</button>`);$('#back-scene').onclick=closeModal;};
-// Preload scene art before revealing the world. All artwork is shipped locally.
-Promise.race([world?.ready||Promise.resolve(),new Promise(resolve=>setTimeout(resolve,15000))]).then(()=>{setTimeout(()=>{$('#loading').style.opacity='0';setTimeout(()=>$('#loading').remove(),750);},300);});
-
-let statueFailed=false;
-const assetNotice=document.createElement('button');assetNotice.className='asset-notice';assetNotice.textContent='佛像资源下载中，请稍候…';assetNotice.hidden=true;$('#app').append(assetNotice);
-const assetNoticeTimer=setTimeout(()=>{assetNotice.hidden=false;},10000);
-world?.ready.then(()=>{clearTimeout(assetNoticeTimer);if(!statueFailed)assetNotice.remove();});
-addEventListener('statue-load-error',()=>{statueFailed=true;clearTimeout(assetNoticeTimer);assetNotice.hidden=false;assetNotice.textContent='佛像加载失败 · 点击重新加载';assetNotice.onclick=()=>location.reload();toast('佛像资源未能下载，请点击提示重新加载');});
+// Show the already rendered architecture immediately; secondary assets never block entry.
+requestAnimationFrame(()=>requestAnimationFrame(()=>{const loading=$('#loading');if(loading){loading.style.opacity='0';setTimeout(()=>loading.remove(),400);}}));
+let statueFailed=false,assetRequest=0,assetNoticeTimer;
+const assetNotice=document.createElement('button');assetNotice.className='asset-notice';assetNotice.hidden=true;$('#app').append(assetNotice);
+function observeAssets(promise){const request=++assetRequest;statueFailed=false;clearTimeout(assetNoticeTimer);assetNotice.hidden=true;assetNotice.textContent='造像加载中，可先在殿内走走…';assetNotice.onclick=null;assetNoticeTimer=setTimeout(()=>{assetNotice.hidden=false;},3000);Promise.resolve(promise).then(()=>{if(request===assetRequest){clearTimeout(assetNoticeTimer);if(!statueFailed)assetNotice.hidden=true;}});}
+observeAssets(world?.ready);
+addEventListener('scene-assets-loading',event=>observeAssets(event.detail.promise));
+addEventListener('statue-load-error',()=>{statueFailed=true;clearTimeout(assetNoticeTimer);assetNotice.hidden=false;assetNotice.textContent='造像加载失败 · 点击重试';assetNotice.onclick=()=>location.reload();});
 
 $('#all-halls').onclick=()=>{openModal(`<h2 id="modal-title">五殿巡礼</h2><p class="intro">沿庭前石径，拜访五座新殿。<br/>各殿均可自由行走、上香与参拜。</p><div class="route-list">${HALLS.map((h,i)=>`<button class="route-stop" data-hall="${h.id}"><span>${String(i+1).padStart(2,'0')}</span><div><strong>${h.name}</strong><small>${h.description}</small></div><i data-icon="arrow-right"></i></button>`).join('')}</div>`);$$('[data-hall]').forEach(b=>b.onclick=()=>goScene(b.dataset.hall));};

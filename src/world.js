@@ -20,12 +20,14 @@ export function createWorld(canvas,onWalk,onBowComplete,onMatSelect){
  const hemisphere=new THREE.HemisphereLight(0xffebce,0x626d62,.65);scene.add(hemisphere);
  const sun=new THREE.DirectionalLight(0xffdbad,3.2);sun.position.set(-16,22,14);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);Object.assign(sun.shadow.camera,{left:-25,right:25,top:25,bottom:-25,far:80});sun.shadow.bias=-.00025;sun.shadow.normalBias=.025;scene.add(sun);
  const fill=new THREE.DirectionalLight(0xc9dedf,.28);fill.position.set(12,8,-7);scene.add(fill);
- const panoramaTexture=new THREE.TextureLoader().load(assetUrl('/assets/mountain-panorama.jpg'),texture=>{texture.mapping=THREE.EquirectangularReflectionMapping;texture.colorSpace=THREE.SRGBColorSpace;scene.background=texture;scene.environment=texture;scene.environmentIntensity=.22;});
+ let panoramaPending=null;function loadPanorama(){if(!panoramaPending)panoramaPending=new THREE.TextureLoader().loadAsync(assetUrl('/assets/mountain-panorama.webp')).then(texture=>{texture.mapping=THREE.EquirectangularReflectionMapping;texture.colorSpace=THREE.SRGBColorSpace;scene.background=texture;scene.environment=texture;scene.environmentIntensity=.22;}).catch(()=>{panoramaPending=null;});return panoramaPending;}
  const temple=createTemple();scene.add(temple.group);
  const character=createMonk(),monk=character.root;monk.scale.setScalar(CHARACTER_SCALE);monk.position.copy(temple.anchors.hall);scene.add(monk);
  const cushions=createCushions();scene.add(cushions.group);
  let sceneId='hall',selectedMat=null,pendingRitual=null,walking=false,ritual='idle',ritualTime=0,autoBow=false,reduceMotion=false,remoteActors=[];
  let greetingUntil=0,faceTarget=null;
+ function loadArea(id){const pending=temple.loadArea(id);if(!HALL_IDS.includes(id))loadPanorama();window.dispatchEvent(new CustomEvent('scene-assets-loading',{detail:{promise:pending}}));return pending;}
+ temple.ready.then(()=>{const schedule=window.requestIdleCallback||((fn)=>setTimeout(fn,1200));schedule(()=>{if(sceneId==='hall')loadArea('hall');},{timeout:2500});});
  const remotes=new Map(),target=monk.position.clone(),keys=new Set(),clock=new THREE.Clock(),delta=new THREE.Vector3();
  const ring=new THREE.Mesh(new THREE.RingGeometry(.16,.19,48),new THREE.MeshBasicMaterial({color:0xe8ce8d,side:THREE.DoubleSide,transparent:true,opacity:.75}));ring.rotation.x=-Math.PI/2;ring.position.y=.025;ring.visible=false;scene.add(ring);
  let waypoints=[];
@@ -61,7 +63,7 @@ export function createWorld(canvas,onWalk,onBowComplete,onMatSelect){
   if(walking&&delta.length()>.035){const distance=Math.min(dt*1.65,delta.length());delta.normalize();monk.position.addScaledVector(delta,distance);clampToWalkable(monk.position);const angle=Math.atan2(-delta.x,-delta.z),diff=THREE.MathUtils.euclideanModulo(angle-monk.rotation.y+Math.PI,Math.PI*2)-Math.PI;monk.rotation.y+=diff*Math.min(dt*8,1);}
   else if(waypoints.length){target.copy(waypoints.shift());walking=true;}else{walking=false;ring.visible=false;if(pendingRitual){ritual=pendingRitual.value;autoBow=pendingRitual.auto;ritualTime=0;pendingRitual=null;onMatSelect?.('arrived',selectedMat,ritual);}}
   monk.position.y=floorHeight(monk.position.x,monk.position.z);
-  const area=regionAt(monk.position.x,monk.position.z);if(area!==sceneId){sceneId=area;onMatSelect?.('area',area);}
+  const area=regionAt(monk.position.x,monk.position.z);if(area!==sceneId){sceneId=area;loadArea(area);onMatSelect?.('area',area);}
   if(ritual==='bow'){ritualTime+=dt;if(ritualTime>=BOW_DURATION){ritualTime%=BOW_DURATION;onBowComplete?.();if(!autoBow)ritual='idle';}}
   if(ritual==='incense'){ritualTime+=dt;if(ritualTime>=INCENSE_DURATION){ritual='idle';ritualTime=0;onMatSelect?.('incense-complete');}}if(greetingUntil&&t>=greetingUntil){greetingUntil=0;faceTarget=null;ritual='idle';onMatSelect?.('greet-end');}
   if(ritual==='bow'||ritual==='palms'||ritual==='incense'){const desired=faceTarget?Math.atan2(monk.position.x-faceTarget.x,monk.position.z-faceTarget.z):0;const diff=THREE.MathUtils.euclideanModulo(desired-monk.rotation.y+Math.PI,Math.PI*2)-Math.PI;monk.rotation.y+=diff*Math.min(dt*6,1);}
@@ -80,7 +82,7 @@ export function createWorld(canvas,onWalk,onBowComplete,onMatSelect){
   setRitual(value,auto=false){greetingUntil=0;faceTarget=null;if(value!=='idle'&&value!=='incense'&&HALL_IDS.includes(sceneId)&&!selectedMat){const occupied=occupiedMats(),available=MATS.filter(m=>m.scene===sceneId&&!occupied.has(m.id)).sort((a,b)=>Math.hypot(a.x-monk.position.x,a.z+MAT_FOOT_OFFSET-monk.position.z)-Math.hypot(b.x-monk.position.x,b.z+MAT_FOOT_OFFSET-monk.position.z));if(!available.length){onMatSelect?.('occupied');return;}chooseMat(available[0].id,false);pendingRitual={value,auto};return;}ritual=value;ritualTime=0;autoBow=auto;walking=false;pendingRitual=null;target.copy(monk.position);waypoints=[];if(value==='idle')selectedMat=null;},
   startIncense(){selectedMat=null;greetingUntil=0;faceTarget=null;ritual='idle';navigate(new THREE.Vector3(hallById(sceneId)?.x||0,0,hallById(sceneId)?hallById(sceneId).z-2.4:-9.5));pendingRitual={value:'incense',auto:false};},
   greetPeer(id){const actor=remoteActors.find(a=>a.id===id);if(!actor||Math.hypot(actor.x-monk.position.x,actor.z-monk.position.z)>12){onMatSelect?.('too-far');return false;}selectedMat=null;pendingRitual=null;waypoints=[];target.copy(monk.position);walking=false;faceTarget=new THREE.Vector3(actor.x,0,actor.z);greetingUntil=clock.elapsedTime+4;ritual='palms';ritualTime=0;return true;},
-  reset(id='hall'){greetingUntil=0;faceTarget=null;sceneId=id;monk.position.copy(temple.anchors[id]||temple.anchors.hall);monk.rotation.y=0;target.copy(monk.position);ritual='idle';ritualTime=0;walking=false;pendingRitual=null;selectedMat=null;waypoints=[];resetView();},
+  reset(id='hall'){loadArea(id);greetingUntil=0;faceTarget=null;sceneId=id;monk.position.copy(temple.anchors[id]||temple.anchors.hall);monk.rotation.y=0;target.copy(monk.position);ritual='idle';ritualTime=0;walking=false;pendingRitual=null;selectedMat=null;waypoints=[];resetView();},
   walkToAltar(){selectedMat=null;pendingRitual=null;target.copy(monk.position).add(new THREE.Vector3(0,0,-1));walking=true;ritual='idle';},
   getState(){return {scene:sceneId,x:+monk.position.x.toFixed(3),z:+monk.position.z.toFixed(3),rotation:+monk.rotation.y.toFixed(3),mode:walking?'walk':ritual,phase:+ritualTime.toFixed(2),mat:selectedMat};},
   spawn(actor){if(actor){monk.position.set(actor.x,0,actor.z);target.copy(monk.position);resetView();}},

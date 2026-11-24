@@ -7,14 +7,14 @@ import {createStatue} from './statues.js';
 import {mergeGeometries} from 'three/addons/utils/BufferGeometryUtils.js';
 const material=(color,roughness=.85,metalness=0)=>new THREE.MeshStandardMaterial({color,roughness,metalness});
 export function createTemple({loadTextures=true}={}){
- const statueLoads=[];
- const group=new THREE.Group(),wood=material(0x57251d),darkWood=material(0x2b2019),stone=material(0x8a8779),gold=material(0xb58a3c,.32,.72),roof=material(0x303c38),wall=material(0xb4ac91),leaf=material(0x526947),red=material(0x9e3026);
+ const attendants=[];
+ const group=new THREE.Group(),wood=material(0x57251d),darkWood=material(0x2b2019),stone=material(0x8a8779),gold=material(0xb58a3c,.32,.72),roof=material(0x303c38),red=material(0x9e3026);
  // Fine-grained procedural surface maps remain continuous from every camera angle.
  function surface(kind){const size=128,data=new Uint8Array(size*size*4);for(let y=0;y<size;y++)for(let x=0;x<size;x++){const noise=Math.sin(x*12.9898+y*78.233)*43758.5453;const random=noise-Math.floor(noise);const value=kind==='wood'?.64+.13*Math.sin(x*.42+Math.sin(y*.032)*1.6)+random*.13:.62+random*.22+.06*Math.sin(x*.1)*Math.cos(y*.17);const i=(y*size+x)*4;data[i]=data[i+1]=data[i+2]=Math.round(value*255);data[i+3]=255;}const texture=new THREE.DataTexture(data,size,size);texture.wrapS=texture.wrapT=THREE.RepeatWrapping;texture.colorSpace=THREE.SRGBColorSpace;texture.needsUpdate=true;return texture;}
  stone.map=surface('stone');wood.map=surface('wood');darkWood.map=wood.map;gold.metalness=.42;gold.emissive=new THREE.Color(0x50300c);gold.emissiveIntensity=.24;
  function mesh(g,m,x=0,y=0,z=0,parent=group){const o=new THREE.Mesh(g,m);o.position.set(x,y,z);o.castShadow=true;o.receiveShadow=true;parent.add(o);return o;}
  function box(w,h,d,m,x,y,z,parent){return mesh(new THREE.BoxGeometry(w,h,d),m,x,y,z,parent);}
- function sphere(rx,ry,rz,m,x,y,z,parent){const o=mesh(new THREE.SphereGeometry(1,32,20),m,x,y,z,parent);o.scale.set(rx,ry,rz);return o;}
+ function sphere(rx,ry,rz,m,x,y,z,parent){const o=mesh(new THREE.SphereGeometry(1,16,10),m,x,y,z,parent);o.scale.set(rx,ry,rz);return o;}
  function cylinder(rt,rb,h,m,x,y,z,parent){return mesh(new THREE.CylinderGeometry(rt,rb,h,24),m,x,y,z,parent);}
  function beam(a,b,r,m,parent=group){const v=new THREE.Vector3(...b).sub(new THREE.Vector3(...a)),o=mesh(new THREE.CylinderGeometry(r,r,v.length(),12),m,...new THREE.Vector3(...a).add(new THREE.Vector3(...b)).multiplyScalar(.5).toArray(),parent);o.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),v.normalize());return o;}
  // Continuous stone floor, with geometric paving: moving and orbiting preserve real perspective.
@@ -68,7 +68,7 @@ export function createTemple({loadTextures=true}={}){
   for(const dx of [-2,2]){cylinder(.18,.23,6.6,gold,x+dx,3.9,-15.2);box(.48,.20,.6,gilt,x+dx,7.25,-15.2);}
   box(4.9,.35,1.25,gold,x,7.5,-15.4);box(5.25,.16,1.5,lacquer,x,7.77,-15.4);
   box(4.2,.5,2.3,lacquer,x,.40,-14.4);box(4.45,.13,2.5,gold,x,.72,-14.4);
-  const attendant=createStatue({loadAssets:loadTextures});attendant.position.set(x,.84,-14.1);group.add(attendant);statueLoads.push(attendant.userData.ready);
+  const attendant=createStatue({loadAssets:loadTextures,defer:true});attendant.position.set(x,.84,-14.1);group.add(attendant);attendants.push(attendant);
 
  }
  // The curved roof is built as sloping strips with raised eaves, not a backdrop.
@@ -76,7 +76,7 @@ export function createTemple({loadTextures=true}={}){
  beam([0,19.56,-20],[0,19.56,16],.16,gold);
  // Altar and a sculpted seated Buddha, visible from the sides and from behind.
  box(8.5,.65,3.5,darkWood,0,.325,-13);box(8.9,.18,3.8,gold,0,.74,-13);
- const buddha=createPrincipalBuddha({loadTextures});buddha.position.set(0,.90,-13.9);group.add(buddha);statueLoads.push(buddha.userData.ready);
+ const buddha=createPrincipalBuddha({loadTextures});buddha.position.set(0,.90,-13.9);group.add(buddha);
  // A recessed architectural niche replaces the old photographic Buddha panel.
  box(8.1,11.9,.40,darkWood,0,6.65,-16.5);
  for(const x of [-3.85,3.85])box(.11,11.5,.12,gold,x,6.65,-16.25);
@@ -103,8 +103,8 @@ export function createTemple({loadTextures=true}={}){
  function lantern(x,y,z){const glow=material(0xe5bd76,.5);glow.emissive=new THREE.Color(0xe9ae50);glow.emissiveIntensity=.55;cylinder(.36,.36,.72,glow,x,y,z);for(let i=0;i<6;i++){const a=i/6*Math.PI*2;beam([x+Math.sin(a)*.37,y-.4,z+Math.cos(a)*.37],[x+Math.sin(a)*.37,y+.4,z+Math.cos(a)*.37],.025,darkWood);}cylinder(.43,.43,.08,gold,x,y+.42,z);cylinder(.43,.43,.08,gold,x,y-.42,z);beam([x,y+.4,z],[x,y+1.4,z],.02,darkWood);const light=new THREE.PointLight(0xffc47d,100,18,2);light.position.set(x,y-.2,z);if(z===-8)group.add(light);}
  for(const x of [-8,8])for(const z of [-8,2,11])lantern(x,5.5,z);
  // Courtyard, wish tree, temple gate and mountain enclosure inhabit the same space.
- const foliageTexture=loadTextures?new THREE.TextureLoader().load(assetUrl('/assets/pine-canopy.webp')):new THREE.Texture();foliageTexture.colorSpace=THREE.SRGBColorSpace;
- const foliageMaterial=new THREE.MeshStandardMaterial({map:foliageTexture,alphaTest:.42,side:THREE.DoubleSide,roughness:1,color:0xd5dda5});
+ let foliagePending=null;
+ const foliageMaterial=new THREE.MeshStandardMaterial({transparent:true,opacity:0,depthWrite:false,alphaTest:.42,side:THREE.DoubleSide,roughness:1,color:0xd5dda5});
  foliageMaterial.onBeforeCompile=shader=>{shader.fragmentShader=shader.fragmentShader.replace('#include <alphatest_fragment>','diffuseColor.a *= smoothstep(1.8,4.6,length(vViewPosition));\n#include <alphatest_fragment>');};
  const grass=material(0x677649);grass.map=surface('stone');for(const x of [-24,24]){const lawn=mesh(new THREE.PlaneGeometry(22,46),grass,x,.026,24);lawn.rotation.x=-Math.PI/2;}
  function pine(x,z,height=6,wide=1){const tree=new THREE.Group();tree.position.set(x,0,z);group.add(tree);cylinder(.16,.32,height,darkWood,0,height/2,0,tree);
@@ -114,10 +114,10 @@ export function createTemple({loadTextures=true}={}){
  const treeX=15,treeZ=22;pine(treeX,treeZ,8,1.25);for(let i=0;i<14;i++){const angle=i*2.4,xx=treeX+Math.sin(angle)*2.6,zz=treeZ+Math.cos(angle)*2.6,yy=4.7+(i%4)*.5;const ribbon=box(.10,1.2+(i%3)*.14,.018,red,xx,yy-.4,zz);ribbon.rotation.z=Math.sin(i)*.16;}
  for(let i=0;i<18;i++){const side=i%2?1:-1;const rock=sphere(.45+(i%3)*.15,.3+(i%4)*.12,.58,stone,side*(12.8+(i%3)*.8),.18,17+i*1.4);rock.rotation.y=i;}
  for(const x of [-4,4]){cylinder(.3,.38,5.5,wood,x,2.75,36);box(1,.3,1,darkWood,x,5.5,36);}box(11,.5,2.5,darkWood,0,5.7,36);box(10,.25,3.2,roof,0,6.1,36);box(12,.25,3.7,roof,0,6.25,36);
- const sideHalls=createSideHalls({labels:loadTextures});group.add(sideHalls);statueLoads.push(sideHalls.userData.ready);
+ const sideHalls=createSideHalls({labels:loadTextures});group.add(sideHalls);
  // Merge static architecture by material to keep the panoramic room affordable on mobile.
  group.updateMatrixWorld(true);const batches=new Map(),originals=[];group.traverse(o=>{if(!o.isMesh||o.isInstancedMesh||o.userData.keepSeparate||o===floor)return;const key=o.material.uuid+(o.geometry.index?'-indexed':'-unindexed');let entry=batches.get(key);if(!entry){entry={material:o.material,geometries:[]};batches.set(key,entry);}entry.geometries.push(o.geometry.clone().applyMatrix4(o.matrixWorld));originals.push(o);});
  for(const entry of batches.values()){const geometry=mergeGeometries(entry.geometries,false);if(geometry){const combined=new THREE.Mesh(geometry,entry.material);combined.castShadow=true;combined.receiveShadow=true;group.add(combined);}for(const geometry of entry.geometries)geometry.dispose();}
  for(const object of originals){object.parent.remove(object);object.geometry.dispose();}
- return {group,floor,ready:Promise.all(statueLoads),anchors:{...Object.fromEntries(HALLS.map(h=>[h.id,new THREE.Vector3(h.x,0,h.z+5.5)])),hall:new THREE.Vector3(0,0,7),court:new THREE.Vector3(0,0,22),gate:new THREE.Vector3(0,0,33),tree:new THREE.Vector3(13,0,22)}};
+ return {group,floor,ready:buddha.userData.ready,loadArea(id){if(!loadTextures)return Promise.resolve();if(id==='hall')return Promise.all(attendants.map(a=>a.userData.load()));if(HALLS.some(h=>h.id===id))return sideHalls.userData.load();if(!foliagePending)foliagePending=new THREE.TextureLoader().loadAsync(assetUrl('/assets/pine-canopy.webp')).then(texture=>{texture.colorSpace=THREE.SRGBColorSpace;foliageMaterial.map=texture;foliageMaterial.opacity=1;foliageMaterial.transparent=false;foliageMaterial.depthWrite=true;foliageMaterial.needsUpdate=true;}).catch(()=>{foliagePending=null;});return foliagePending;},anchors:{...Object.fromEntries(HALLS.map(h=>[h.id,new THREE.Vector3(h.x,0,h.z+5.5)])),hall:new THREE.Vector3(0,0,7),court:new THREE.Vector3(0,0,22),gate:new THREE.Vector3(0,0,33),tree:new THREE.Vector3(13,0,22)}};
 }
