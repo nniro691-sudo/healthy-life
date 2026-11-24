@@ -10,7 +10,7 @@ test('a continuous world contains all four areas and constrains walls and tree t
  assert.equal(MATS.length,124);assert.ok(CHARACTER_SCALE<1);
 });
 test('panoramic architecture consists of real merged geometry rather than a background image',()=>{
- const temple=createTemple({loadTextures:false});let meshes=0;temple.group.traverse(o=>{if(o.isMesh)meshes++;});assert.ok(meshes>10&&meshes<100,`static draw count ${meshes}`);assert.ok(temple.floor.isMesh);assert.ok(temple.anchors.gate.distanceTo(temple.anchors.hall)>20);
+ const errors=[],originalError=console.error;let temple;try{console.error=(...args)=>{if(String(args[0]).includes('mergeGeometries'))errors.push(args);else originalError(...args);};temple=createTemple({loadTextures:false});}finally{console.error=originalError;}assert.equal(errors.length,0,'curved shrine panels must survive geometry batching');let meshes=0;temple.group.traverse(o=>{if(o.isMesh)meshes++;});assert.ok(meshes>10&&meshes<100,`static draw count ${meshes}`);assert.ok(temple.floor.isMesh);assert.ok(temple.anchors.gate.distanceTo(temple.anchors.hall)>20);
 });
 
 import {HALLS} from '../src/halls.js';
