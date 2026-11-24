@@ -4,7 +4,7 @@ const standard=(color,metalness=0,roughness=.6)=>new THREE.MeshStandardMaterial(
 const SHARED={gilt:standard(0xb9924e,.53,.43),edge:standard(0xe0bb73,.48,.45),wood:standard(0x35201b),ink:standard(0x151714)};
 const THEMES={
  guanyin:{color:0x193f37,motif:'lotus'},
- wenchang:{color:0x192f45,motif:'scroll'},
+ wenchang:{color:0x192f45,motif:'lotus'},
  wenshu:{color:0x49381d,motif:'lotus'},
  dizang:{color:0x39252e,motif:'lotus'},
  caishen:{color:0x53251a,motif:'coin'}
@@ -48,7 +48,6 @@ export function createShrineBackdrop(id,{textures=true}={}){
  // Low relief ornament stays at the plinth, distinct from facial details.
  for(let i=-3;i<=3;i++){
   if(theme.motif==='coin'){const coin=add(new THREE.TorusGeometry(.16,.025,8,32),gilt,i*.72,1.04,-7.02);box(.105,.105,.016,lacquer,i*.72,1.04,-6.99);}
-  else if(theme.motif==='scroll'){box(.42,.24,.03,gilt,i*.72,1.04,-7.02);box(.34,.18,.035,wood,i*.72,1.04,-6.99);}
   else{for(let petal=-1;petal<=1;petal++){const o=add(new THREE.SphereGeometry(1,12,8),gilt,i*.72+petal*.09,1.04,-7.02);o.scale.set(.065,.16,.025);o.rotation.z=petal*-.45;}}
  }
  return root;

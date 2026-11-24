@@ -1,3 +1,5 @@
+import {diamondSections} from './diamond-sutra.js';
+
 export const scriptures = {
  heart: {
   title: '心经', scope: '全文',
@@ -12,12 +14,8 @@ export const scriptures = {
    '故说般若波罗蜜多咒，即说咒曰：揭谛揭谛，波罗揭谛，波罗僧揭谛，菩提萨婆诃。'
   ]
  },
- diamond: {
-  title: '金刚经', scope: '节选',
-  sections: [
-   '应无所住，而生其心。',
-   '凡所有相，皆是虚妄。若见诸相非相，即见如来。',
-   '一切有为法，如梦幻泡影，如露亦如电，应作如是观。'
-  ]
+ 'diamond-full': {
+  title: '金刚经', scope: '全文 · 鸠摩罗什译',
+  sections: diamondSections
  }
 };

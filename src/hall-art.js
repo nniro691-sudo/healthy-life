@@ -5,7 +5,27 @@ import {loadResource} from './load-resource.js';
 // Like the retained main Buddha, this is explicitly a devotional image surface,
 // mounted inside real architecture. The shared atlas is downloaded only once.
 export function mountHallArt(group,index,texture){
- const t=texture.clone();t.needsUpdate=true;const bounds=ART_LAYOUT.halls[index];t.offset.fromArray(bounds.offset);t.repeat.fromArray(bounds.repeat);t.anisotropy=4;
- const height=6.35,width=Math.min(5.3,height*bounds.aspect);const m=new THREE.MeshBasicMaterial({map:t,transparent:true,alphaTest:.18,side:THREE.DoubleSide,toneMapped:false});const figure=new THREE.Mesh(new THREE.PlaneGeometry(width,height),m);figure.name='devotional-image-'+index;figure.position.set(0,.63+height/2,-5.8);group.add(figure);return figure;
+ const bounds=index===1 ? null : ART_LAYOUT.halls[index];
+ const map=bounds ? texture.clone() : texture;
+ if(bounds){
+  map.offset.fromArray(bounds.offset);
+  map.repeat.fromArray(bounds.repeat);
+  map.needsUpdate=true;
+ }
+ map.anisotropy=4;
+ const aspect=bounds?.aspect ?? map.image.width/map.image.height;
+ const height=Math.min(6.35,5.3/aspect);
+ const material=new THREE.MeshBasicMaterial({map,transparent:true,alphaTest:.18,side:THREE.DoubleSide,toneMapped:false});
+ const figure=new THREE.Mesh(new THREE.PlaneGeometry(height*aspect,height),material);
+ figure.name='devotional-image-'+index;
+ figure.position.set(0,.63+height/2,-5.8);
+ group.add(figure);
 }
-export function loadHallArt(){return loadResource(new THREE.TextureLoader(),assetUrl('/assets/five-halls-devotional-atlas.webp')).then(t=>{t.colorSpace=THREE.SRGBColorSpace;return t;});}
+
+export function loadHallArt(id){
+ const asset=id==='wenchang' ? 'samantabhadra.webp' : 'five-halls-devotional-atlas.webp';
+ return loadResource(new THREE.TextureLoader(),assetUrl('/assets/'+asset)).then(texture=>{
+  texture.colorSpace=THREE.SRGBColorSpace;
+  return texture;
+ });
+}

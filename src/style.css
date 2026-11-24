@@ -65,3 +65,5 @@
  .practice-bar:has(#scriptures) button {gap: 4px; letter-spacing: 0;}
  .practice-bar:has(#scriptures) .divider {flex-shrink: 0;}
 }
+
+.scripture-text {white-space: pre-line;}

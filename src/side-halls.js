@@ -4,7 +4,7 @@ import * as THREE from 'three';
 import {HALLS} from './halls.js';
 // Original geometric shrine designs: no remote assets or additional model downloads.
 export function createSideHalls({labels=true}={}){
- const root=new THREE.Group();root.name='five-side-halls';const mounts=[];let pending=null;
+ const root=new THREE.Group();root.name='five-side-halls';const mounts=[];const pending=new Map();
  const mat=(color,metalness=0,roughness=.65)=>new THREE.MeshStandardMaterial({color,metalness,roughness});
  const gold=mat(0xd8ae59,.62,.38),wood=mat(0x5e251e),dark=mat(0x271e19),stone=mat(0x8c8472),roof=mat(0x344a43);
  function mesh(g,m,x,y,z,p){const o=new THREE.Mesh(g,m);o.position.set(x,y,z);p.add(o);return o;}
@@ -25,5 +25,21 @@ export function createSideHalls({labels=true}={}){
   // Broad, level paths connect every open doorway to the central garden walk.
   box(5,.035,15,stone,h.x===0?0:-h.x/2,.02,16,p);if(h.x!==0)box(Math.abs(h.x)+4,.036,4,stone,-h.x/2,.023,12,p);
  }
- root.userData.load=()=>{if(!labels)return Promise.resolve();if(!pending)pending=loadHallArt().then(t=>{mounts.forEach((p,i)=>mountHallArt(p,i,t));}).catch(error=>{pending=null;console.error('殿内造像加载失败',error);window.dispatchEvent(new CustomEvent('statue-load-error'));});return pending;};return root;
+ root.userData.load=id=>{
+  if(!labels)return Promise.resolve();
+  const key=id==='wenchang' ? id : 'atlas';
+  if(!pending.has(key)){
+   pending.set(key,loadHallArt(id).then(texture=>{
+    mounts.forEach((group,index)=>{
+     if((key==='wenchang')===(index===1))mountHallArt(group,index,texture);
+    });
+   }).catch(error=>{
+    pending.delete(key);
+    console.error('殿内造像加载失败',error);
+    window.dispatchEvent(new CustomEvent('statue-load-error'));
+   }));
+  }
+  return pending.get(key);
+ };
+ return root;
 }
