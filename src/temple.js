@@ -19,7 +19,7 @@ export function createTemple({loadTextures=true}={}){
  function beam(a,b,r,m,parent=group){const v=new THREE.Vector3(...b).sub(new THREE.Vector3(...a)),o=mesh(new THREE.CylinderGeometry(r,r,v.length(),12),m,...new THREE.Vector3(...a).add(new THREE.Vector3(...b)).multiplyScalar(.5).toArray(),parent);o.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),v.normalize());return o;}
  // Continuous stone floor, with geometric paving: moving and orbiting preserve real perspective.
  const floor=mesh(new THREE.PlaneGeometry(100,180),material(0x393b33),0,-.025,14);floor.rotation.x=-Math.PI/2;
- const tiles=new THREE.InstancedMesh(new THREE.BoxGeometry(1.94,.035,1.94),stone,36*44),matrix=new THREE.Matrix4();let n=0;for(let x=-18;x<18;x++)for(let z=-17;z<27;z++){matrix.makeTranslation(x*2+.98,-.006,z*2+.98);tiles.setMatrixAt(n,matrix);tiles.setColorAt(n,new THREE.Color().setHSL(.12,.07,.32+((x*7+z*11+2000)%7)*.017));n++;}tiles.receiveShadow=true;group.add(tiles);
+ const tiles=new THREE.InstancedMesh(new THREE.BoxGeometry(1.94,.035,1.94),stone,36*60),matrix=new THREE.Matrix4();let n=0;for(let x=-18;x<18;x++)for(let z=-17;z<43;z++){matrix.makeTranslation(x*2+.98,-.006,z*2+.98);tiles.setMatrixAt(n,matrix);tiles.setColorAt(n,new THREE.Color().setHSL(.12,.07,.32+((x*7+z*11+2000)%7)*.017));n++;}tiles.receiveShadow=true;group.add(tiles);
  // Dark dressed stone distinguishes the sanctuary from the rough courtyard paving.
  const polishedStone=material(0x514b3e,.42,.12);
  for(let x=-5;x<=5;x++)for(let z=-8;z<=6;z++)box(1.975,.014,1.975,polishedStone,x*2,.019,z*2);
