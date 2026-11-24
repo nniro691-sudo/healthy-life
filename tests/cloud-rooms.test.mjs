@@ -32,3 +32,11 @@ test('shared cloud rooms synchronize actions, enforce mats, deliver greetings an
  DB.sql.exec('UPDATE actors SET updated=updated-16000');assert.equal((await call('sync',{...b,state:pose})).status,401);
  DB.sql.close();
 });
+
+test('all five additional halls synchronize beyond the old courtyard bounds and own independent mats',async()=>{
+ const DB=new D1(),dir=new URL('../cloud-deployment/drizzle/',import.meta.url);for(const name of (await readdir(dir)).filter(n=>n.endsWith('.sql')).sort())DB.sql.exec(await readFile(new URL(name,dir),'utf8'));
+ const call=(path,data={})=>roomFetch(new Request(`https://temple.test/api/room/${path}?room=annex-test`,{method:'POST',headers:{'Content-Type':'application/json',Origin:'https://nniro691-sudo.github.io'},body:JSON.stringify(data)}),{DB});
+ const a=await(await call('join')).json(),b=await(await call('join')).json();const {HALLS}=await import('../src/halls.js');
+ for(const h of HALLS){const state={scene:h.id,x:h.x,z:h.z,rotation:0,mode:'bow',phase:1,mat:h.id+'-mat-0'};DB.sql.exec('UPDATE actors SET updated=updated-200');assert.equal((await call('sync',{...a,state})).status,200);assert.equal((await call('sync',{...b,state})).status,409);DB.sql.exec('UPDATE actors SET updated=updated-200');const r=await(await call('sync',{...b,state:{...state,mat:null}})).json();const other=r.actors.find(c=>c.id===a.id);assert.equal(other.x,h.x);assert.equal(other.z,h.z);assert.equal(other.mat,state.mat);}
+ DB.sql.close();
+});

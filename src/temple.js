@@ -1,3 +1,5 @@
+import {createSideHalls} from './side-halls.js';
+import {HALLS} from './halls.js';
 import {assetUrl} from './asset-url.js';
 import * as THREE from 'three';
 import {createPrincipalBuddha} from './principal-buddha.js';
@@ -16,7 +18,7 @@ export function createTemple({loadTextures=true}={}){
  function cylinder(rt,rb,h,m,x,y,z,parent){return mesh(new THREE.CylinderGeometry(rt,rb,h,24),m,x,y,z,parent);}
  function beam(a,b,r,m,parent=group){const v=new THREE.Vector3(...b).sub(new THREE.Vector3(...a)),o=mesh(new THREE.CylinderGeometry(r,r,v.length(),12),m,...new THREE.Vector3(...a).add(new THREE.Vector3(...b)).multiplyScalar(.5).toArray(),parent);o.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),v.normalize());return o;}
  // Continuous stone floor, with geometric paving: moving and orbiting preserve real perspective.
- const floor=mesh(new THREE.PlaneGeometry(100,110),material(0x393b33),0,-.025,14);floor.rotation.x=-Math.PI/2;
+ const floor=mesh(new THREE.PlaneGeometry(100,180),material(0x393b33),0,-.025,14);floor.rotation.x=-Math.PI/2;
  const tiles=new THREE.InstancedMesh(new THREE.BoxGeometry(1.94,.035,1.94),stone,36*44),matrix=new THREE.Matrix4();let n=0;for(let x=-18;x<18;x++)for(let z=-17;z<27;z++){matrix.makeTranslation(x*2+.98,-.006,z*2+.98);tiles.setMatrixAt(n,matrix);tiles.setColorAt(n,new THREE.Color().setHSL(.12,.07,.32+((x*7+z*11+2000)%7)*.017));n++;}tiles.receiveShadow=true;group.add(tiles);
  // Dark dressed stone distinguishes the sanctuary from the rough courtyard paving.
  const polishedStone=material(0x514b3e,.42,.12);
@@ -112,9 +114,10 @@ export function createTemple({loadTextures=true}={}){
  const treeX=15,treeZ=22;pine(treeX,treeZ,8,1.25);for(let i=0;i<14;i++){const angle=i*2.4,xx=treeX+Math.sin(angle)*2.6,zz=treeZ+Math.cos(angle)*2.6,yy=4.7+(i%4)*.5;const ribbon=box(.10,1.2+(i%3)*.14,.018,red,xx,yy-.4,zz);ribbon.rotation.z=Math.sin(i)*.16;}
  for(let i=0;i<18;i++){const side=i%2?1:-1;const rock=sphere(.45+(i%3)*.15,.3+(i%4)*.12,.58,stone,side*(12.8+(i%3)*.8),.18,17+i*1.4);rock.rotation.y=i;}
  for(const x of [-4,4]){cylinder(.3,.38,5.5,wood,x,2.75,36);box(1,.3,1,darkWood,x,5.5,36);}box(11,.5,2.5,darkWood,0,5.7,36);box(10,.25,3.2,roof,0,6.1,36);box(12,.25,3.7,roof,0,6.25,36);
+ const sideHalls=createSideHalls({labels:loadTextures});group.add(sideHalls);statueLoads.push(sideHalls.userData.ready);
  // Merge static architecture by material to keep the panoramic room affordable on mobile.
  group.updateMatrixWorld(true);const batches=new Map(),originals=[];group.traverse(o=>{if(!o.isMesh||o.isInstancedMesh||o===floor)return;const key=o.material.uuid;let entry=batches.get(key);if(!entry){entry={material:o.material,geometries:[]};batches.set(key,entry);}entry.geometries.push(o.geometry.clone().applyMatrix4(o.matrixWorld));originals.push(o);});
  for(const entry of batches.values()){const geometry=mergeGeometries(entry.geometries,false);if(geometry){const combined=new THREE.Mesh(geometry,entry.material);combined.castShadow=true;combined.receiveShadow=true;group.add(combined);}for(const geometry of entry.geometries)geometry.dispose();}
  for(const object of originals){object.parent.remove(object);object.geometry.dispose();}
- return {group,floor,ready:Promise.all(statueLoads),anchors:{hall:new THREE.Vector3(0,0,7),court:new THREE.Vector3(0,0,22),gate:new THREE.Vector3(0,0,33),tree:new THREE.Vector3(13,0,22)}};
+ return {group,floor,ready:Promise.all(statueLoads),anchors:{...Object.fromEntries(HALLS.map(h=>[h.id,new THREE.Vector3(h.x,0,h.z+5.5)])),hall:new THREE.Vector3(0,0,7),court:new THREE.Vector3(0,0,22),gate:new THREE.Vector3(0,0,33),tree:new THREE.Vector3(13,0,22)}};
 }

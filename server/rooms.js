@@ -1,7 +1,8 @@
+import {HALL_IDS} from '../src/halls.js';
 import {randomUUID,randomBytes} from 'node:crypto';
 import {networkInterfaces} from 'node:os';
 import {MATS,WORLD_BOUNDS} from '../src/mats.js';
-const SCENES=new Set(['hall','court','gate','tree']);
+const SCENES=new Set([...HALL_IDS,'court','gate','tree']);
 const MODES=new Set(['idle','walk','palms','bow','incense']);
 const MAT_IDS=new Set(MATS.map(m=>m.id));
 export function createRoomService(){
@@ -44,8 +45,8 @@ export function createRoomService(){
     }
     if(Date.now()-client.lastPost<50)return reply(res,429,{error:'too-frequent'});
     const s=data.state;if(!s||!SCENES.has(s.scene)||!MODES.has(s.mode)||![s.x,s.z,s.rotation,s.phase].every(Number.isFinite))return reply(res,400,{error:'invalid-state'});
-    const mat=s.scene==='hall'&&MAT_IDS.has(s.mat)?s.mat:null;
-    if(mat&&[...room.values()].some(c=>c.id!==client.id&&c.state.scene==='hall'&&c.state.mat===mat))return reply(res,409,{error:'mat-occupied'});
+    const mat=MATS.some(m=>m.id===s.mat&&m.scene===s.scene)?s.mat:null;
+    if(mat&&[...room.values()].some(c=>c.id!==client.id&&c.state.mat===mat))return reply(res,409,{error:'mat-occupied'});
     client.lastPost=Date.now();client.state={scene:s.scene,x:Math.max(WORLD_BOUNDS.minX,Math.min(WORLD_BOUNDS.maxX,s.x)),z:Math.max(WORLD_BOUNDS.minZ,Math.min(WORLD_BOUNDS.maxZ,s.z)),rotation:s.rotation%(Math.PI*2),mode:s.mode,phase:Math.max(0,Math.min(7.2,s.phase)),mat};
     publish(room,'actor',publicActor(client));reply(res,200,{ok:true});
    });return;

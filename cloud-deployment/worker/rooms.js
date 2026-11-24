@@ -1,5 +1,6 @@
+import {HALL_IDS} from './halls.js';
 import {MATS,WORLD_BOUNDS} from './mats.js';
-const scenes=new Set(['hall','court','gate','tree']),modes=new Set(['idle','walk','palms','bow','incense']),mats=new Set(MATS.map(m=>m.id));
+const scenes=new Set([...HALL_IDS,'court','gate','tree']),modes=new Set(['idle','walk','palms','bow','incense']),mats=new Set(MATS.map(m=>m.id));
 const WEB='https://nniro691-sudo.github.io/healthy-life/',TTL=15000;
 const actor=row=>({id:row.id,name:row.name,...JSON.parse(row.state)});
 export async function roomFetch(request,env){
@@ -38,7 +39,7 @@ export async function roomFetch(request,env){
   if(path==='/api/room/sync'){
    const s=data.state;if(!s||!scenes.has(s.scene)||!modes.has(s.mode)||![s.x,s.z,s.rotation,s.phase].every(Number.isFinite))return reply(400,{error:'invalid-state'});
    if(now-client.updated<100)return reply(429,{error:'too-frequent'});
-   const mat=s.scene==='hall'&&mats.has(s.mat)?s.mat:null;
+   const mat=MATS.some(m=>m.id===s.mat&&m.scene===s.scene)?s.mat:null;
    const state={scene:s.scene,x:Math.max(WORLD_BOUNDS.minX,Math.min(WORLD_BOUNDS.maxX,s.x)),z:Math.max(WORLD_BOUNDS.minZ,Math.min(WORLD_BOUNDS.maxZ,s.z)),rotation:s.rotation%(Math.PI*2),mode:s.mode,phase:Math.max(0,Math.min(7.2,s.phase)),mat};
    const results=await db.batch([
     db.prepare('DELETE FROM actors WHERE room=? AND updated<?').bind(room,cutoff),
